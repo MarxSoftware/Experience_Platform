@@ -1,0 +1,20 @@
+{
+    "modules": {
+        "core-module-entities": {
+            "active": true,
+            "id": "core-module-entities"
+        },
+        "core-module-analytics-storage-lucene": {
+            "active": true,
+            "id": "core-module-analytics-storage-lucene"
+        },
+        "core-module-configuration": {
+            "active": true,
+            "id": "core-module-configuration"
+        },
+        "core-module-datalayer": {
+            "active": true,
+            "id": "core-module-datalayer"
+        }
+    }
+}

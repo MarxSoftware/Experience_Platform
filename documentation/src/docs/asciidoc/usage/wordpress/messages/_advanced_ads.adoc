@@ -1,0 +1,3 @@
+===== Advanced Ads
+
+Die Integration in das Advanced Ads Plugin ermöglicht was Ausspielen von Werbung und Banner für bestimmte Zielgruppen.

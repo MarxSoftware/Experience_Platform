@@ -1,0 +1,3 @@
+===== Popup Maker
+
+Die Integration in den Popup Maker ermöglicht das zielgruppen genaue Ausspielen von Nachrichten über Popups oder Exit Intents.

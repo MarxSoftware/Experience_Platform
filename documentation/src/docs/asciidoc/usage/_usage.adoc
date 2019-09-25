@@ -1,0 +1,12 @@
+== Usage
+
+The standard workflow consists of configure target audiences and create content for these audiences.
+
+include::ui/_ui.adoc[]
+
+
+//include::wordpress/_wordpress.adoc[]
+
+//include::_javascript.adoc[]
+
+//include::_rest.adoc[]

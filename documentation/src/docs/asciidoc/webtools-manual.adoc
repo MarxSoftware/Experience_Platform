@@ -1,0 +1,20 @@
+= Experience-Platform Manual
+2019-01-09
+:revnumber: {project-version}
+:example-caption!:
+:experimental:
+ifndef::imagesdir[:imagesdir: images]
+ifndef::sourcedir[:sourcedir: ../../main/java]
+
+Dies ist das Manual für die webTools Platform in Version {webtools-version}
+
+== Einführung
+
+Die webTools Platform ist eine unter der GPLv3 stehende Personalisierungs Engine.
+Sie bietet alle Funktionen um ihren Benuztern eine personalisierte Erfahrung zu schaffen.
+
+include::installation/_installation.adoc[]
+
+include::usage/_usage.adoc[]
+
+//include::integrations/_integrations.adoc[]

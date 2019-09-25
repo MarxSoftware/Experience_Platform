@@ -1,0 +1,8 @@
+==== ApiKey
+
+To access the REST api a valid apiykey is necassary. 
+The current apikey is displayed here.
+To generate a new apikey click the btn:[Generate ApiKey].
+After the new apikey is generated, the old apikey is not valid anymore. 
+So keep in mind that all integrations which use the old key will not work anymore.
+

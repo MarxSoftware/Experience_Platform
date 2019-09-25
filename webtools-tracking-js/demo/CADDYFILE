@@ -1,0 +1,10 @@
+localhost:2016 {
+  tls off
+  browse
+  root ../build/
+}
+
+localhost {
+  tls off
+  root ./
+}

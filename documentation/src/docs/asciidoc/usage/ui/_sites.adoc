@@ -1,0 +1,5 @@
+==== Sites
+
+All collected data belongs to a site.
+Here you can define all available sites.
+These can be used for filtering at the dashboard.

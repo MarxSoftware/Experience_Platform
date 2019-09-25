@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  #%L
+  webtools-actions
+  %%
+  Copyright (C) 2016 - 2018 Thorsten Marx
+  %%
+  This program is free software: you can redistribute it and/or modify
+  it under the terms of the GNU General Public License as
+  published by the Free Software Foundation, either version 3 of the
+  License, or (at your option) any later version.
+  
+  This program is distributed in the hope that it will be useful,
+  but WITHOUT ANY WARRANTY; without even the implied warranty of
+  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  GNU General Public License for more details.
+  
+  You should have received a copy of the GNU General Public
+  License along with this program.  If not, see
+  <http://www.gnu.org/licenses/gpl-3.0.html>.
+  #L%
+  -->
+
+<segments>
+	<segment id="id1" name="segment 1">
+		<start unit="HOUR" count="2" />
+		<rules>
+			<rule type="score">
+				<name>hit</name>
+				<score>50</score>
+			</rule>
+			<rule type="pageView">
+				<site>site</site>
+				<page>page</page>
+				<count>2</count>
+			</rule>
+		</rules>
+	</segment>
+	<segment id="id2" name="segment 2">
+		<rules>
+			<rule type="event">
+				<start unit="DAY" count="30" />
+				<site>site</site>
+				<event>order</event>
+				<count>2</count>
+			</rule>
+		</rules>
+	</segment>
+</segments>

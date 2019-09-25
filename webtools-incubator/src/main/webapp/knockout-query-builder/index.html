@@ -1,0 +1,174 @@
+﻿<!DOCTYPE html>
+<!--
+  #%L
+  webtools-incubator
+  %%
+  Copyright (C) 2016 - 2018 Thorsten Marx
+  %%
+  This program is free software: you can redistribute it and/or modify
+  it under the terms of the GNU General Public License as
+  published by the Free Software Foundation, either version 3 of the
+  License, or (at your option) any later version.
+  
+  This program is distributed in the hope that it will be useful,
+  but WITHOUT ANY WARRANTY; without even the implied warranty of
+  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  GNU General Public License for more details.
+  
+  You should have received a copy of the GNU General Public
+  License along with this program.  If not, see
+  <http://www.gnu.org/licenses/gpl-3.0.html>.
+  #L%
+  -->
+
+<html>
+
+<head>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<title>Knockout.js Query Builder</title>
+	<!-- Latest compiled and minified CSS -->
+	<link rel="stylesheet" href="https://unpkg.com/bootstrap-material-design@4.1.1/dist/css/bootstrap-material-design.min.css"
+	 integrity="sha384-wXznGJNEXNG1NFsbm0ugrLFMQPWswR3lds2VeinahP8N0zJw9VWSopbjv2x7WCvX" crossorigin="anonymous">
+	<!-- Optional theme -->
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" crossorigin="anonymous"
+	/>
+	<link rel="stylesheet" href="css/styles.css" />
+</head>
+
+<body>
+	<div class="container">
+		<h1>Knockout.js Query Builder</h1>
+		<div class="alert alert-info">
+			<strong>Example Output</strong>
+			<br/>
+			<span data-bind="text: text"></span>
+			<br />
+			<span data-bind="text: json"></span>
+		</div>
+		<div data-bind="with: group">
+			<div data-bind="template: templateName"></div>
+		</div>
+	</div>
+
+	<!-- HTML Template For Conditions -->
+	<script id="condition-template" type="text/html">
+			<div class="condition">
+				<select data-bind="options: fields, value: selectedField"></select>
+				<select data-bind="options: comparisons, value: selectedComparison"></select>
+				<input type="text" data-bind="value: value"></input>
+				<button class="btn btn-danger btn-xs" data-bind="click: $parent.removeChild"><span class="glyphicon glyphicon-minus-sign"></span></button>
+			</div>
+		</script>
+	<script id="pageview-condition-template" type="text/html">
+			<div class="condition">
+				<span>Site:&nbsp;</span><input type="text" data-bind="value: site"></input>
+				<span>Page:&nbsp;</span><input type="text" data-bind="value: page"></input>
+				<span>Count:&nbsp;</span><input type="number" data-bind="value: count" min="0" step="1"></input>
+				<button class="btn btn-danger btn-xs" data-bind="click: $parent.removeChild"><i class="fa fa-trash-o"></i></button>
+			</div>
+		</script>
+	<script id="event-condition-template" type="text/html">
+			<div class="condition">
+				<span>Site:&nbsp;</span><input type="text" data-bind="value: site"></input>
+				<span>Event:&nbsp;</span><input type="text" data-bind="value: event"></input>
+				<span>Count:&nbsp;</span><input type="number" data-bind="value: count" min="0" step="1"></input>
+				<button class="btn btn-danger btn-xs" data-bind="click: $parent.removeChild"><i class="fa fa-trash-o"></i></button>
+			</div>
+		</script>
+	<script id="score-condition-template" type="text/html">
+			<div class="condition">
+				<span>Name:&nbsp;</span><input type="text" data-bind="value: name"></input>
+				<span>Score:&nbsp;</span><input type="number" data-bind="value: score" min="0" step="1"></input>
+				<button class="btn btn-danger btn-xs" data-bind="click: $parent.removeChild"><i class="fa fa-trash-o"></i></button>
+			</div>
+		</script>
+
+	<!-- HTML Template For Groups -->
+	<script id="group-template" type="text/html">
+			<div class="alert alert-warning alert-group">
+				<!--select data-bind="options: logicalOperators, value: selectedLogicalOperator"></select-->
+				<div class="btn-group btn-group-toggle" data-toggle="buttons">
+					<label class="btn btn-secondary active">
+					  <input type="radio" name="options" id="option1" autocomplete="off" value="AND" data-bind="bsChecked: selectedLogicalOperator"> AND
+					</label>
+					<label class="btn btn-secondary">
+					  <input type="radio" name="options" id="option2" autocomplete="off" value="OR" data-bind="bsChecked: selectedLogicalOperator"> OR
+					</label>
+					<label class="btn btn-secondary">
+					  <input type="radio" name="options" id="option3" autocomplete="off" value="NOT" data-bind="bsChecked: selectedLogicalOperator"> NOT
+					</label>
+				  </div>
+				<!--button class="btn btn-xs btn-success" data-bind="click: addPageViewCondition"><span class="glyphicon glyphicon-plus-sign"></span> Add PageViewRule</button>
+				<button class="btn btn-xs btn-success" data-bind="click: addEventCondition"><span class="glyphicon glyphicon-plus-sign"></span> Add EventRule</button>
+				<button class="btn btn-xs btn-success" data-bind="click: addScoreCondition"><span class="glyphicon glyphicon-plus-sign"></span> Add ScoreRule</button-->
+				<!--<button class="btn btn-xs btn-success" data-bind="click: addCondition"><span class="glyphicon glyphicon-plus-sign"></span> Add Condition</button>-->
+				<!--button class="btn btn-xs btn-success" data-bind="click: addGroup"><span class="glyphicon glyphicon-plus-sign"></span> Add Group</button-->
+				<button class="btn btn-xs btn-danger" data-bind="click: $parent.removeChild"><i class="fa fa-trash-o"></i> Remove Group</button>
+				<div class="group-conditions">
+					<div data-bind="foreach: children">
+						<div data-bind="template: templateName"></div>
+					</div>
+				</div>
+
+				<div class="btn-group" role="group">
+					<button id="btnGroupDrop1" type="button" class="btn btn-secondary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+					  Add Rule
+					</button>
+					<div class="dropdown-menu" aria-labelledby="btnGroupDrop1">
+							<button class="dropdown-item" data-bind="click: addPageViewCondition"><span class="glyphicon glyphicon-plus-sign"></span> Add PageViewRule</button>
+							<button class="dropdown-item" data-bind="click: addEventCondition"><span class="glyphicon glyphicon-plus-sign"></span> Add EventRule</button>
+							<button class="dropdown-item" data-bind="click: addScoreCondition"><span class="glyphicon glyphicon-plus-sign"></span> Add ScoreRule</button>
+							<button class="dropdown-item" data-bind="click: addGroup"><span class="glyphicon glyphicon-plus-sign"></span> Add Group</button>
+					</div>
+				  </div>
+			</div>
+		</script>
+
+	<!-- js -->
+
+	<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN"
+	 crossorigin="anonymous"></script>
+	<script src="https://unpkg.com/popper.js@1.12.6/dist/umd/popper.js" integrity="sha384-fA23ZRQ3G/J53mElWqVJEGJzU0sTs+SvzG8fXVWP+kJQ1lwFAOkcUOysnlKJC33U"
+	 crossorigin="anonymous"></script>
+	<script src="https://unpkg.com/bootstrap-material-design@4.1.1/dist/js/bootstrap-material-design.js" integrity="sha384-CauSuKpEqAFajSpkdjv3z9t8E7RlpJ1UP0lKM/+NdtSarroVKu069AlsRPKkFBz9"
+	 crossorigin="anonymous"></script>
+	<script>$(document).ready(function () { $('body').bootstrapMaterialDesign(); });</script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/knockout/3.4.2/knockout-min.js"></script>
+	<script src="js/condition.js"></script>
+	<script src="js/group.js"></script>
+	<script src="js/viewModel.js"></script>
+	<script>
+		var initValue = { "rules": [{ "type": "pageview", "site": "s1", "page": "page" }, { "rules": [], "operator": "AND", "type": "group" }], "operator": "AND", "type": "group" };
+
+		ko.bindingHandlers.bsChecked = {
+			init: function (element, valueAccessor, allBindingsAccessor,
+				viewModel, bindingContext) {
+				var value = valueAccessor();
+				var newValueAccessor = function () {
+					return {
+						change: function () {
+							value(element.value);
+						}
+					}
+				};
+				ko.bindingHandlers.event.init(element, newValueAccessor,
+					allBindingsAccessor, viewModel, bindingContext);
+			},
+			update: function (element, valueAccessor, allBindingsAccessor,
+				viewModel, bindingContext) {
+				if ($(element).val() == ko.unwrap(valueAccessor())) {
+					setTimeout(function () {
+						$(element).closest('.btn').button('toggle');
+					}, 1);
+				}
+			}
+		}
+
+		window.addEventListener('load', function () {
+			ko.applyBindings(new QueryBuilder.ViewModel());
+		}, true);
+	</script>
+</body>
+
+</html>

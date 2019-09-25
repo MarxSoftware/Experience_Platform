@@ -1,0 +1,37 @@
+<html>
+
+<head>
+	<meta charset='utf-8'>
+	<script src="../src/js/webtools.js"></script>
+	<script src="../src/js/domready.js"></script>
+	<script src="../src/js/binding.js"></script>
+	<script>
+
+		webtools.domReady(function (event) {
+			var obj = { a: 123 }
+			var myInputElement1 = document.getElementById("myText1")
+			var myInputElement2 = document.getElementById("myText2")
+			var myDOMElement = document.getElementById("myDomElement")
+
+			new webtools.binding.Binding({
+				object: obj,
+				property: "a"
+			})
+				.addBinding(myInputElement1, "value", "keyup")
+				.addBinding(myInputElement2, "value", "keyup")
+				.addBinding(myDOMElement, "innerHTML")
+
+			obj.a = 456;
+		});
+
+	</script>
+</head>
+
+<body>
+	<input type=text id="myText1">
+	<input type=text id="myText2">
+	<span type=text id="myDomElement"></span>
+
+</body>
+
+</html>

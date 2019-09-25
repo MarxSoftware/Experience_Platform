@@ -1,0 +1,6 @@
+nbactions.xml
+nb-configuration.xml
+target/
+node_modules
+build/
+demo/caddy.exe

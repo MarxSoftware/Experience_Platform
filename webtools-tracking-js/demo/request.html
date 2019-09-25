@@ -1,0 +1,22 @@
+<html>
+
+<head>
+	<meta charset='utf-8'>
+	<script src="http://localhost:2016/js/webtools.js"></script>
+	<script src="http://localhost:2016/js/domready.js"></script>
+	<script src="http://localhost:2016/js/request.js"></script>
+	<script>
+		webtools.Request.get("/demo.json").then(function (response) {
+			response.json().then(function (result) {
+				console.log("result", result);
+			});
+		});
+	</script>
+	
+</head>
+
+<body>
+	<h1 class="selectme">Test Request</h1>
+</body>
+
+</html>

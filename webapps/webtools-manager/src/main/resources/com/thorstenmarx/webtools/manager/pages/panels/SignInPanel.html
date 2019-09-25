@@ -1,0 +1,76 @@
+<!--
+  #%L
+  webtools-manager
+  %%
+  Copyright (C) 2016 - 2018 Thorsten Marx
+  %%
+  This program is free software: you can redistribute it and/or modify
+  it under the terms of the GNU General Public License as
+  published by the Free Software Foundation, either version 3 of the
+  License, or (at your option) any later version.
+  
+  This program is distributed in the hope that it will be useful,
+  but WITHOUT ANY WARRANTY; without even the implied warranty of
+  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  GNU General Public License for more details.
+  
+  You should have received a copy of the GNU General Public
+  License along with this program.  If not, see
+  <http://www.gnu.org/licenses/gpl-3.0.html>.
+  #L%
+  -->
+<?xml version="1.0" encoding="UTF-8" ?>
+<!--
+
+    WebTools-Platform
+    Copyright (C) 2016-2018  ThorstenMarx (kontakt@thorstenmarx.com)
+
+    This program is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with this program.  If not, see <http://www.gnu.org/licenses/>.
+
+-->
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:wicket="http://wicket.apache.org">
+	<head>
+		<title></title>
+	</head>
+	<body>
+		<wicket:panel>
+			<div class="container">
+				<form class="form-signin" wicket:id="signInForm" autocomplete="off">
+					<h2 class="form-signin-heading">Please sign in</h2>
+					<div class="input-group">
+						<span class="input-group-addon"><i class="fas fa-user"></i></span>
+						<input wicket:id="username" type="text" class="form-control" name="username" placeholder="Username">
+					</div>
+					<div class="input-group">
+						<span class="input-group-addon"><i class="fas fa-lock"></i></span>
+						<input wicket:id="password" type="password" class="form-control" name="password" placeholder="Password">
+					</div>
+					<div class="input-group" wicket:id="rememberMeContainer">
+						<label class="checkbox">
+							<input wicket:id="rememberMe" type="checkbox" value="remember-me">Remember Me
+						</label>
+					</div>
+
+					<button class="btn btn-lg btn-primary btn-block" type="submit">Sign in</button>
+				</form>
+				<div class="row">
+					<span wicket:id="feedback" class="form-text">Password error</span>
+				</div>
+
+			</div>
+
+
+		</wicket:panel>
+	</body>
+</html>
