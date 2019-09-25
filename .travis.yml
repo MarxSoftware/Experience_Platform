@@ -1,0 +1,7 @@
+language: java
+jdk:
+  - openjdk13
+script:
+  - cd webtools-parent
+  - mvn install -DskipTests=true -Dmaven.javadoc.skip=true -B -V
+  - mvn test -B
