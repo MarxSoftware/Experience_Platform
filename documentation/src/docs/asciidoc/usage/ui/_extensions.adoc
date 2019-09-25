@@ -1,0 +1,5 @@
+==== Extensions
+
+Extensions provide additional functionality to the webTools-Platform.
+The extension manager allows to upload new extension.
+Activte, deactivate or uninstall installed extensions.

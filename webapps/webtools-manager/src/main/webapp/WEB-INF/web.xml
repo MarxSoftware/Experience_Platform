@@ -1,0 +1,243 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  #%L
+  webtools-manager
+  %%
+  Copyright (C) 2016 - 2018 Thorsten Marx
+  %%
+  This program is free software: you can redistribute it and/or modify
+  it under the terms of the GNU General Public License as
+  published by the Free Software Foundation, either version 3 of the
+  License, or (at your option) any later version.
+  
+  This program is distributed in the hope that it will be useful,
+  but WITHOUT ANY WARRANTY; without even the implied warranty of
+  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  GNU General Public License for more details.
+  
+  You should have received a copy of the GNU General Public
+  License along with this program.  If not, see
+  <http://www.gnu.org/licenses/gpl-3.0.html>.
+  #L%
+  -->
+
+<web-app metadata-complete="true" version="3.0" xmlns="http://java.sun.com/xml/ns/javaee" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_3_0.xsd">
+	<!--
+	<context-param>
+		<param-name>configuration</param-name>
+		<param-value>development</param-value>
+	</context-param>
+	-->
+	<context-param>
+		<param-name>configuration</param-name>
+		<param-value>deployment</param-value>
+	</context-param>
+	
+	<context-param>
+		<param-name>STAGE</param-name>
+		<param-value>development</param-value>
+	</context-param>
+	<listener>
+		<listener-class>com.thorstenmarx.webtools.ContextListener</listener-class>
+	</listener>
+
+	<filter>
+		<filter-name>CORSFilter</filter-name>
+		<filter-class>com.thorstenmarx.webtools.web.filter.CORSRequestFilter</filter-class>
+		<async-supported>true</async-supported>
+	</filter>
+	
+	
+	<!-- START MANAGER -->
+	<display-name>webTools</display-name>
+	<filter>
+		<filter-name>ManagerApplication</filter-name>
+		<filter-class>org.apache.wicket.protocol.http.WicketFilter</filter-class>
+		<async-supported>true</async-supported>
+		<init-param>
+			<param-name>applicationClassName</param-name>
+			<param-value>com.thorstenmarx.webtools.manager.ManagerApplication</param-value>
+		</init-param>
+	</filter>
+	<filter-mapping>
+		<filter-name>ManagerApplication</filter-name>
+		<url-pattern>/manager/*</url-pattern>
+	</filter-mapping>
+	<!-- END MANAGER -->
+	
+	<!-- START MNAGER REST -->
+	<servlet>
+		<servlet-name>ManagerRestApplication</servlet-name>
+		<servlet-class>org.glassfish.jersey.servlet.ServletContainer</servlet-class>
+		<async-supported>true</async-supported>
+		<init-param>
+			<param-name>javax.ws.rs.Application</param-name>
+			<param-value>com.thorstenmarx.webtools.manager.rest.ManagerRestApplication</param-value>
+		</init-param>
+		<load-on-startup>1</load-on-startup>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>ManagerRestApplication</servlet-name>
+		<url-pattern>/manager-rest/*</url-pattern>
+	</servlet-mapping>
+	<filter-mapping>
+		<filter-name>CORSFilter</filter-name>
+		<url-pattern>/manager-rest/*</url-pattern>
+	</filter-mapping>
+	<filter>
+		<filter-name>SessionFilter</filter-name>
+		<filter-class>org.apache.wicket.protocol.http.servlet.WicketSessionFilter</filter-class>
+		<async-supported>true</async-supported>
+		<init-param>
+			<param-name>filterName</param-name>
+			<param-value>ManagerApplication</param-value>
+		</init-param>
+	</filter>
+	<filter-mapping>
+		<filter-name>SessionFilter</filter-name>
+		<url-pattern>/manager-rest/*</url-pattern>
+	</filter-mapping>
+	<filter>
+		<filter-name>ManagerRestSecurityFilter</filter-name>
+		<filter-class>com.thorstenmarx.webtools.manager.rest.SecurityFilter</filter-class>
+		<async-supported>true</async-supported>
+	</filter>
+	<filter-mapping>
+		<filter-name>ManagerRestSecurityFilter</filter-name>
+		<url-pattern>/manager-rest/*</url-pattern>
+	</filter-mapping>
+	<!-- END MANAGER REST -->
+	
+	<!-- START INSECURE REST-->
+	<servlet>
+		<servlet-name>RestApplication</servlet-name>
+		<servlet-class>org.glassfish.jersey.servlet.ServletContainer</servlet-class>
+		<async-supported>true</async-supported>
+		<init-param>
+			<param-name>javax.ws.rs.Application</param-name>
+			<param-value>com.thorstenmarx.webtools.web.rest.RestApplication</param-value>
+		</init-param>
+		<load-on-startup>1</load-on-startup>
+	</servlet>
+	<filter-mapping>
+		<filter-name>CORSFilter</filter-name>
+		<url-pattern>/api/*</url-pattern>
+	</filter-mapping>
+	<servlet-mapping>
+		<servlet-name>RestApplication</servlet-name>
+		<url-pattern>/api/*</url-pattern>
+	</servlet-mapping>
+	<!-- END INSECURE REST-->
+	
+	<!-- START -->
+	<servlet>
+		<servlet-name>SecureRestApplication</servlet-name>
+		<servlet-class>org.glassfish.jersey.servlet.ServletContainer</servlet-class>
+		<async-supported>true</async-supported>
+		<init-param>
+			<param-name>javax.ws.rs.Application</param-name>
+			<param-value>com.thorstenmarx.webtools.web.rest.SecureRestApplication</param-value>
+		</init-param>
+		<load-on-startup>1</load-on-startup>
+	</servlet>
+	
+	<servlet>
+		<servlet-name>TrackServlet</servlet-name>
+		<servlet-class>com.thorstenmarx.webtools.web.servlets.TrackServlet</servlet-class>
+		<async-supported>true</async-supported>
+	</servlet>
+	
+	<servlet>
+		<servlet-name>JsonPServlet</servlet-name>
+		<servlet-class>com.thorstenmarx.webtools.web.servlets.JsonPServlet</servlet-class>
+		<async-supported>true</async-supported>
+	</servlet>
+	<servlet>
+		<servlet-name>ExtensionServlet</servlet-name>
+		<servlet-class>com.thorstenmarx.webtools.web.servlets.ExtensionServlet</servlet-class>
+		<async-supported>true</async-supported>
+	</servlet>
+	
+	<servlet>
+		<servlet-name>ExtensionFileServlet</servlet-name>
+		<servlet-class>com.thorstenmarx.webtools.web.servlets.ExtensionFileServlet</servlet-class>
+		<async-supported>true</async-supported>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>SecureRestApplication</servlet-name>
+		<url-pattern>/rest/*</url-pattern>
+	</servlet-mapping>
+	<servlet-mapping>
+		<servlet-name>TrackServlet</servlet-name>
+		<url-pattern>/track</url-pattern>
+	</servlet-mapping>
+	<servlet-mapping>
+		<servlet-name>ExtensionServlet</servlet-name>
+		<url-pattern>/extension</url-pattern>
+	</servlet-mapping>
+	<servlet-mapping>
+		<servlet-name>JsonPServlet</servlet-name>
+		<url-pattern>/js/data.js</url-pattern>
+	</servlet-mapping>
+	<servlet-mapping>
+		<servlet-name>ExtensionFileServlet</servlet-name>
+		<url-pattern>/extension/file/*</url-pattern>
+	</servlet-mapping>
+	
+	
+	<filter>
+		<filter-name>RequestFilter</filter-name>
+		<filter-class>com.thorstenmarx.webtools.web.filter.HTTPRequestFilter</filter-class>
+	</filter>
+	<filter-mapping>
+		<filter-name>RequestFilter</filter-name>
+		<url-pattern>/rest/*</url-pattern>
+	</filter-mapping>
+	<filter>
+		<filter-name>ApiKeyFilter</filter-name>
+		<filter-class>com.thorstenmarx.webtools.web.filter.ApiKeyFilter</filter-class>
+	</filter>
+	<filter-mapping>
+		<filter-name>ApiKeyFilter</filter-name>
+		<url-pattern>/rest/*</url-pattern>
+	</filter-mapping>
+	<filter-mapping>
+		<filter-name>CORSFilter</filter-name>
+		<url-pattern>/rest/*</url-pattern>
+	</filter-mapping>
+	<!-- END -->
+	
+	<mime-mapping>
+		<extension>svg</extension>
+		<mime-type>image/svg+xml</mime-type>
+	</mime-mapping>
+	<mime-mapping>
+		<extension>ttf</extension>
+		<mime-type>application/x-font-ttf</mime-type>
+	</mime-mapping>
+	
+	<mime-mapping>
+		<extension>otf</extension>
+		<mime-type>application/x-font-opentype</mime-type>
+	</mime-mapping>
+	<mime-mapping>
+		<extension>woff</extension>
+		<mime-type>application/font-woff</mime-type>
+	</mime-mapping>
+	
+	<mime-mapping>
+		<extension>woff2</extension>
+		<mime-type>application/font-woff2</mime-type>
+	</mime-mapping>
+	<mime-mapping>
+		<extension>eot</extension>
+		<mime-type>application/vnd.ms-fontobject</mime-type>
+	</mime-mapping>
+	
+	<mime-mapping>
+		<extension>sfnt</extension>
+		<mime-type>application/font-sfnt</mime-type>
+	</mime-mapping>
+	
+	<absolute-ordering/>
+</web-app>

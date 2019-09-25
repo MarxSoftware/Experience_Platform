@@ -1,0 +1,90 @@
+<!--
+  #%L
+  webtools-manager
+  %%
+  Copyright (C) 2016 - 2018 Thorsten Marx
+  %%
+  This program is free software: you can redistribute it and/or modify
+  it under the terms of the GNU General Public License as
+  published by the Free Software Foundation, either version 3 of the
+  License, or (at your option) any later version.
+  
+  This program is distributed in the hope that it will be useful,
+  but WITHOUT ANY WARRANTY; without even the implied warranty of
+  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  GNU General Public License for more details.
+  
+  You should have received a copy of the GNU General Public
+  License along with this program.  If not, see
+  <http://www.gnu.org/licenses/gpl-3.0.html>.
+  #L%
+-->
+<?xml version="1.0" encoding="UTF-8" ?>
+<!--
+
+    WebTools-Platform
+    Copyright (C) 2016-2018  ThorstenMarx (kontakt@thorstenmarx.com)
+
+    This program is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with this program.  If not, see <http://www.gnu.org/licenses/>.
+
+-->
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:wicket="http://wicket.apache.org">
+	<head>
+		<title></title>
+	</head>
+	<body>
+
+		<wicket:fragment wicket:id="sidebarSection">
+			<span class="heading" wicket:id="title"></span>
+			<ul class="list-unstyled">
+				<wicket:container wicket:id="links">
+					<wicket:container wicket:id="content" />
+				</wicket:container>
+			</ul>
+		</wicket:fragment>
+		<wicket:fragment wicket:id="sidebarMenu">
+			<li wicket:id="list">
+				<a wicket:id="target" href="#exampledropdownDropdown" aria-expanded="false" data-toggle="collapse"> <i wicket:id="icon" class="material-icons">settings</i>&nbsp;<span wicket:id="title">[Title]</span></a>
+				<ul wicket:id="items" id="exampledropdownDropdown" class="list-unstyled ">
+					<wicket:container wicket:id="links">
+						<wicket:container wicket:id="content" />
+					</wicket:container>
+				</ul>
+			</li>
+		</wicket:fragment>
+		<wicket:fragment wicket:id="sidebarMenuItem">
+			<li wicket:id="list"><a wicket:id="target"> <i class="material-icons" wicket:id="icon"></i>&nbsp;<span wicket:id="title">[Title]</span></a></li>
+		</wicket:fragment>
+
+		<wicket:panel>
+			<nav class="side-navbar">
+				<div class="sidebar-header d-flex align-items-center">
+					<div class="title">
+						<h1 class="h4">Experience Platform</h1>
+					</div>
+				</div>
+				<wicket:container wicket:id="sections">
+					<wicket:container wicket:id="content" />
+				</wicket:container>
+				<ul>
+					<li>
+						<wicket:link>
+							<a class="nav-link" href="/com/thorstenmarx/webtools/manager/pages/LogoutPage.html">Logout</a>
+						</wicket:link>
+					</li>
+				</ul>
+			</nav>
+		</wicket:panel>
+	</body>
+</html>

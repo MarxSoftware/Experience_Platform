@@ -1,0 +1,22 @@
+{
+    "files": [
+        "src/ts/webtools.ts",
+        "src/ts/cookie.ts",
+        "src/ts/tools.ts",
+        "src/ts/domready.ts",
+        "src/ts/element.ts",
+        "src/ts/tracking.ts",
+        "src/ts/frontend.ts",
+        "src/ts/highlight.ts",
+        "src/ts/request.ts",
+    ],
+    "compilerOptions": {
+        "noImplicitAny": true,
+        "target": "es2018",
+        "allowJs": true
+    },
+    "lib": [
+        "es7", 
+        "dom"
+    ]
+}

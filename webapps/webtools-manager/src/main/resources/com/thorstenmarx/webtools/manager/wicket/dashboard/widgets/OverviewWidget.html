@@ -1,0 +1,71 @@
+<!--
+  #%L
+  webtools-manager
+  %%
+  Copyright (C) 2016 - 2018 Thorsten Marx
+  %%
+  This program is free software: you can redistribute it and/or modify
+  it under the terms of the GNU General Public License as
+  published by the Free Software Foundation, either version 3 of the
+  License, or (at your option) any later version.
+  
+  This program is distributed in the hope that it will be useful,
+  but WITHOUT ANY WARRANTY; without even the implied warranty of
+  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  GNU General Public License for more details.
+  
+  You should have received a copy of the GNU General Public
+  License along with this program.  If not, see
+  <http://www.gnu.org/licenses/gpl-3.0.html>.
+  #L%
+  -->
+<?xml version="1.0" encoding="UTF-8" ?>
+<!--
+
+    WebTools-Platform
+    Copyright (C) 2016-2018  ThorstenMarx (kontakt@thorstenmarx.com)
+
+    This program is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with this program.  If not, see <http://www.gnu.org/licenses/>.
+
+-->
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:wicket="http://wicket.apache.org">
+	<head>
+		<title></title>
+	</head>
+	<body>
+		<wicket:extend>
+			<div id="chartContainer" style="min-width: 310px; height: 400px; margin: 0 auto">
+				<script type="text/javascript">
+					var svg = dimple.newSvg("#chartContainer", "100%", "100%");
+					var site = $("select#sites").find("option:selected").val();
+					if (typeof site === "undefined") {
+						site = "";
+					}
+					d3.json("/manager-rest/dashboard/overview?site=" + site, function (data) {
+//						data = dimple.filterData(data, "Owner", ["Aperture", "Black Mesa"])
+						var myChart = new dimple.chart(svg, data.points);
+//						myChart.setBounds(60, 30, 505, 305);
+						var x = myChart.addCategoryAxis("x", "Day");
+						x.addOrderRule("Day");
+						myChart.addMeasureAxis("y", "Count");
+						var s = myChart.addSeries("type", dimple.plot.line);
+						s.interpolation = "cardinal";
+						myChart.addLegend(60, 10, 500, 20, "right");
+						myChart.draw();
+					});
+				</script>
+			</div>
+		</wicket:extend>
+	</body>
+</html>

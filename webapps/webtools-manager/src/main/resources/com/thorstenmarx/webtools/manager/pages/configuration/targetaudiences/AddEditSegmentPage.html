@@ -1,0 +1,181 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<!--
+  #%L
+  webtools-manager
+  %%
+  Copyright (C) 2016 - 2018 Thorsten Marx
+  %%
+  This program is free software: you can redistribute it and/or modify
+  it under the terms of the GNU General Public License as
+  published by the Free Software Foundation, either version 3 of the
+  License, or (at your option) any later version.
+  
+  This program is distributed in the hope that it will be useful,
+  but WITHOUT ANY WARRANTY; without even the implied warranty of
+  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  GNU General Public License for more details.
+  
+  You should have received a copy of the GNU General Public
+  License along with this program.  If not, see
+  <http://www.gnu.org/licenses/gpl-3.0.html>.
+  #L%
+  -->
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en"
+	  xmlns:wicket="http://wicket.apache.org/dtds.data/wicket-xhtml1.4-strict.dtd">
+	<head>
+		<title>Item Directory v0.1</title>
+	</head>
+	<body>
+		<wicket:extend>
+		
+			<form action="" wicket:id="addSegmentForm">
+				<input type="hidden" id="id" wicket:id="id" />
+				<fieldset>
+					<legend><wicket:message key="label.basic">Basic information</wicket:message></legend>
+					<div class="form-group">
+						<label for="name" wicket:id="nameLabel">Segment name</label> 
+						<input type="text" id="name" wicket:id="name" class="form-control"/>
+						<small class="form-text text-muted">
+							The segment name.
+						</small>
+					</div>
+					<div class="form-check" >
+						<input type="checkbox" id="active" wicket:id="segmentActive" class="form-check-input"/>
+						<label class="form-check-label" for="active" wicket:id="activeLabel"></label>
+						<small class="form-text text-muted">
+							Activate the segment generation.
+						</small>
+					</div>
+				</fieldset>
+				<div id="time-accordion" role="tablist">
+					<div class="card">
+						<div class="card-header" role="tab" id="headingTime">
+							<h5 class="mb-0">
+								<a data-toggle="collapse" href="#collapseTime" aria-expanded="true" aria-controls="collapseTime">
+									<wicket:message key="label.timerange">Timerange</wicket:message>
+								</a>
+							</h5>
+						</div>
+
+						<div id="collapseTime" class="collapse show" role="tabpanel" aria-labelledby="headingTime" data-parent="#time-accordion">
+							<div class="card-body">
+								<h6 class="card-subtitle mb-2 text-muted">The time range to calculate the segment.</h6>
+								<div class="row">
+									<div class="col">
+										<div class="form-group">
+											<label for="timeInterval"><wicket:message key="label.timerange.interval">Interval</wicket:message></label>
+											<select id="timeInterval" class="form-control" wicket:id="timerange-interval"/>
+											<small class="form-text text-muted">
+												The interval, e.g. day, week, month, year.
+											</small>
+										</div>
+									</div>
+									<div class="col">
+										<div class="form-group">
+											<label for="timeCount"><wicket:message key="label.timerange.count">Count</wicket:message></label>
+											<input type="text" id="timeCount" class="form-control" wicket:id="timerange-count"/>
+											<small class="form-text text-muted">
+												Number of intervals.
+											</small>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+
+				<div id="rules-accordion" role="tablist">
+					<div class="card">
+						<div class="card-header" role="tab" id="headingRules">
+							<h5 class="mb-0">
+								<a data-toggle="collapse" href="#collapseRules" aria-expanded="true" aria-controls="collapseRules">
+									<wicket:message key="rules.title">Rules</wicket:message>
+								</a>
+							</h5>
+						</div>
+
+						<div id="collapseRules" class="collapse show" role="tabpanel" aria-labelledby="headingRules" data-parent="#rules-accordion">
+							<div class="card-body">
+								<textarea id="contentArea" wicket:id="content" style="display: none;" data-bind="text: json"></textarea>
+								<div data-bind="with: group">
+									<div data-bind="template: templateName"></div>
+								</div>
+								<!-- HTML Template For Conditions -->
+								<wicket:container wicket:id="pageViewRuleTemplate"></wicket:container>
+								<wicket:container wicket:id="firstVisitRuleTemplate"></wicket:container>
+								<wicket:container wicket:id="eventRuleTemplate"></wicket:container>
+								<wicket:container wicket:id="scoreRuleTemplate"></wicket:container>
+								<wicket:container wicket:id="locationRuleTemplate"></wicket:container>
+								<wicket:container wicket:id="browserRuleTemplate"></wicket:container>
+								<wicket:container wicket:id="osRuleTemplate"></wicket:container>
+								<wicket:container wicket:id="deviceRuleTemplate"></wicket:container>
+								<wicket:container wicket:id="campaignRuleTemplate"></wicket:container>
+								<wicket:container wicket:id="referrerRuleTemplate"></wicket:container>
+								<wicket:container wicket:id="keyvalueRuleTemplate"></wicket:container>
+
+
+
+
+								<!-- HTML Template For Groups -->
+								<script id="group-template" type="text/html">
+									<div class="group">
+										<div class="form-inline">
+											<!--select class="form-control" data-bind="options: logicalOperators, value: selectedLogicalOperator"></select-->
+											<div class="btn-group btn-group-toggle" data-toggle="buttons">
+												<label class="btn btn-secondary active">
+													<input type="radio" name="options" id="option1" autocomplete="off" value="AND" data-bind="bsChecked: selectedLogicalOperator"> AND
+												</label>
+												<label class="btn btn-secondary">
+													<input type="radio" name="options" id="option2" autocomplete="off" value="OR" data-bind="bsChecked: selectedLogicalOperator"> OR
+												</label>
+												<label class="btn btn-secondary">
+													<input type="radio" name="options" id="option3" autocomplete="off" value="NOT" data-bind="bsChecked: selectedLogicalOperator"> NOT
+												</label>
+											</div>
+											<button style="float:right;" class="btn btn-sm btn-danger" data-bind="click: $parent.removeChild"><i class="fa fa-trash-o"></i></button>
+										</div>
+
+										<div class="group-conditions">
+											<div data-bind="foreach: children">
+												<div data-bind="template: templateName"></div>
+											</div>
+										</div>
+										<div class="btn-group" role="group">
+											<button id="btnGroupDrop1" type="button" class="btn btn-secondary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+												<i class="fas fa-plus"></i> <wicket:message key="button.addrule.label">Add Rule</wicket:message>
+											</button>
+											<div class="dropdown-menu" aria-labelledby="btnGroupDrop1">
+												<button class="dropdown-item" data-bind="click: addFirstVisitCondition">FirstVisitRule</button>
+												<button class="dropdown-item" data-bind="click: addPageViewCondition">PageViewRule</button>
+												<button class="dropdown-item" data-bind="click: addEventCondition">EventRule</button>
+												<button class="dropdown-item" data-bind="click: addScoreCondition">ScoreRule</button>
+												<button class="dropdown-item" data-bind="click: addLocationCondition">LocationRule</button>
+												<button class="dropdown-item" data-bind="click: addBrowserCondition">BrowserRule</button>
+												<button class="dropdown-item" data-bind="click: addOSCondition">OperatingSystemRule</button>
+												<button class="dropdown-item" data-bind="click: addDeviceCondition">DeviceRule</button>
+												<button class="dropdown-item" data-bind="click: addCampaignCondition">CampaignRule</button>
+												<button class="dropdown-item" data-bind="click: addReferrerCondition">ReferrerRule</button>
+												<button class="dropdown-item" data-bind="click: addKeyValueCondition">KeyValueRule</button>
+												<div class="dropdown-divider"></div>
+												<button class="dropdown-item" data-bind="click: addGroup"><span class="fa fa-object-group"></span> Group</button>
+											</div>
+										</div>
+									</div>
+								</script>
+							</div>
+						</div>
+					</div>
+				</div>
+				<br/>
+				<input type="submit" wicket:message="value:save" class="btn btn-success" name="save" wicket:id="submitButton"/>
+				<button class="btn btn-primary" name="cancel" wicket:id="cancelButton"><wicket:message key="cancel"/></button>
+
+				<div wicket:id="feedback"></div>
+			</form>
+
+		</wicket:extend>
+	</body>
+</html>

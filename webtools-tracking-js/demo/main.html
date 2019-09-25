@@ -1,0 +1,30 @@
+<html>
+
+<head>
+		<meta charset='utf-8'>
+	<script src="../src/js/webtools.js"></script>
+	<script src="../src/js/domready.js"></script>
+	<script src="../src/js/tools.js"></script>
+	<script src="../src/js/highlight.js"></script>
+	<script>
+
+		webtools.domReady(function (event) {
+			console.log("ready");
+
+			webtools.Highlight.activate(Array.apply([], document.querySelectorAll('.selectme')));
+		});
+
+	</script>
+</head>
+
+<body>
+	<h1 class="selectme">Hallo</h1>
+	<div>
+		Hier ist Text
+		<h4 class="selectme">Hier eine Überschrift</h4>
+		hier wieder text
+	</div>
+
+</body>
+
+</html>

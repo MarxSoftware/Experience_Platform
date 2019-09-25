@@ -1,0 +1,90 @@
+<!--
+
+    WebTools-Platform
+    Copyright (C) 2016-2018  ThorstenMarx (kontakt@thorstenmarx.com)
+
+    This program is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with this program.  If not, see <http://www.gnu.org/licenses/>.
+
+-->
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<!--
+  #%L
+  webtools-manager
+  %%
+  Copyright (C) 2016 - 2018 Thorsten Marx
+  %%
+  This program is free software: you can redistribute it and/or modify
+  it under the terms of the GNU General Public License as
+  published by the Free Software Foundation, either version 3 of the
+  License, or (at your option) any later version.
+  
+  This program is distributed in the hope that it will be useful,
+  but WITHOUT ANY WARRANTY; without even the implied warranty of
+  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  GNU General Public License for more details.
+  
+  You should have received a copy of the GNU General Public
+  License along with this program.  If not, see
+  <http://www.gnu.org/licenses/gpl-3.0.html>.
+  #L%
+  -->
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en"
+	  xmlns:wicket="http://wicket.apache.org/dtds.data/wicket-xhtml1.4-strict.dtd">
+	<head>
+		<title>test</title>
+	</head>
+	<body>
+		<wicket:extend>
+
+			<div>
+				<form wicket:id="simpleUpload">
+					<fieldset>
+						<legend><wicket:message key="form.title"/></legend>
+						<p>
+							<label for="simpleUpload" class="btn btn-default btn-file">
+								<wicket:message key="form.extension.label"/>
+								<input wicket:id="fileInput" type="file" id="simpleUpload" style="display:none;"/>
+							</label>
+						</p>
+						<input class="btn btn-success btn-lg btn-block" type="submit" value="Upload" wicket:message="value:form.submit"/>
+					</fieldset>
+				</form>
+			</div>
+			<wicket:enclosure child="extensions">
+				<table class="table table-striped table-hover">
+					<tr>
+						<th><wicket:message key="th.id"/></th>
+						<th><wicket:message key="th.name"/></th>
+						<th><wicket:message key="th.version"/></th>
+						<th><wicket:message key="th.active"/></th>
+						<th><wicket:message key="th.actions"/></th>
+					</tr>
+					<span wicket:id="extensions">
+						<tr>
+							<td><span wicket:id="id"></span></td>
+							<td><span wicket:id="name"></span></td>
+							<td><span wicket:id="version"></span></td>
+							<td><span wicket:id="active"></span></td>
+							<td align="center">
+								<a href wicket:id="actionLink"><wicket:container wicket:id="label" /></a>
+							</td>
+						</tr>
+					</span>
+				</table>
+			</wicket:enclosure>
+
+		</wicket:extend>
+	</body>
+</html>

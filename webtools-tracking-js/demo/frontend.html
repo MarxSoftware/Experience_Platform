@@ -1,0 +1,38 @@
+<html>
+
+<head>
+		<meta charset='utf-8'>
+	<script src="../build/js/webtools.js"></script>
+	<script src="../build/js/domready.js"></script>
+	<script src="../build/js/frontend.js"></script>
+	<script>
+		TMA_CONFIG = {
+			"user_segments" : ["3"]
+		};
+		webtools.domReady(function (event) {
+			webtools.Frontend.update(TMA_CONFIG.user_segments);
+		});
+	</script>
+	<style>
+		.tma-hide {
+			display: none;
+		}
+	</style>
+</head>
+
+<body>
+	<h1 class="selectme">Hallo</h1>
+	<div>
+		<p class="tma-hide" data-tma-group="default" data-tma-segments="1,2" data-tma-matching="single" data-tma-personalization="enabled">
+			Ich bin nur da, wenn 1 und 2 ok ist.
+		</p>
+		<p class="tma-hide" data-tma-group="default" data-tma-segments="1,2" data-tma-matching="all" data-tma-personalization="enabled">
+			Ich bin nur da, wenn 1 oder 2 ok ist.
+		</p>
+		<p data-tma-group="default" data-tma-default="yes" data-tma-personalization="enabled">
+			Ich bin der default
+		</p>
+	</div>
+</body>
+
+</html>

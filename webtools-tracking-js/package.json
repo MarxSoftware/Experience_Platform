@@ -1,0 +1,9 @@
+{
+  "dependencies": {
+    "gulp": "^4.0.0",
+    "gulp-concat": "^2.6.1",
+    "gulp-minify": "^3.1.0",
+    "gulp-typescript": "^5.0.0",
+    "typescript": "^3.3.3"
+  }
+}

@@ -1,0 +1,38 @@
+==== Target Audience
+
+This is the place to define your targeting.
+
+==== Segment editor
+
+The segment editor is a simple ui to configure audiences. 
+
+==== Advanced Segments
+
+The advanced segments are create via a simple DSL. To create an advanced segmente use the left sidebar menu menu:TargetAudience[AdvancedSegment]
+
+
+.Segmentation on traffic source
+[source,javascript]
+----
+segment().and(rule(REFERRER).medium('SEARCH'))  #<1>
+segment().and(rule(REFERRER).medium('SOCIAL'))  #<2>
+segment().and(rule(REFERRER).medium('EMAIL'))   #<3>
+segment().and(rule(REFERRER).medium('PAID'))    #<4>
+----
+<1> Traffic from search engines
+<2> Traffic from social networks
+<3> Traffic from mail providers
+<4> Paid traffic
+
+.Segmentation on campaign
+[source,javascript]
+----
+segment().and(rule(CAMPAIGN)    #<1>
+    .campaign("summer sale")    #<2>
+    .medium('SOCIAL')           #<3>
+    .source("twitter"))         #<4>
+----
+<1> Start new campaign rule
+<2> Name of the campaign (utm_campaign)
+<3> Campaign medium (utm_medium)
+<4> Campaign source (utm_source)

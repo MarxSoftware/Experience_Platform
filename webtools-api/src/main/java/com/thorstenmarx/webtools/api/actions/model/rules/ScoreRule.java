@@ -1,0 +1,105 @@
+package com.thorstenmarx.webtools.api.actions.model.rules;
+
+/*-
+ * #%L
+ * webtools-api
+ * %%
+ * Copyright (C) 2016 - 2018 Thorsten Marx
+ * %%
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as
+ * published by the Free Software Foundation, either version 3 of the
+ * License, or (at your option) any later version.
+ * 
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ * 
+ * You should have received a copy of the GNU General Public
+ * License along with this program.  If not, see
+ * <http://www.gnu.org/licenses/gpl-3.0.html>.
+ * #L%
+ */
+import com.alibaba.fastjson.JSONObject;
+import com.thorstenmarx.webtools.api.analytics.query.ShardDocument;
+import com.thorstenmarx.webtools.api.actions.model.Rule;
+import com.thorstenmarx.webtools.collection.CounterMapMap;
+import java.util.Map;
+
+/**
+ *
+ * @author thmarx
+ */
+public class ScoreRule extends Rule<ScoreRule> {
+
+	private String name;
+	private int score;
+
+	public ScoreRule() {
+	}
+
+	public String name() {
+		return name;
+	}
+
+	public ScoreRule name(String name) {
+		this.name = name;
+		return this;
+	}
+
+	public int score() {
+		return score;
+	}
+
+	public ScoreRule score(int score) {
+		this.score = score;
+		return this;
+	}
+
+	@Override
+	public String toString() {
+		return "ScoreRule{" + "name=" + name + ", score=" + score + '}';
+	}
+
+	@Override
+	protected void extendJson(final JSONObject rule) {
+		rule.put("type", "score");
+		rule.put("name", name);
+		rule.put("score", score);
+	}
+
+	public static Rule fromJson(final JSONObject jsonRule) {
+		ScoreRule rule = new ScoreRule();
+		Rule.extendBasic(jsonRule, rule);
+
+		rule.name(jsonRule.getString("name"));
+		rule.score(jsonRule.getIntValue("score"));
+
+		return rule;
+	}
+
+	@Override
+	public void handle(final ShardDocument doc, final CounterMapMap<String, String> results) {
+		if (doc.document.containsKey("score")) {
+			String[] scores = doc.document.getJSONArray("score").toArray(new String[1]);
+			final String userid = doc.document.getString("userid");
+			for (String docScore : scores) {
+				if (docScore.startsWith(name() + ":")) {
+					String[] values = docScore.split(":");
+					results.add(userid, values[0], Integer.parseInt(values[1]));
+				}
+			}
+		}
+	}
+
+	@Override
+	public boolean match(final Map<String, Integer> values) {
+		if (values.containsKey(name) && values.get(name) >= score) {
+			// Entsprechender Score wurde erreicht
+			return true;
+		}
+		return false;
+	}
+
+}

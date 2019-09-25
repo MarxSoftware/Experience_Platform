@@ -1,0 +1,22 @@
+=== WordPress
+Die webTools Platform ist voll in WordPress Integriert!
+
+
+==== Installation
+
+To use the WordPress integration please install the https://wordpress.org/plugins/tma-webtools[tma-webtools WordPress Plugin].
+
+
+==== Editor Plugins
+
+include::_shortcode.adoc[]
+
+include::pagebuilders/_gutenberg.adoc[]
+
+include::pagebuilders/_elementor.adoc[]
+
+include::pagebuilders/_beaver_builder.adoc[]
+
+==== Core WordPress
+
+include::_widget.adoc[]

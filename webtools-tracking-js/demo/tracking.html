@@ -1,0 +1,35 @@
+<html >
+	<head>
+		<title>Tracking TestPage</title>
+		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+		<!--script src="../build/js/webtools-tracking.js"></script-->
+		<script src="http://localhost:8083/tracking/js/webtools.js"></script>
+
+		<script>
+			
+			webtools.Tracking.init("http://localhost:8083", "testsite", "testpage");
+			webtools.Tracking.setCookieDomain(".local.host");
+			webtools.Tracking.customParameters ({test: "mein test", demo : [ "meine demo", "noch eins" ]});
+			webtools.Tracking.register();
+			
+			function doTrack () {
+				webtools.Tracking.track("click");
+			}
+			function doScore () {
+				var scores = {
+					tester : 5,
+					mode : 10
+				};
+				webtools.Tracking.score(scores);
+			}
+		</script>
+	</head>
+	<body >
+		<h1>Hier wird getackt</h1>
+		<button onclick="doTrack()">TRACK ME</button>
+		<button onclick="doScore()">Score ME</button>
+		
+		<br />
+		<div id="aImage"></div>
+	</body>
+</html>

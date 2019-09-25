@@ -1,0 +1,60 @@
+<!--
+  #%L
+  webtools-manager
+  %%
+  Copyright (C) 2016 - 2018 Thorsten Marx
+  %%
+  This program is free software: you can redistribute it and/or modify
+  it under the terms of the GNU General Public License as
+  published by the Free Software Foundation, either version 3 of the
+  License, or (at your option) any later version.
+  
+  This program is distributed in the hope that it will be useful,
+  but WITHOUT ANY WARRANTY; without even the implied warranty of
+  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  GNU General Public License for more details.
+  
+  You should have received a copy of the GNU General Public
+  License along with this program.  If not, see
+  <http://www.gnu.org/licenses/gpl-3.0.html>.
+  #L%
+  -->
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:wicket="http://wicket.apache.org">
+	<head>
+		<title></title>
+	</head>
+	<body>
+		<wicket:panel>
+			<script id="campaign-condition-template" type="text/html">
+				<div class="card condition form">
+					<fieldset class="form-group">
+						<legend>
+							<wicket:message key="label.rule.campaign">[FirstVisit]</wicket:message> 
+							<button class="btn btn-danger btn-xs btn-delete" data-bind="click: $parent.removeChild"><i class="fa fa-trash-o"></i></button>
+						</legend>
+						<div class="row">
+							<div class="col">
+								<div class="form-group">
+									<label class="form-control-label"><wicket:message key="label.details.campaign">[Campaign]</wicket:message></label>
+									<input class="form-control input-sm" id="campaignName" wicket:id="campaign" data-bind="value: campaign"></input>
+								</div>
+							</div>
+							<div class="col">
+								<div class="form-group">
+									<label class="form-control-label"><wicket:message key="label.details.medium">[Medium]</wicket:message></label>
+									<input class="form-control input-sm" id="campaignMedium" wicket:id="medium" data-bind="value: medium"><input>
+								</div>
+							</div>
+							<div class="col">
+								<div class="form-group">
+									<label class="form-control-label"><wicket:message key="label.details.source">[Source]</wicket:message></label>
+									<input class="form-control input-sm" id="campaignSource" wicket:id="source" data-bind="value: source"></input>
+								</div>
+							</div>
+						</div>
+					</fieldset>
+				</div>
+			</script>
+		</wicket:panel>
+	</body>
+</html>

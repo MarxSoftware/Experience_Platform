@@ -1,0 +1,23 @@
+== Installation und erste Schritte
+
+Die aktuelle Version der webTools Platform kann über https://bintray.com/thmarx/generic/webTools[Bintry].
+
+.Systemanforderungen
+* Java Version 11
+
+.Installation
+* Laden sie die aktuelle Version {webtools-version} von Bintray
+* Entpacken sie die Datei in ein beliebiges Verzeichnis.
+
+.Start der webTools-Platform
+....
+java -jar start.jar
+....
+
+.Erste Schritte
+Während des ersten Starts der Anwendung, wird ein zufälliges Password generiert und in die Datei *error.log* geschrieben.
+Diese Password ist für den *admin* Benutzer und sollte umgehend geändert werden.
+
+.WordPress Plugin
+Das WordPress Plugin kann über das offizielle Plugin Repository installiert werden.
+Öffnen sie dazu ihre WordPress Installation und suchen sie unter Plugins->Installieren nach *tma-webtools* und installieren sie das Plugin.

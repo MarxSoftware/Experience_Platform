@@ -1,0 +1,14 @@
+== Release == 
+mvn release:prepare
+mvn release:perform
+
+set manager web.xml configuration to deployment
+
+== update version == 
+mvn versions:set -DnewVersion=3.1.0 -DprocessAllModules
+mvn versions:commit -DprocessAllModules
+
+== development ==
+Sidebar styles: https://bootstrapious.com/p/admin-template
+used color: sea
+

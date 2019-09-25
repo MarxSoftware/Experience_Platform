@@ -1,0 +1,54 @@
+<!--
+  #%L
+  webtools-incubator
+  %%
+  Copyright (C) 2016 - 2018 Thorsten Marx
+  %%
+  This program is free software: you can redistribute it and/or modify
+  it under the terms of the GNU General Public License as
+  published by the Free Software Foundation, either version 3 of the
+  License, or (at your option) any later version.
+  
+  This program is distributed in the hope that it will be useful,
+  but WITHOUT ANY WARRANTY; without even the implied warranty of
+  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  GNU General Public License for more details.
+  
+  You should have received a copy of the GNU General Public
+  License along with this program.  If not, see
+  <http://www.gnu.org/licenses/gpl-3.0.html>.
+  #L%
+  -->
+<html>
+
+<head>
+	<script src="hook2.js"></script>
+	
+</head>
+
+<body>
+	<p>
+		<button onclick="on('click',function(){alert('hook `'+(new Date()).getTime()+'` added!')});">Add a
+			<code>click</code> Hook</button>
+		<button onclick="on('click.foo',function(){alert('hook `click.foo` added!')});">Add a
+			<code>click</code> Hook with ID
+			<code>foo</code>
+		</button>
+	</p>
+	<p>
+		<button onclick="off('click');">Remove All
+			<code>click</code> Hooks</button>
+		<button onclick="off('click.foo');">Remove a
+			<code>click</code> Hook with ID
+			<code>foo</code>
+		</button>
+	</p>
+	<p>
+		<button onclick="trigger('click');">Trigger All
+			<code>click</code> Hooks</button>
+		<button onclick="trigger('click.foo');">Trigger
+			<code>click</code> Hook with ID `foo`</button>
+	</p>
+</body>
+
+</html>

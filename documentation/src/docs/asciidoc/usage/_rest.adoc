@@ -1,0 +1,19 @@
+=== REST-API
+
+The REST API to collect and retriev data.
+
+=== Read
+
+[cols="h,5a"]
+|===
+| URL
+| /rest/version
+
+| Method
+| GET
+
+| Response Body
+| ----
+{ "version": "{webtools-version}"}
+----
+|===

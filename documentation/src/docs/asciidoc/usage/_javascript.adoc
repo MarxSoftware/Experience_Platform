@@ -1,0 +1,42 @@
+=== JavaScript-API
+
+Die JavaScript API dient zur Integration in verschiedene Web-Projekte.
+Sie bietet eine einfach Schnittstelle, alle Arten von Events zu Tracken.
+
+.Hinzufügen der JavaScript API
+[source,html]
+----
+<script src="http://webtools.local.host:8080/js/webtools.js"></script>
+----
+
+.Init and configuration of the webTools API
+[source,javascript]
+----
+webtools.Tracking.init("http://webtools.local.host:8080", "testsite", "testpage"); // <1>
+webtools.Tracking.setCookieDomain(".local.host"); // <2>
+webtools.Tracking.customParameters ({test: "mein test", demo : [ "meine demo", "noch eins" ]}); // <3>
+webtools.Tracking.register(); // <4>
+----
+<1> Init and configure the webTools library
+<2> Setzen sie die Cookiedomain, wenn sie über verschiedene Subdomains hinweg tracken wollen.
+<3> Die benutzerdefinierten Parameter werden bei jedem Event mit getrackt.
+<4> Der Aufruf der register Methode trackt einen initialen PageView.
+
+.Scoreing
+[source,javascript]
+----
+var scores = { // <1>
+	tester : 5,
+	mode : 10
+};
+webtools.Tracking.score(scores); // <2>
+----
+<1> Konfiguriere die Scores, die getrackt werden sollen
+<2> Das abschließende Tracken der Scores
+
+.Tracking of custom events
+[source,javascript]
+----
+webtools.Tracking.track("banner_clicked");
+----
+<1> Trackt das Event *banne_clicked*

@@ -1,0 +1,11 @@
+=== Manager
+
+The main focus of the manager is to create and configure target audiences.
+
+
+include::_audience.adoc[]
+
+include::_apikey.adoc[]
+include::_extensions.adoc[]
+include::_password.adoc[]
+include::_sites.adoc[]

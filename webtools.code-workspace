@@ -1,0 +1,22 @@
+{
+	"folders": [
+		{
+			"path": "webtools-tracking-js"
+		},
+		{
+			"path": "documentation"
+		},
+		{
+			"path": "mock"
+		},
+		{
+			"path": "distribution"
+		},
+		{
+			"path": "webtools-query-editor"
+		}
+	],
+	"settings": {
+		"java.configuration.updateBuildConfiguration": "automatic"
+	}
+}

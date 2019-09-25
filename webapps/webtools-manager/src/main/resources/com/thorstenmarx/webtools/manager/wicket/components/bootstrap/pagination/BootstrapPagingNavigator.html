@@ -1,0 +1,59 @@
+<!--
+  #%L
+  webtools-manager
+  %%
+  Copyright (C) 2016 - 2018 Thorsten Marx
+  %%
+  This program is free software: you can redistribute it and/or modify
+  it under the terms of the GNU General Public License as
+  published by the Free Software Foundation, either version 3 of the
+  License, or (at your option) any later version.
+  
+  This program is distributed in the hope that it will be useful,
+  but WITHOUT ANY WARRANTY; without even the implied warranty of
+  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  GNU General Public License for more details.
+  
+  You should have received a copy of the GNU General Public
+  License along with this program.  If not, see
+  <http://www.gnu.org/licenses/gpl-3.0.html>.
+  #L%
+  -->
+<!--
+
+    WebTools-Platform
+    Copyright (C) 2016-2018  ThorstenMarx (kontakt@thorstenmarx.com)
+
+    This program is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with this program.  If not, see <http://www.gnu.org/licenses/>.
+
+-->
+<html xmlns:wicket="http://wicket.apache.org">
+<body>
+
+	<wicket:panel>
+		<ul class="pagination pagination-sm">
+			<li wicket:id="firstCont"><a wicket:id="first" href="#">&lt;&lt;</a></li>
+			<li wicket:id="prevCont"><a wicket:id="prev" href="#">&lt;</a></li>
+			<li wicket:id="nextCont"><a wicket:id="next" href="#">&gt;</a></li>
+			<li wicket:id="lastCont"><a wicket:id="last" href="#">&gt;&gt;</a></li>
+			<li class="disabled"><a href="#">&nbsp;</a></li>
+			<li wicket:id="navigation"><a wicket:id="pageLink" href="#">
+					<span wicket:id="pageNumber">1</span>
+			</a></li>
+
+		</ul>
+	</wicket:panel>
+
+</body>
+</html>
