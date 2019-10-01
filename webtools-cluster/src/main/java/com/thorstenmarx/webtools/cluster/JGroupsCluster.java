@@ -75,15 +75,15 @@ public class JGroupsCluster extends ReceiverAdapter implements RAFT.RoleChange, 
 	
 	public final String name;
 
-	private ReplicatedMessageService messageService;
+	private final ReplicatedMessageService messageService;
 	private LockService lockService;
 	private ClusterDataLayer dataLayer;
 	private JChannel clusterChannel;
 
 	private ExecutorService executorService;
 	
-	private ClusterActionSystem clusterActionSystem;
-	private AnalyticsDB db;
+	private final ClusterActionSystem clusterActionSystem;
+	private final AnalyticsDB db;
 	private ExecutorService service;
 	private Future<?> segmentExecutionRunner;
 	
