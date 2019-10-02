@@ -38,13 +38,13 @@ package com.thorstenmarx.webtools.actions.segmentation;
  * #L%
  */
 
-import com.thorstenmarx.webtools.actions.segmentation.mocks.MockEntities;
 import com.thorstenmarx.webtools.api.TimeWindow;
 import com.thorstenmarx.webtools.api.actions.SegmentService;
 import com.thorstenmarx.webtools.api.actions.model.AdvancedSegment;
 import com.thorstenmarx.webtools.api.datalayer.DataLayer;
 import com.thorstenmarx.webtools.api.datalayer.SegmentData;
 import com.thorstenmarx.webtools.api.entities.Entities;
+import com.thorstenmarx.webtools.test.MockEntities;
 import java.util.List;
 import java.util.Set;
 import java.util.concurrent.TimeUnit;

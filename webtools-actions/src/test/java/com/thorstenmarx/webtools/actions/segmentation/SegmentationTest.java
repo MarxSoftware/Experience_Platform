@@ -21,12 +21,10 @@ package com.thorstenmarx.webtools.actions.segmentation;
  * <http://www.gnu.org/licenses/gpl-3.0.html>.
  * #L%
  */
-import com.thorstenmarx.webtools.actions.segmentation.mocks.MockDataLayer;
-import com.thorstenmarx.webtools.actions.segmentation.mocks.MockedExecutor;
 import com.alibaba.fastjson.JSONObject;
 import com.thorstenmarx.webtools.actions.ActionSystem;
 import com.thorstenmarx.webtools.actions.TestHelper;
-import com.thorstenmarx.webtools.actions.segmentation.mocks.MockAnalyticsDB;
+import com.thorstenmarx.webtools.actions.segmentation.mocks.MockedExecutor;
 import com.thorstenmarx.webtools.api.TimeWindow;
 import com.thorstenmarx.webtools.api.datalayer.SegmentData;
 import com.thorstenmarx.webtools.api.actions.SegmentService;
@@ -38,6 +36,8 @@ import com.thorstenmarx.webtools.api.analytics.AnalyticsDB;
 import com.thorstenmarx.webtools.api.analytics.Fields;
 import com.thorstenmarx.webtools.api.datalayer.DataLayer;
 import com.thorstenmarx.webtools.base.Configuration;
+import com.thorstenmarx.webtools.test.MockAnalyticsDB;
+import com.thorstenmarx.webtools.test.MockDataLayer;
 import static org.assertj.core.api.Assertions.*;
 import org.testng.annotations.AfterClass;
 import org.testng.annotations.AfterMethod;

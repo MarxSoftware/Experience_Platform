@@ -21,30 +21,56 @@ package com.thorstenmarx.webtools.tracking.useragent;
  * <http://www.gnu.org/licenses/gpl-3.0.html>.
  * #L%
  */
-
 import com.alibaba.fastjson.JSONObject;
+import com.blueconic.browscap.Capabilities;
+import com.blueconic.browscap.ParseException;
+import com.blueconic.browscap.UserAgentParser;
+import com.blueconic.browscap.UserAgentService;
 import com.thorstenmarx.webtools.api.analytics.Fields;
+import java.io.IOException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
  * @author marx
  */
-public class UserAgentFilter  {
+public class UserAgentFilter {
 
-	
-	public static void filter(final JSONObject object) {
-		if (object.getJSONObject("data").containsKey(Fields.UserAgent.value())) {
-			String userAgentString = object.getJSONObject("data").getString(Fields.UserAgent.value());
-			eu.bitwalker.useragentutils.UserAgent ua = eu.bitwalker.useragentutils.UserAgent.parseUserAgentString(userAgentString);
-			if (ua != null) {
-				object.getJSONObject("data").put("browser.name", ua.getBrowser().name());
-				object.getJSONObject("data").put("browser.group", ua.getBrowser().getGroup().name());
-				object.getJSONObject("data").put("browser.version", ua.getBrowserVersion().getVersion());
-				object.getJSONObject("data").put("os.name", ua.getOperatingSystem().name());
-				object.getJSONObject("data").put("os.group", ua.getOperatingSystem().getGroup().name());
-				object.getJSONObject("data").put("os.type", ua.getOperatingSystem().getDeviceType().name());
-			}
+	private static UserAgentFilter INSTANCE = null;
+
+	public static UserAgentFilter getInstance() throws IOException {
+		if (INSTANCE == null) {
+			INSTANCE = new UserAgentFilter();
+		}
+
+		return INSTANCE;
+	}
+
+	final UserAgentParser parser;
+
+	private UserAgentFilter() throws IOException {
+		try {
+			parser = new UserAgentService().loadParser();
+		} catch (ParseException ex) {
+			throw new IOException(ex);
 		}
 	}
 
+	public void filter(final JSONObject object) {
+		if (object.getJSONObject("data").containsKey(Fields.UserAgent.value())) {
+			String userAgentString = object.getJSONObject("data").getString(Fields.UserAgent.value());
+			
+			final Capabilities capabilities = parser.parse(userAgentString);
+			
+			if (capabilities != null){
+				object.getJSONObject("data").put("browser.name", capabilities.getBrowser());
+				object.getJSONObject("data").put("browser.version", capabilities.getBrowserMajorVersion());
+				object.getJSONObject("data").put("browser.type", capabilities.getBrowserType());
+				object.getJSONObject("data").put("os.name", capabilities.getPlatform());
+				object.getJSONObject("data").put("os.version", capabilities.getPlatformVersion());
+				object.getJSONObject("data").put("device.type", capabilities.getDeviceType());
+			}
+		}
+	}
 }

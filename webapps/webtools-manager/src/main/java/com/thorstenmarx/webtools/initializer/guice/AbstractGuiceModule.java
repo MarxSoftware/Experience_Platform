@@ -82,8 +82,8 @@ public abstract class AbstractGuiceModule extends AbstractModule {
 	public AbstractGuiceModule() {
 	}
 
-	protected void initAnalyticsFilters(final AnalyticsDB db, final LocationProvider locationProvider) {
-		db.addFilter(UserAgentFilter::filter);
+	protected void initAnalyticsFilters(final AnalyticsDB db, final LocationProvider locationProvider) throws IOException {
+		db.addFilter(UserAgentFilter.getInstance()::filter);
 
 		LocationFilter locationFilter = new LocationFilter(locationProvider);
 		db.addFilter(locationFilter);

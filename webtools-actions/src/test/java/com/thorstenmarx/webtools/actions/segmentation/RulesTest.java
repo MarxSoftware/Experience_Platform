@@ -21,12 +21,10 @@ package com.thorstenmarx.webtools.actions.segmentation;
  * <http://www.gnu.org/licenses/gpl-3.0.html>.
  * #L%
  */
-import com.thorstenmarx.webtools.actions.segmentation.mocks.MockDataLayer;
-import com.thorstenmarx.webtools.actions.segmentation.mocks.MockedExecutor;
 import com.alibaba.fastjson.JSONObject;
 import com.thorstenmarx.webtools.actions.ActionSystem;
 import com.thorstenmarx.webtools.actions.TestHelper;
-import com.thorstenmarx.webtools.actions.segmentation.mocks.MockAnalyticsDB;
+import com.thorstenmarx.webtools.actions.segmentation.mocks.MockedExecutor;
 import java.util.HashMap;
 import java.util.Map;
 import org.testng.annotations.AfterMethod;
@@ -40,7 +38,8 @@ import com.thorstenmarx.webtools.api.actions.model.rules.KeyValueRule;
 import com.thorstenmarx.webtools.api.analytics.AnalyticsDB;
 import com.thorstenmarx.webtools.api.datalayer.DataLayer;
 import com.thorstenmarx.webtools.base.Configuration;
-import java.io.File;
+import com.thorstenmarx.webtools.test.MockAnalyticsDB;
+import com.thorstenmarx.webtools.test.MockDataLayer;
 import java.io.IOException;
 import java.util.Set;
 import java.util.concurrent.TimeUnit;

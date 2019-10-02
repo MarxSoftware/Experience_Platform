@@ -76,6 +76,11 @@
 			<artifactId>easymock</artifactId>
 			<scope>test</scope>
 		</dependency>
+		<dependency>
+			<groupId>com.thorstenmarx.webtools</groupId>
+			<artifactId>webtools-test</artifactId>
+			<scope>test</scope>
+		</dependency>
 	</dependencies>
 	<licenses>
 		<license>
