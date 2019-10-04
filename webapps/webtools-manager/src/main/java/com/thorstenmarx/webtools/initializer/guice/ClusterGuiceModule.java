@@ -40,6 +40,7 @@ import com.thorstenmarx.webtools.api.location.LocationProvider;
 import com.thorstenmarx.webtools.cluster.JGroupsCluster;
 import com.thorstenmarx.webtools.initializer.CoreModuleManager;
 import com.thorstenmarx.webtools.initializer.Internal;
+import java.io.IOException;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
@@ -55,7 +56,7 @@ public class ClusterGuiceModule extends AbstractGuiceModule {
 
     @Provides
     @Singleton
-    private AnalyticsDB analyticsDB(final LocationProvider locationProvider, @CoreModuleManager ModuleManager moduleManager) {
+    private AnalyticsDB analyticsDB(final LocationProvider locationProvider, @CoreModuleManager ModuleManager moduleManager) throws IOException {
         if (ContextListener.STATE.shuttingDown()) {
             return null;
         }

@@ -42,6 +42,7 @@ import com.thorstenmarx.webtools.api.location.LocationProvider;
 import com.thorstenmarx.webtools.initializer.CoreModuleManager;
 import com.thorstenmarx.webtools.initializer.guice.local.LocalCacheLayer;
 import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.io.Serializable;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
@@ -55,7 +56,7 @@ public class LocalGuiceModule extends AbstractGuiceModule {
 
     @Provides
     @Singleton
-    private AnalyticsDB analyticsDB(final LocationProvider locationProvider, @CoreModuleManager ModuleManager moduleManager) {
+    private AnalyticsDB analyticsDB(final LocationProvider locationProvider, @CoreModuleManager ModuleManager moduleManager) throws IOException {
         if (ContextListener.STATE.shuttingDown()) {
             return null;
         }
