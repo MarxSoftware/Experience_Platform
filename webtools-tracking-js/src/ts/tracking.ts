@@ -73,7 +73,7 @@
         var aid = webtools.Cookie.get(cookiename);
         if (aid === null || aid === "") {  
             if (uidStorage && uidStorage.getItem(cookiename) !== null) {
-                localStorage.getItem(cookiename);
+                aid = localStorage.getItem(cookiename);
             } else {
                 aid = webtools.Tools.uuid();
             }
