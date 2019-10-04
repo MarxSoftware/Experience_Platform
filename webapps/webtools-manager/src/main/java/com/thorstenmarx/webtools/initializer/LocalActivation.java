@@ -28,8 +28,8 @@ import com.google.inject.Key;
 import com.thorstenmarx.modules.api.ModuleManager;
 import com.thorstenmarx.webtools.ContextListener;
 import com.thorstenmarx.webtools.Fields;
-import com.thorstenmarx.webtools.actions.ActionSystem;
 import com.thorstenmarx.webtools.api.Lookup;
+import com.thorstenmarx.webtools.api.actions.ActionSystem;
 import com.thorstenmarx.webtools.api.analytics.AnalyticsDB;
 import com.thorstenmarx.webtools.api.configuration.Configuration;
 import com.thorstenmarx.webtools.api.execution.Executor;
@@ -39,6 +39,7 @@ import com.thorstenmarx.webtools.manager.model.User;
 import com.thorstenmarx.webtools.manager.services.UserService;
 import com.thorstenmarx.webtools.manager.utils.Helper;
 import com.thorstenmarx.webtools.api.location.LocationProvider;
+import com.thorstenmarx.webtools.initializer.guice.BaseGuiceModule;
 import java.util.Optional;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -54,17 +55,12 @@ public class LocalActivation implements Activation {
 	
 	@Override
 	public void initialize () {
-		Injector injector = Guice.createInjector(new LocalGuiceModule());
+		Injector injector = Guice.createInjector(new LocalGuiceModule(), new BaseGuiceModule());
 		ContextListener.INJECTOR_PROVIDER.injector(injector);
 
-		ContextListener.INJECTOR_PROVIDER.injector().getInstance(ActionSystem.class).start();
-
-		
 		EventBus eventBus = new EventBus();
 		Lookup.getDefault().register(EventBus.class, eventBus);
-
 		Lookup.getDefault().register(AnalyticsDB.class, injector.getInstance(AnalyticsDB.class));
-		Lookup.getDefault().register(ActionSystem.class, injector.getInstance(ActionSystem.class));
 		
 
 		UserService users = injector.getInstance(UserService.class);
@@ -90,22 +86,14 @@ public class LocalActivation implements Activation {
 			config.set(Fields.ApiKey.value(), apikey);
 		}
 		
-		// init module manager by get the instance from guice
+		// init module manager by getting the instance from guice
 		ContextListener.INJECTOR_PROVIDER.injector().getInstance(ModuleManager.class);
+		ContextListener.INJECTOR_PROVIDER.injector().getInstance(ActionSystem.class);
 	}
 	
 	@Override
 	public void destroy () {
 		ContextListener.STATE.shuttingDown(true);
-
-		try {
-			ActionSystem actionSystem = ContextListener.INJECTOR_PROVIDER.injector().getInstance(ActionSystem.class);
-			if (actionSystem != null) {
-				actionSystem.close();
-			}
-		} catch (Exception ex) {
-			LOGGER.error("", ex);
-		}
 
 		// close modulemanager
 		ModuleManager moduleManager = ContextListener.INJECTOR_PROVIDER.injector().getInstance(ModuleManager.class);

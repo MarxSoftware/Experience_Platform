@@ -17,3 +17,4 @@ nb-configuration.xml
 *.iml
 .factorypath
 nbactions.xml
+tests/acceptance/www/caddy.exe

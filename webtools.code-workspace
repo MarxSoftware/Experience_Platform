@@ -13,7 +13,7 @@
 			"path": "distribution"
 		},
 		{
-			"path": "webtools-query-editor"
+			"path": "tests"
 		}
 	],
 	"settings": {

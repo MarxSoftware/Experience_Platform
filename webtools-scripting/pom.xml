@@ -3,7 +3,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>com.thorstenmarx.webtools</groupId>
 	<artifactId>webtools-scripting</artifactId>
-	<version>3.1.0</version>
+	<version>3.2.0-SNAPSHOT</version>
 	<name>webtools-scripting</name>
 	<description>Scripting</description>
 	<inceptionYear>2016</inceptionYear>
@@ -24,7 +24,7 @@
 			<dependency>
 				<groupId>com.thorstenmarx.webtools</groupId>
 				<artifactId>webtools-bom</artifactId>
-				<version>3.1.0</version>
+				<version>3.2.0-SNAPSHOT</version>
 				<scope>import</scope>
 				<type>pom</type>
 			</dependency>   

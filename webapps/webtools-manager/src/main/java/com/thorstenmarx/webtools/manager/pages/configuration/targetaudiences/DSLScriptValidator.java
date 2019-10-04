@@ -23,8 +23,7 @@ package com.thorstenmarx.webtools.manager.pages.configuration.targetaudiences;
  */
 import com.thorstenmarx.modules.api.ModuleManager;
 import com.thorstenmarx.webtools.ContextListener;
-import com.thorstenmarx.webtools.actions.dsl.DSLSegment;
-import com.thorstenmarx.webtools.actions.dsl.rhino.RhinoDSL;
+import com.thorstenmarx.webtools.api.actions.ActionSystem;
 import javax.script.ScriptException;
 import net.engio.mbassy.bus.MBassador;
 import org.apache.logging.log4j.LogManager;
@@ -40,15 +39,12 @@ import org.apache.wicket.validation.ValidationError;
 public class DSLScriptValidator implements IValidator<String> {
 
 	private static final Logger LOGGER = LogManager.getLogger(DSLScriptValidator.class);
-	private RhinoDSL dslRunner;
 	final String message;
+	private final ActionSystem actionSystem;
 
 	public DSLScriptValidator(final String message) {
 		this.message = message;
-		dslRunner = new RhinoDSL(
-				ContextListener.INJECTOR_PROVIDER.injector().getInstance(ModuleManager.class),
-				ContextListener.INJECTOR_PROVIDER.injector().getInstance(MBassador.class)
-		);
+		this.actionSystem = ContextListener.INJECTOR_PROVIDER.injector().getInstance(ActionSystem.class);
 	}
 
 	/**
@@ -57,10 +53,7 @@ public class DSLScriptValidator implements IValidator<String> {
 	 */
 	@Override
 	public void validate(IValidatable<String> iv) {
-		try {
-			final DSLSegment segment = dslRunner.build(iv.getValue());
-		} catch (ScriptException ex) {
-			LOGGER.error("", ex);
+		if (!actionSystem.validate(iv.getValue())) {
 			ValidationError error = new ValidationError();
 			error.setMessage(message);
 			iv.error(error);

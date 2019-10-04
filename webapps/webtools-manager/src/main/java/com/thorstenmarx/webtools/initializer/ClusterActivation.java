@@ -29,8 +29,8 @@ import com.google.inject.Key;
 import com.thorstenmarx.modules.api.ModuleManager;
 import com.thorstenmarx.webtools.ContextListener;
 import com.thorstenmarx.webtools.Fields;
-import com.thorstenmarx.webtools.actions.ActionSystem;
 import com.thorstenmarx.webtools.api.Lookup;
+import com.thorstenmarx.webtools.api.actions.ActionSystem;
 import com.thorstenmarx.webtools.api.analytics.AnalyticsDB;
 import com.thorstenmarx.webtools.api.cluster.Cluster;
 import com.thorstenmarx.webtools.api.configuration.Configuration;
@@ -41,7 +41,8 @@ import com.thorstenmarx.webtools.manager.model.User;
 import com.thorstenmarx.webtools.manager.services.UserService;
 import com.thorstenmarx.webtools.manager.utils.Helper;
 import com.thorstenmarx.webtools.api.location.LocationProvider;
-import com.thorstenmarx.webtools.cluster.JGroupsCluster;
+import com.thorstenmarx.webtools.initializer.guice.BaseGuiceModule;
+//import com.thorstenmarx.webtools.cluster.JGroupsCluster;
 import com.thorstenmarx.webtools.initializer.guice.ClusterGuiceModule;
 import java.io.File;
 import java.util.List;
@@ -64,16 +65,16 @@ public class ClusterActivation implements Activation {
 	
 	@Override
 	public void initialize () {
-		Injector injector = Guice.createInjector(new ClusterGuiceModule());
+		Injector injector = Guice.createInjector(new ClusterGuiceModule(), new BaseGuiceModule());
 		ContextListener.INJECTOR_PROVIDER.injector(injector);
 
 		Cluster cluster = ContextListener.INJECTOR_PROVIDER.injector().getInstance(Cluster.class);
-		try {
-			((JGroupsCluster)cluster).start(new File("webtools_data/conf"), false, 3000, new File("webtools_data/data/"));
-		} catch (Exception ex) {
-			LOGGER.error("error start node", ex);
-			throw new IllegalStateException(ex);
-		}
+//		try {
+//			((JGroupsCluster)cluster).start(new File("webtools_data/conf"), false, 3000, new File("webtools_data/data/"));
+//		} catch (Exception ex) {
+//			LOGGER.error("error start node", ex);
+//			throw new IllegalStateException(ex);
+//		}
 		
 		EventBus eventBus = new EventBus();
 		Lookup.getDefault().register(EventBus.class, eventBus);
@@ -113,14 +114,14 @@ public class ClusterActivation implements Activation {
 	public void destroy () {
 		ContextListener.STATE.shuttingDown(true);
 
-		try {
-			Cluster cluster = ContextListener.INJECTOR_PROVIDER.injector().getInstance(Cluster.class);
-			if (cluster != null) {
-				((JGroupsCluster)cluster).close();
-			}
-		} catch (Exception ex) {
-			LOGGER.error("", ex);
-		}
+//		try {
+//			Cluster cluster = ContextListener.INJECTOR_PROVIDER.injector().getInstance(Cluster.class);
+//			if (cluster != null) {
+//				((JGroupsCluster)cluster).close();
+//			}
+//		} catch (Exception ex) {
+//			LOGGER.error("", ex);
+//		}
 
 		// close modulemanager
 		ModuleManager moduleManager = ContextListener.INJECTOR_PROVIDER.injector().getInstance(ModuleManager.class);

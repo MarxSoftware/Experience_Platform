@@ -24,7 +24,7 @@ package com.thorstenmarx.webtools.web.rest.resources.secured;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.thorstenmarx.webtools.ContextListener;
-import com.thorstenmarx.webtools.actions.ActionSystem;
+import com.thorstenmarx.webtools.api.actions.ActionSystem;
 import com.thorstenmarx.webtools.api.actions.SegmentService;
 import com.thorstenmarx.webtools.api.actions.model.Segment;
 import com.thorstenmarx.webtools.api.actions.model.rules.EventRule;

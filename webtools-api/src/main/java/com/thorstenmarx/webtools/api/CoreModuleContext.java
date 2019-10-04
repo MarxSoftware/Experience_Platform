@@ -41,6 +41,7 @@ public class CoreModuleContext extends Context {
 	
 	private final Cluster cluster;
 	
+	
 	public CoreModuleContext (final File dataPath, final MBassador eventBus, final Executor executor) {
 		this(dataPath, eventBus, executor, null);
 	}
@@ -50,6 +51,7 @@ public class CoreModuleContext extends Context {
 		this.executor = executor;
 		this.cluster = cluster;
 	}
+	
 	
 	public boolean isCluster () {
 		return cluster != null;

@@ -21,19 +21,19 @@ package com.thorstenmarx.webtools.initializer.guice;
  * <http://www.gnu.org/licenses/gpl-3.0.html>.
  * #L%
  */
+import com.google.inject.AbstractModule;
 import com.google.inject.Provides;
 import com.google.inject.Singleton;
 import com.thorstenmarx.modules.api.ModuleManager;
 import com.thorstenmarx.webtools.api.analytics.AnalyticsDB;
-import com.thorstenmarx.webtools.base.Configuration;
 import com.thorstenmarx.webtools.ContextListener;
-import com.thorstenmarx.webtools.actions.ActionSystem;
-import com.thorstenmarx.webtools.api.actions.SegmentService;
+import com.thorstenmarx.webtools.api.actions.ActionSystem;
 import com.thorstenmarx.webtools.api.cache.CacheLayer;
 import com.thorstenmarx.webtools.api.configuration.Registry;
 import com.thorstenmarx.webtools.api.datalayer.DataLayer;
 import com.thorstenmarx.webtools.api.entities.Entities;
 import com.thorstenmarx.webtools.api.execution.Executor;
+import com.thorstenmarx.webtools.api.extensions.core.CoreActionSystemExtension;
 import com.thorstenmarx.webtools.api.extensions.core.CoreAnalyticsDbExtension;
 import com.thorstenmarx.webtools.api.extensions.core.CoreDataLayerExtension;
 import com.thorstenmarx.webtools.api.extensions.core.CoreEntitiesExtension;
@@ -41,15 +41,11 @@ import com.thorstenmarx.webtools.api.extensions.core.CoreRegistryExtension;
 import com.thorstenmarx.webtools.api.location.LocationProvider;
 import com.thorstenmarx.webtools.initializer.CoreModuleManager;
 import com.thorstenmarx.webtools.initializer.guice.local.LocalCacheLayer;
-import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.io.Serializable;
 import java.util.List;
-import java.util.concurrent.TimeUnit;
-import javax.annotation.Nullable;
 import net.engio.mbassy.bus.MBassador;
 
-public class LocalGuiceModule extends AbstractGuiceModule {
+public class LocalGuiceModule extends AbstractModule {
 
     public LocalGuiceModule() {
     }
@@ -65,7 +61,7 @@ public class LocalGuiceModule extends AbstractGuiceModule {
 
 		AnalyticsDB db = extensions.get(0).getAnalyticsDb();
 
-        initAnalyticsFilters(db, locationProvider);
+        BaseGuiceModule.initAnalyticsFilters(db, locationProvider);
 
         return db;
     }
@@ -93,16 +89,14 @@ public class LocalGuiceModule extends AbstractGuiceModule {
 
 		return extensions.get(0).getDataLayer();
     }
-	
+
 	@Provides
-	@Singleton
-	protected ActionSystem actionSystem(@Nullable final AnalyticsDB db, final SegmentService segments, final Configuration config, final ModuleManager moduleManager, final MBassador mbassador, final DataLayer datalayer, final Executor executor) throws FileNotFoundException {
-		if (ContextListener.STATE.shuttingDown()) {
-			return null;
-		}
-		ActionSystem actionSystem = new ActionSystem(db, segments, config, moduleManager, mbassador, datalayer, executor);
-		return actionSystem;
-	}
+    @Singleton
+    private ActionSystem actionSystem(final @CoreModuleManager ModuleManager moduleManager, final DataLayer datalayer, final Executor executor, final AnalyticsDB analyticsDB, final MBassador mBassador) {
+        final List<CoreActionSystemExtension> extensions = moduleManager.extensions(CoreActionSystemExtension.class);
+
+		return extensions.get(0).getActionSystem();
+    }
 	
 	@Provides
 	@Singleton
@@ -115,6 +109,8 @@ public class LocalGuiceModule extends AbstractGuiceModule {
 
     @Override
     protected void configure() {
+		
+		
     }
 
 }

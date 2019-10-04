@@ -26,8 +26,7 @@ import com.alibaba.fastjson.JSONObject;
 import com.google.common.base.Strings;
 import com.thorstenmarx.modules.api.ModuleManager;
 import com.thorstenmarx.webtools.ContextListener;
-import com.thorstenmarx.webtools.actions.dsl.DSLSegment;
-import com.thorstenmarx.webtools.actions.dsl.graal.GraalDSL;
+import com.thorstenmarx.webtools.api.actions.ActionSystem;
 import com.thorstenmarx.webtools.api.actions.SegmentService;
 import com.thorstenmarx.webtools.api.actions.model.AdvancedSegment;
 import com.thorstenmarx.webtools.api.actions.model.Segment;
@@ -55,16 +54,11 @@ public class AudienceResource {
 	
 	private static final Logger LOGGER = LogManager.getLogger(AudienceResource.class);
 	
-	private final GraalDSL dslRunner;
-	
 	private final SegmentService segmentService;
+	private final ActionSystem actionSystem;
 	public AudienceResource () {
 		this.segmentService = ContextListener.INJECTOR_PROVIDER.injector().getInstance(SegmentService.class);
-		
-		this.dslRunner = new GraalDSL(
-				ContextListener.INJECTOR_PROVIDER.injector().getInstance(ModuleManager.class),
-				ContextListener.INJECTOR_PROVIDER.injector().getInstance(MBassador.class)
-		);
+		this.actionSystem = ContextListener.INJECTOR_PROVIDER.injector().getInstance(ActionSystem.class);
 	}
 	
 	@GET
@@ -209,9 +203,7 @@ public class AudienceResource {
 			return new ValidationResult(false, "Content should not be null!");
 		}
 		try {
-			final DSLSegment segment = dslRunner.build(dsl);
-			
-			return new ValidationResult(true);
+			return new ValidationResult(actionSystem.validate(dsl));
 		} catch (Exception ex) {
 			return new ValidationResult(false, ex.getMessage());
 		}

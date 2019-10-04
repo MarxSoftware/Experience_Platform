@@ -3,21 +3,18 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>com.thorstenmarx.webtools</groupId>
 	<artifactId>webtools-parent</artifactId>
-	<version>3.1.0</version>
+	<version>3.2.0-SNAPSHOT</version>
 	<packaging>pom</packaging>
 	<modules>
 		<module>../webtools-bom</module>
-		<module>../documentation</module>
+		<!--module>../documentation</module-->
 		<module>../webtools-api</module>
 		<module>../webtools-test</module>
 		<module>../webtools-base</module>
 		<module>../webtools-tracking</module>
-		<module>../webtools-actions</module>
 		<module>../plugin-example</module>
 		<module>../webtools-scripting</module>
-		<!--<module>../webtools-rest</module>-->
-		<!--module>../webtools-saas</module-->
-		<module>../webtools-cluster</module>
+<!--		<module>../webtools-cluster</module>-->
 		<module>../webtools-incubator</module>
 		<module>../webapps/webtools-manager</module>        
 		<module>../webapps/webtools-tracker</module>        

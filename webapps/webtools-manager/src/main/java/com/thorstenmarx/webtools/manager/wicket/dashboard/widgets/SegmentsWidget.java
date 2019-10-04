@@ -21,10 +21,10 @@ package com.thorstenmarx.webtools.manager.wicket.dashboard.widgets;
  * <http://www.gnu.org/licenses/gpl-3.0.html>.
  * #L%
  */
-import com.thorstenmarx.webtools.actions.ActionSystem;
 import com.thorstenmarx.webtools.api.events.DashboardSelectionChangedEvent;
 import com.thorstenmarx.webtools.api.ui.Widget;
 import com.thorstenmarx.webtools.ContextListener;
+import com.thorstenmarx.webtools.api.actions.ActionSystem;
 import com.thorstenmarx.webtools.api.actions.SegmentService;
 import com.thorstenmarx.webtools.api.analytics.AnalyticsDB;
 

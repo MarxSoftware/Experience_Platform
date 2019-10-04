@@ -21,6 +21,7 @@ package com.thorstenmarx.webtools.initializer.guice;
  * <http://www.gnu.org/licenses/gpl-3.0.html>.
  * #L%
  */
+import com.google.inject.AbstractModule;
 import com.google.inject.Provides;
 import com.google.inject.Singleton;
 import com.thorstenmarx.modules.api.ModuleManager;
@@ -37,7 +38,7 @@ import com.thorstenmarx.webtools.api.extensions.core.CoreDataLayerExtension;
 import com.thorstenmarx.webtools.api.extensions.core.CoreEntitiesExtension;
 import com.thorstenmarx.webtools.api.extensions.core.CoreRegistryExtension;
 import com.thorstenmarx.webtools.api.location.LocationProvider;
-import com.thorstenmarx.webtools.cluster.JGroupsCluster;
+//import com.thorstenmarx.webtools.cluster.JGroupsCluster;
 import com.thorstenmarx.webtools.initializer.CoreModuleManager;
 import com.thorstenmarx.webtools.initializer.Internal;
 import java.io.IOException;
@@ -47,7 +48,7 @@ import java.util.Map;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class ClusterGuiceModule extends AbstractGuiceModule {
+public class ClusterGuiceModule extends AbstractModule {
 	
 	private static final Logger LOGGER = LoggerFactory.getLogger(ClusterGuiceModule.class);
 
@@ -65,7 +66,7 @@ public class ClusterGuiceModule extends AbstractGuiceModule {
 
 		AnalyticsDB db = extensions.get(0).getAnalyticsDb();
 
-        initAnalyticsFilters(db, locationProvider);
+        BaseGuiceModule.initAnalyticsFilters(db, locationProvider);
 
         return db;
     }
@@ -86,17 +87,17 @@ public class ClusterGuiceModule extends AbstractGuiceModule {
 		return extensions.get(0).getRegistry();
     }
 	
-	@Provides
-	@Singleton
-	private Cluster cluster (@Internal final AnalyticsDB db, final SegmentService segmentService, final Configuration config) {
-		Map nodeConfig = config.getMap("node", Collections.EMPTY_MAP);
-		if (nodeConfig.isEmpty()) {
-			throw new IllegalStateException("node config not available");
-		}
-		Cluster cluster = new JGroupsCluster((String) nodeConfig.get("name"), segmentService, db);
-		
-		return cluster;
-	}
+//	@Provides
+//	@Singleton
+//	private Cluster cluster (@Internal final AnalyticsDB db, final SegmentService segmentService, final Configuration config) {
+//		Map nodeConfig = config.getMap("node", Collections.EMPTY_MAP);
+//		if (nodeConfig.isEmpty()) {
+//			throw new IllegalStateException("node config not available");
+//		}
+//		Cluster cluster = new JGroupsCluster((String) nodeConfig.get("name"), segmentService, db);
+//		
+//		return cluster;
+//	}
 
     @Provides
     @Singleton
