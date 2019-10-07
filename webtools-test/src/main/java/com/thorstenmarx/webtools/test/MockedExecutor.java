@@ -1,4 +1,4 @@
-package com.thorstenmarx.webtools.actions.segmentation.mocks;
+package com.thorstenmarx.webtools.test;
 
 /*-
  * #%L

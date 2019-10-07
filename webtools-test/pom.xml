@@ -1,6 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
+
+	<parent>
+		<groupId>com.thorstenmarx.webtools</groupId>
+		<artifactId>webtools-parent</artifactId>
+		<version>3.2.0-SNAPSHOT</version>
+		<relativePath>../webtools-parent</relativePath>
+	</parent>
+
 	<groupId>com.thorstenmarx.webtools</groupId>
 	<artifactId>webtools-test</artifactId>
 	<version>3.2.0-SNAPSHOT</version>
@@ -9,20 +17,15 @@
 	<inceptionYear>2016</inceptionYear>
 	<packaging>jar</packaging>
 	<organization>
-		<name>Thorsten Marx</name>
-		<url>https://thorstenmarx.com</url>
+		<name>WP DigitalExperience</name>
+		<url>https://wp-digitalexperience.com</url>
 	</organization>
 	<properties>
-		<maven.compiler.source>12</maven.compiler.source>
-		<maven.compiler.target>12</maven.compiler.target>
+		<maven.compiler.source>13</maven.compiler.source>
+		<maven.compiler.target>13</maven.compiler.target>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 	</properties>
-	<repositories>
-		<repository>
-			<id>jcenter</id>
-			<url>https://jcenter.bintray.com/</url>
-		</repository>
-	</repositories>
+	
 	<dependencyManagement>
 		<dependencies>
 			<dependency>
@@ -77,14 +80,13 @@
 		<url>git@bitbucket.org:thmarx/webtools.git</url>
 		<tag>v2.2.0</tag>
 	</scm>
-	<distributionManagement>
+	<!--	<distributionManagement>
 		<repository>
-			<id>bintray-thmarx-maven</id>
-			<name>thmarx-maven</name>
-			<url>https://api.bintray.com/maven/thmarx/maven/webtools/</url>
-			<!-- ;publish=1 -->
+			<id>bintray-wpdigitalexperience-ExperiencePlatform</id>
+			<name>wpdigitalexperience-ExperiencePlatform</name>
+			<url>https://api.bintray.com/maven/wpdigitalexperience/ExperiencePlatform/Experience-Platform-Artifacts/;publish=1</url>
 		</repository>
-	</distributionManagement>
+	</distributionManagement>-->
 	<build>
 		<plugins>
 			<plugin>
@@ -122,7 +124,7 @@
 					<dependency>
 						<groupId>org.ow2.asm</groupId>
 						<artifactId>asm</artifactId>
-						<version>6.1.1</version>
+						<version>7.2</version>
 						<!-- Use newer version of ASM -->
 					</dependency>
 				</dependencies>

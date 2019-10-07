@@ -4,6 +4,13 @@
 	<groupId>com.thorstenmarx.webtools</groupId>
 	<artifactId>webtools-api</artifactId>
 	<version>3.2.0-SNAPSHOT</version>
+	
+	<parent>
+		<groupId>com.thorstenmarx.webtools</groupId>
+		<artifactId>webtools-parent</artifactId>
+		<version>3.2.0-SNAPSHOT</version>
+		<relativePath>../webtools-parent</relativePath>
+	</parent>
   
 	<name>webtools-api</name>
 	<description>API for the webTools-Platform.</description>
@@ -11,8 +18,8 @@
 	<packaging>jar</packaging>
 	
 	<organization>
-		<name>Thorsten Marx</name>
-		<url>https://thorstenmarx.com</url>
+		<name>WP DigitalExperience</name>
+		<url>https://wp-digitalexperience.com</url>
 	</organization>
   
 	<properties>
@@ -118,14 +125,31 @@
 		<url>git@bitbucket.org:thmarx/webtools.git</url>
 		<tag>v2.2.0</tag>
 	</scm>
-	<distributionManagement>
+<!--	<distributionManagement>
 		<repository>
-			<id>bintray-thmarx-maven</id> 
-			<name>thmarx-maven</name>
-			<url>https://api.bintray.com/maven/thmarx/maven/webtools-api/</url><!-- ;publish=1 -->
+			<snapshots>
+				<enabled>false</enabled>
+			</snapshots>
+			<id>bintray-wpdigitalexperience-ExperiencePlatform</id>
+			<name>wpdigitalexperience-ExperiencePlatform</name>
+			<url>https://api.bintray.com/maven/wpdigitalexperience/ExperiencePlatform/Experience-Platform-Artifacts/</url>
 		</repository>
-	</distributionManagement>
+		<snapshotRepository>
+			<snapshots>
+				<enabled>true</enabled>
+			</snapshots>
+			<id>wp-digitalexperience-ftp</id>
+			<url>ftp://wp-digitalexperience.com/htdocs/wp-digitalexperience/maven2</url>
+		</snapshotRepository>
+	</distributionManagement>-->
 	<build>
+<!--		<extensions>
+			<extension>
+				<groupId>org.apache.maven.wagon</groupId>
+				<artifactId>wagon-ftp</artifactId>
+				<version>3.3.3</version>
+			</extension>
+		</extensions>-->
 		<plugins>
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>

@@ -1,10 +1,8 @@
-package com.thorstenmarx.webtools.api.entities;
-
 /*-
  * #%L
- * webtools-api
+ * webtools-test
  * %%
- * Copyright (C) 2016 - 2018 Thorsten Marx
+ * Copyright (C) 2016 - 2019 WP DigitalExperience
  * %%
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as
@@ -21,19 +19,7 @@ package com.thorstenmarx.webtools.api.entities;
  * <http://www.gnu.org/licenses/gpl-3.0.html>.
  * #L%
  */
-
-import java.util.List;
-
+package com.thorstenmarx.webtools.test;
 /**
- *
- * @author marx
+ * Test Implementations
  */
-public interface Result<T> extends List<T> {
-
-	public int totalSize();
-
-	public int offset();
-
-	public int limit();
-
-}

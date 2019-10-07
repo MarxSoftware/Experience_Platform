@@ -14,23 +14,51 @@
 		<module>../webtools-tracking</module>
 		<module>../plugin-example</module>
 		<module>../webtools-scripting</module>
-<!--		<module>../webtools-cluster</module>-->
+		<!--		<module>../webtools-cluster</module>-->
 		<module>../webtools-incubator</module>
 		<module>../webapps/webtools-manager</module>        
 		<module>../webapps/webtools-tracker</module>        
 	</modules>
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-		<maven.compiler.source>12</maven.compiler.source>
-		<maven.compiler.target>12</maven.compiler.target>
+		<maven.compiler.source>13</maven.compiler.source>
+		<maven.compiler.target>13</maven.compiler.target>
 	</properties>
+	<organization>
+		<name>WP DigitalExperience</name>
+		<url>https://wp-digitalexperience.com</url>
+	</organization>
 	<scm>
 		<connection>scm:git:ssh://git@bitbucket.org/thmarx/webtools2.git</connection>
 		<developerConnection>scm:git:ssh://git@bitbucket.org/thmarx/webtools2.git</developerConnection>
 		<url>https://bitbucket.org/thmarx/webtools2.git</url>
 		<tag>v2.4.0</tag>
 	</scm>
+	<distributionManagement>
+		<repository>
+			<snapshots>
+				<enabled>false</enabled>
+			</snapshots>
+			<id>bintray-wpdigitalexperience-ExperiencePlatform</id>
+			<name>wpdigitalexperience-ExperiencePlatform</name>
+			<url>https://api.bintray.com/maven/wpdigitalexperience/ExperiencePlatform/Experience-Platform-Artifacts/</url>
+		</repository>
+		<snapshotRepository>
+			<snapshots>
+				<enabled>true</enabled>
+			</snapshots>
+			<id>wp-digitalexperience-ftp</id>
+			<url>ftp://wp-digitalexperience.com/htdocs/wp-digitalexperience/maven2</url>
+		</snapshotRepository>
+	</distributionManagement>
 	<build>
+		<extensions>
+			<extension>
+				<groupId>org.apache.maven.wagon</groupId>
+				<artifactId>wagon-ftp</artifactId>
+				<version>3.3.3</version>
+			</extension>
+		</extensions>
 		<plugins>
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
@@ -44,6 +72,7 @@
 			</plugin>
 		</plugins>
 	</build>
+	
 	<repositories>
 		<repository>
 			<id>oracleReleases</id>
@@ -57,9 +86,8 @@
 				<updatePolicy>always</updatePolicy>
 				<checksumPolicy>fail</checksumPolicy>
 			</snapshots>
-			<id>jetty-snapshots</id>
-			<name>jetty Snapshots</name>
-			<url>http://oss.sonatype.org/content/groups/jetty/</url>
+			<id>wp-digitalexperience-ftp</id>
+			<url>ftp://wp-digitalexperience.com/htdocs/wp-digitalexperience/maven2</url>
 			<layout>default</layout>
 		</repository>
 	</repositories>

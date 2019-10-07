@@ -9,8 +9,8 @@
 	<inceptionYear>2016</inceptionYear>
 	<packaging>jar</packaging>
 	<organization>
-		<name>Thorsten Marx</name>
-		<url>https://thorstenmarx.com</url>
+		<name>WP DigitalExperience</name>
+		<url>https://wp-digitalexperience.com</url>
 	</organization>
 	<properties>
 		<maven.compiler.source>12</maven.compiler.source>
