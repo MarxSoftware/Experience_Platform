@@ -35,12 +35,12 @@ import com.thorstenmarx.webtools.api.entities.Entities;
 import com.thorstenmarx.webtools.api.execution.Executor;
 import com.thorstenmarx.webtools.api.extensions.core.CoreActionSystemExtension;
 import com.thorstenmarx.webtools.api.extensions.core.CoreAnalyticsDbExtension;
+import com.thorstenmarx.webtools.api.extensions.core.CoreCacheLayerExtension;
 import com.thorstenmarx.webtools.api.extensions.core.CoreDataLayerExtension;
 import com.thorstenmarx.webtools.api.extensions.core.CoreEntitiesExtension;
 import com.thorstenmarx.webtools.api.extensions.core.CoreRegistryExtension;
 import com.thorstenmarx.webtools.api.location.LocationProvider;
 import com.thorstenmarx.webtools.initializer.CoreModuleManager;
-import com.thorstenmarx.webtools.initializer.guice.local.LocalCacheLayer;
 import java.io.IOException;
 import java.util.List;
 import net.engio.mbassy.bus.MBassador;
@@ -100,11 +100,11 @@ public class LocalGuiceModule extends AbstractModule {
 	
 	@Provides
 	@Singleton
-	protected CacheLayer cachelayer() {
+	protected CacheLayer cachelayer(final @CoreModuleManager ModuleManager moduleManager) {
 		
-		CacheLayer cachelayer = new LocalCacheLayer();
-		
-		return cachelayer;
+		final List<CoreCacheLayerExtension> extensions = moduleManager.extensions(CoreCacheLayerExtension.class);
+
+		return extensions.get(0).getCacheLayer();
 	}
 
     @Override

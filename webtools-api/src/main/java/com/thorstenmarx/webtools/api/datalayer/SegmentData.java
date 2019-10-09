@@ -23,6 +23,7 @@ package com.thorstenmarx.webtools.api.datalayer;
  */
 
 import com.thorstenmarx.webtools.stream.ImmutableCollectionCollectors;
+import java.io.Serializable;
 import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
@@ -32,42 +33,36 @@ import java.util.Set;
  *
  * @author marx
  */
-public class SegmentData implements Data, Expirable {
+public class SegmentData implements Data, Serializable {
 	
 	public static final String KEY = "segments";
 
-	public Set<Segment> segments;
+	public Segment segment;
 
 	public SegmentData() {
-		segments = new HashSet<>();
+		
 	}
 
-	@Override
-	public boolean isExpired() {
-		return getSegments().isEmpty();
-	}
 	
 	/**
 	 * Returns a copy of valid segments.
 	 *
 	 * @return
 	 */
-	public Set<String> getSegments() {
-		final long current = System.currentTimeMillis();
-		return segments.stream().filter((s) -> s.validTo >= current).map((s) -> s.name).collect(ImmutableCollectionCollectors.toImmutableSet());
+	public Segment getSegment() {
+		return segment;
 	}
 
-	public void addSegment(final String name, final long wpid, final long validTo) {
-		segments.add(new Segment(name, wpid, validTo));
+	public void setSegment(final Segment segment) {
+		this.segment = segment;
 	}
-	public void addSegment(final String name, final long wpid) {
-		segments.add(new Segment(name, wpid, Long.MAX_VALUE));
-	}
+
+	
 
 	@Override
 	public int hashCode() {
 		int hash = 3;
-		hash = 47 * hash + Objects.hashCode(this.segments);
+		hash = 47 * hash + Objects.hashCode(this.segment);
 		return hash;
 	}
 
@@ -83,7 +78,7 @@ public class SegmentData implements Data, Expirable {
 			return false;
 		}
 		final SegmentData other = (SegmentData) obj;
-		if (!Objects.deepEquals(this.segments, other.segments)) {
+		if (!Objects.deepEquals(this.segment, other.segment)) {
 			return false;
 		}
 		return true;
@@ -100,23 +95,23 @@ public class SegmentData implements Data, Expirable {
 
 		public String name;
 		public long wpid;
-		public long validTo;
+		public String id;
 
 		public Segment() {
 		}
 
-		public Segment(final String name, final long wpid, final long validTo) {
+		public Segment(final String name, final long wpid, final String id) {
 			this.name = name;
 			this.wpid = wpid;
-			this.validTo = validTo;
+			this.id = id;
 		}
 
 		@Override
 		public int hashCode() {
 			int hash = 5;
 			hash = 61 * hash + Objects.hashCode(this.name);
+			hash = 61 * hash + Objects.hashCode(this.id);
 			hash = 61 * hash + (int) (this.wpid ^ (this.wpid >>> 32));
-			hash = 61 * hash + (int) (this.validTo ^ (this.validTo >>> 32));
 			return hash;
 		}
 
@@ -132,13 +127,13 @@ public class SegmentData implements Data, Expirable {
 				return false;
 			}
 			final Segment other = (Segment) obj;
-			if (this.validTo != other.validTo) {
-				return false;
-			}
 			if (this.wpid != other.wpid) {
 				return false;
 			}
 			if (!Objects.equals(this.name, other.name)) {
+				return false;
+			}
+			if (!Objects.equals(this.id, other.id)) {
 				return false;
 			}
 			return true;

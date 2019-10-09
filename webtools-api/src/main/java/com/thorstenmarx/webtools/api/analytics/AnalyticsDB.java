@@ -26,8 +26,6 @@ import com.thorstenmarx.webtools.api.analytics.query.LimitProvider;
 import com.thorstenmarx.webtools.api.analytics.query.Query;
 import com.thorstenmarx.webtools.api.analytics.query.ShardedQuery;
 import com.thorstenmarx.webtools.api.annotations.API;
-import com.thorstenmarx.webtools.api.datalayer.DataLayer;
-import io.reactivex.Completable;
 import java.util.List;
 
 import java.util.Map;

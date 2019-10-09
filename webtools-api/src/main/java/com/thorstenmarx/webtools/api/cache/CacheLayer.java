@@ -24,6 +24,7 @@ package com.thorstenmarx.webtools.api.cache;
 
 import com.thorstenmarx.webtools.api.annotations.API;
 import java.io.Serializable;
+import java.util.List;
 import java.util.Optional;
 import java.util.concurrent.TimeUnit;
 
@@ -34,11 +35,13 @@ import java.util.concurrent.TimeUnit;
 @API(since = "3.1.0", status = API.Status.Experimental)
 public interface CacheLayer {
 	
-	<T extends Serializable> void add (String key, T value, long duration, TimeUnit unit);
+	<T extends Serializable> void add (String key, T value, final Class<T> clazz, long duration, TimeUnit unit);
 	
-	<T extends Serializable> Optional<T> get (String key, Class<T> clazz);
+	public <T extends Serializable> List<T> list(final String key, final Class<T> clazz);
 	
 	boolean exists (String key);
+	
+	void invalidate (String key);
 	
 	default String key (final String key, final String...parts) {
 		return key + ((parts.length > 0) ? ("_" + String.join("_", parts)) : "");

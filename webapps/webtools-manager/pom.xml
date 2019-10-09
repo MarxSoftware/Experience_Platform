@@ -115,10 +115,6 @@
 		</dependency>
 		
 		<dependency>
-			<groupId>org.jsr107.ri</groupId>
-			<artifactId>cache-ri-impl</artifactId>
-		</dependency>
-		<dependency>
 			<groupId>com.maxmind.db</groupId>
 			<artifactId>maxmind-db</artifactId>
 		</dependency>

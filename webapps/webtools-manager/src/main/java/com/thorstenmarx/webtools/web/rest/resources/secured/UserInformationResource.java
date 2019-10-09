@@ -77,15 +77,14 @@ public class UserInformationResource {
 	private JSONObject userInformation(final String userid) {
 		JSONObject userObj = new JSONObject();
 
-		JSONArray segments = new JSONArray();
-
-		Optional<List<SegmentData>> segmentListOptional = datalayer.list(userid, SegmentData.KEY, SegmentData.class);
-		if (segmentListOptional.isPresent()) {
-			segmentListOptional.get().forEach(sd -> {
-				segments.addAll(sd.segments);
-			});
-		}
-		userObj.put("segments", segments);
+//		JSONArray segments = new JSONArray();
+//		Optional<List<SegmentData>> segmentListOptional = datalayer.list(userid, SegmentData.KEY, SegmentData.class);
+//		if (segmentListOptional.isPresent()) {
+//			segmentListOptional.get().forEach(sd -> {
+//				segments.addAll(sd.segments);
+//			});
+//		}
+//		userObj.put("segments", segments);
 
 		List<RestUserInformationExtension> extensions = moduleManager.extensions(RestUserInformationExtension.class);
 		extensions.forEach((ruie) -> {

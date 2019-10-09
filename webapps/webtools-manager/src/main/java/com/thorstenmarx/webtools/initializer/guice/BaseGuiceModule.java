@@ -61,9 +61,6 @@ import java.net.URLClassLoader;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import javax.cache.CacheManager;
-import javax.cache.Caching;
-import javax.cache.spi.CachingProvider;
 import net.engio.mbassy.bus.MBassador;
 
 /**
@@ -175,17 +172,6 @@ public class BaseGuiceModule extends AbstractModule {
 			return null;
 		}
 		return new MBassador();
-	}
-
-	@Provides
-	@Singleton
-	protected CacheManager cache() {
-		if (ContextListener.STATE.shuttingDown()) {
-			return null;
-		}
-		CachingProvider cachingProvider = Caching.getCachingProvider("org.jsr107.ri.spi.RICachingProvider");
-		CacheManager cacheManager = cachingProvider.getCacheManager();
-		return cacheManager;
 	}
 
 	@Provides

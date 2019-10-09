@@ -14,11 +14,11 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package com.thorstenmarx.webtools.initializer.guice.local;
+package com.thorstenmarx.webtools.api.extensions.core;
 
 /*-
  * #%L
- * webtools-manager
+ * webtools-api
  * %%
  * Copyright (C) 2016 - 2019 Thorsten Marx
  * %%
@@ -38,46 +38,17 @@ package com.thorstenmarx.webtools.initializer.guice.local;
  * #L%
  */
 
-import com.google.common.base.CharMatcher;
+import com.thorstenmarx.modules.api.BaseExtension;
+import com.thorstenmarx.webtools.api.CoreModuleContext;
 import com.thorstenmarx.webtools.api.cache.CacheLayer;
-import java.util.concurrent.TimeUnit;
-import org.assertj.core.api.Assertions;
-import static org.testng.Assert.*;
-import org.testng.annotations.AfterClass;
-import org.testng.annotations.BeforeClass;
-import org.testng.annotations.Test;
-import org.testng.asserts.Assertion;
 
 /**
  *
  * @author marx
  */
-public class LocalCacheLayerNGTest {
+public abstract class CoreCacheLayerExtension extends BaseExtension<CoreModuleContext> {
 	
-	CacheLayer cache;
+	public abstract String getName ();
 	
-	@BeforeClass
-	public void setUpClass() throws Exception {
-		cache = new LocalCacheLayer();
-	}
-
-	@Test
-	public void test_add_exist() {
-		cache.add("test_add", "That's my dog", 5, TimeUnit.SECONDS);		
-		Assertions.assertThat(cache.exists("test_add")).isTrue();
-	}
-	
-	@Test
-	public void test_expire () throws InterruptedException {
-		cache.add("test_expire", "That's my dog", 5, TimeUnit.SECONDS);		
-		Thread.sleep(6000l);
-		Assertions.assertThat(cache.exists("test_expire")).isFalse();	
-	}
-	@Test
-	public void test_get () throws InterruptedException {
-		cache.add("test_get", "That's my dog", 5, TimeUnit.SECONDS);		
-		Thread.sleep(3000l);
-		Assertions.assertThat(cache.get("test_get", String.class).get()).isEqualTo("That's my dog");
-	}
-	
+	public abstract CacheLayer getCacheLayer ();
 }

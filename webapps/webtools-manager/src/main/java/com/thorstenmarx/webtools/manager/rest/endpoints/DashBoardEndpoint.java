@@ -71,7 +71,7 @@ public class DashBoardEndpoint {
 
 			Map<String, SegmentCounter> segmentCounters = new ConcurrentHashMap<>();
 			datalayer.each((uid, sd) -> {
-				final String segId = sd.getSegments().iterator().next();
+				final String segId = sd.getSegment().id;
 
 				if (!segmentCounters.containsKey(segId)) {
 					Segment segment = segmentService.get(segId);
