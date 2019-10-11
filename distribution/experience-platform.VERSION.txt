@@ -1,4 +1,4 @@
-webtoosl-3.2.0
+webtoosl-3.2.0 - 11.10.2019
  [Bugfix] Fix major clean up issue in ActionSystem
  [Feature] Extract ActionSystem into core module
  [Bugfix] Fix user id cookie issue

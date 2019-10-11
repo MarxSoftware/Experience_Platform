@@ -17,8 +17,8 @@
 	<inceptionYear>2016</inceptionYear>
 	<packaging>jar</packaging>
 	<organization>
-		<name>Thorsten Marx</name>
-		<url>https://thorstenmarx.com</url>
+		<name>WP DigitalExperience</name>
+		<url>https://wp-digitalexperience.com</url>
 	</organization>
 	<properties>
 		<maven.compiler.source>11</maven.compiler.source>
@@ -58,18 +58,11 @@
 			<url>https://thorstenmarx.com</url>
 		</developer>
 	</developers>
-	<url>https://thorstenmarx.com/projects/webtools/</url>
+	<url>https://wp-digitalexperience.com/</url>
 	<scm>
 		<url>git@bitbucket.org:thmarx/webtools.git</url>
 		<tag>v2.2.0</tag>
 	</scm>
-<!--	<distributionManagement>
-		<repository>
-			<id>bintray-wpdigitalexperience-ExperiencePlatform</id>
-			<name>wpdigitalexperience-ExperiencePlatform</name>
-			<url>https://api.bintray.com/maven/wpdigitalexperience/ExperiencePlatform/Experience-Platform-Artifacts/;publish=1</url>
-		</repository>
-	</distributionManagement>-->
 	<build>
 		<plugins>
 			<plugin>

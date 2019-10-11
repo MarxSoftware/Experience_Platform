@@ -125,31 +125,7 @@
 		<url>git@bitbucket.org:thmarx/webtools.git</url>
 		<tag>v2.2.0</tag>
 	</scm>
-<!--	<distributionManagement>
-		<repository>
-			<snapshots>
-				<enabled>false</enabled>
-			</snapshots>
-			<id>bintray-wpdigitalexperience-ExperiencePlatform</id>
-			<name>wpdigitalexperience-ExperiencePlatform</name>
-			<url>https://api.bintray.com/maven/wpdigitalexperience/ExperiencePlatform/Experience-Platform-Artifacts/</url>
-		</repository>
-		<snapshotRepository>
-			<snapshots>
-				<enabled>true</enabled>
-			</snapshots>
-			<id>wp-digitalexperience-ftp</id>
-			<url>ftp://wp-digitalexperience.com/htdocs/wp-digitalexperience/maven2</url>
-		</snapshotRepository>
-	</distributionManagement>-->
 	<build>
-<!--		<extensions>
-			<extension>
-				<groupId>org.apache.maven.wagon</groupId>
-				<artifactId>wagon-ftp</artifactId>
-				<version>3.3.3</version>
-			</extension>
-		</extensions>-->
 		<plugins>
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
@@ -171,7 +147,7 @@
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-javadoc-plugin</artifactId>
-				<version>3.0.0</version>
+				<version>3.1.1</version>
 				<configuration>
 					<doclint>none</doclint>
 				</configuration>
@@ -194,7 +170,7 @@
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-source-plugin</artifactId>
-				<version>3.0.1</version>
+				<version>3.1.0</version>
 				<executions>
 					<execution>
 						<id>attach-sources</id>
