@@ -18,3 +18,4 @@ nb-configuration.xml
 .factorypath
 nbactions.xml
 tests/acceptance/www/caddy.exe
+distribution/core_modules/modules/*/

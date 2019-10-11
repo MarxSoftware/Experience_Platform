@@ -1,5 +1,10 @@
-webtools-3.1.0 - .09.2019
- [Feature] Experimental Cluster Support (thorsten)
+webtoosl-3.2.0
+ [Bugfix] Fix major clean up issue in ActionSystem
+ [Feature] Extract ActionSystem into core module
+ [Bugfix] Fix user id cookie issue
+
+webtools-3.1.0 - 25.09.2019
+ [Feature] Experimental Cluster Support
  [Feature] set site only once per segment
  [Feature] Experimental CacheLayer
  [Feature] User segmente site configuration to speed up the lucene query
