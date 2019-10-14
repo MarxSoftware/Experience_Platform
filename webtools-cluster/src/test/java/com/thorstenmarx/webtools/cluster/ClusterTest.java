@@ -37,7 +37,6 @@ package com.thorstenmarx.webtools.cluster;
  * <http://www.gnu.org/licenses/gpl-3.0.html>.
  * #L%
  */
-import com.thorstenmarx.webtools.actions.segmentation.EntitiesSegmentService;
 import com.thorstenmarx.webtools.api.cluster.Message;
 import com.thorstenmarx.webtools.api.datalayer.Data;
 import com.thorstenmarx.webtools.api.cluster.services.LockService;
@@ -76,9 +75,9 @@ public class ClusterTest {
 	@BeforeClass
 	public void setUpClass() throws Exception {
 		FileUtils.deleteDirectory(new File("c:\\entwicklung\\temp\\raft"));
-		serviceA = new JGroupsCluster("A", new EntitiesSegmentService(new MockEntities()), new MockAnalyticsDB());
-		serviceB = new JGroupsCluster("B", new EntitiesSegmentService(new MockEntities()), new MockAnalyticsDB());
-		serviceC = new JGroupsCluster("C", new EntitiesSegmentService(new MockEntities()), new MockAnalyticsDB());
+		serviceA = new JGroupsCluster("A");
+		serviceB = new JGroupsCluster("B");
+		serviceC = new JGroupsCluster("C");
 
 		serviceA.getMessageService().registerMessageListener((m) -> {
 			counta.incrementAndGet();
@@ -139,7 +138,7 @@ public class ClusterTest {
 		Assertions.assertThat(lock_c.tryLock()).isEqualTo(true);
 	}
 
-	@Test
+	@Test(enabled = false)
 	public void test_datalayer_single() throws Exception {
 		serviceA.getDataLayer().add("uid", "name", new MyData("uid_name", "thats my name"));
 
@@ -152,7 +151,7 @@ public class ClusterTest {
 		Assertions.assertThat(myDataList.get().size()).isEqualTo(1);
 	}
 
-	@Test
+	@Test(enabled = false)
 	public void test_datalayer_multi() throws Exception {
 		serviceA.getDataLayer().add("uid1", "name", new MyData("uid_name", "thats my name"));
 		serviceA.getDataLayer().add("uid1", "name", new MyData("uid_name", "thats other data"));
@@ -166,7 +165,7 @@ public class ClusterTest {
 		Assertions.assertThat(myDataList.get().size()).isEqualTo(2);
 	}
 
-	@Test
+	@Test(enabled = false)
 	public void test_datalayer_each() throws Exception {
 		serviceA.getDataLayer().add("uid1", "name1", new MyData("uid_name", "thats my name"));
 		serviceA.getDataLayer().add("uid2", "name1", new MyData("uid_name", "thats other data"));
@@ -183,7 +182,7 @@ public class ClusterTest {
 		Assertions.assertThat(users).containsExactlyInAnyOrder("uid1", "uid2");
 	}
 
-	@Test
+	@Test(enabled = false)
 	public void test_datalayer_clear() throws Exception {
 		serviceA.getDataLayer().add("uid1", "name1", new MyData("uid_name", "thats my name"));
 		serviceA.getDataLayer().add("uid2", "name1", new MyData("uid_name", "thats other data"));
@@ -203,7 +202,7 @@ public class ClusterTest {
 		Assertions.assertThat(users).isEmpty();
 	}
 
-	@Test
+	@Test(enabled = false)
 	public void test_executor() throws InterruptedException, ExecutionException {
 		Future<?> future = serviceA.getExecutorService().submit(MyCallable.get("eins"));
 		System.out.println(future.get());

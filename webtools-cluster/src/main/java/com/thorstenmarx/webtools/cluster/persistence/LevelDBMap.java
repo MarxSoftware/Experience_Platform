@@ -45,7 +45,6 @@ import java.util.concurrent.ConcurrentMap;
 
 import org.iq80.leveldb.*;
 import java.io.*;
-import java.util.AbstractMap;
 import java.util.HashMap;
 import java.util.HashSet;
 import static org.iq80.leveldb.impl.Iq80DBFactory.*;
@@ -95,7 +94,8 @@ public class LevelDBMap implements ConcurrentMap<String, String> {
 
 	@Override
 	public String putIfAbsent(String key, String value) {
-		throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+		db.put(bytes(key), bytes(value));
+		return value;
 	}
 
 	@Override
