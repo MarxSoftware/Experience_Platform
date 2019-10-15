@@ -40,8 +40,6 @@ package com.thorstenmarx.webtools.cluster;
 import com.thorstenmarx.webtools.api.cluster.Message;
 import com.thorstenmarx.webtools.api.datalayer.Data;
 import com.thorstenmarx.webtools.api.cluster.services.LockService;
-import com.thorstenmarx.webtools.test.MockAnalyticsDB;
-import com.thorstenmarx.webtools.test.MockEntities;
 import java.io.File;
 import java.io.Serializable;
 import java.util.HashSet;
@@ -138,7 +136,7 @@ public class ClusterTest {
 		Assertions.assertThat(lock_c.tryLock()).isEqualTo(true);
 	}
 
-	@Test(enabled = false)
+	@Test(enabled = true)
 	public void test_datalayer_single() throws Exception {
 		serviceA.getDataLayer().add("uid", "name", new MyData("uid_name", "thats my name"));
 
@@ -151,7 +149,7 @@ public class ClusterTest {
 		Assertions.assertThat(myDataList.get().size()).isEqualTo(1);
 	}
 
-	@Test(enabled = false)
+	@Test(enabled = true)
 	public void test_datalayer_multi() throws Exception {
 		serviceA.getDataLayer().add("uid1", "name", new MyData("uid_name", "thats my name"));
 		serviceA.getDataLayer().add("uid1", "name", new MyData("uid_name", "thats other data"));
@@ -165,7 +163,7 @@ public class ClusterTest {
 		Assertions.assertThat(myDataList.get().size()).isEqualTo(2);
 	}
 
-	@Test(enabled = false)
+	@Test(enabled = true)
 	public void test_datalayer_each() throws Exception {
 		serviceA.getDataLayer().add("uid1", "name1", new MyData("uid_name", "thats my name"));
 		serviceA.getDataLayer().add("uid2", "name1", new MyData("uid_name", "thats other data"));
@@ -182,7 +180,7 @@ public class ClusterTest {
 		Assertions.assertThat(users).containsExactlyInAnyOrder("uid1", "uid2");
 	}
 
-	@Test(enabled = false)
+	@Test(enabled = true)
 	public void test_datalayer_clear() throws Exception {
 		serviceA.getDataLayer().add("uid1", "name1", new MyData("uid_name", "thats my name"));
 		serviceA.getDataLayer().add("uid2", "name1", new MyData("uid_name", "thats other data"));

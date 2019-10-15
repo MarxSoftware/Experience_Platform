@@ -68,7 +68,7 @@ public class ClusterDataLayer implements DataLayer {
 
 	private final Index index;
 
-	Gson gson = new Gson();
+	private final Gson gson = new Gson();
 
 	public ClusterDataLayer(final JChannel channel, final File dataPath) throws IOException {
 		leveldbMap = new LevelDBMap();

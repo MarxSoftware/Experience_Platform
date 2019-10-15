@@ -17,6 +17,7 @@
 package com.thorstenmarx.webtools.cluster;
 
 import java.io.IOException;
+import java.net.InetAddress;
 import java.net.InetSocketAddress;
 import java.net.MulticastSocket;
 import org.jgroups.JChannel;
@@ -30,7 +31,7 @@ import org.testng.annotations.Test;
  */
 public class JGroupsTest {
 
-	@Test
+	@Test(enabled = true)
 	public void simple() throws Exception {
 
 		try (org.jgroups.JChannel channel = new JChannel("udp.xml")) {
@@ -42,19 +43,27 @@ public class JGroupsTest {
 			});
 			channel.connect("MyCluster");
 			channel.send(new Message(null, "hello world"));
-			
+
 			Thread.sleep(2000);
 		}
 	}
 
-	@Test(enabled = false)
-	public void multisocket() {
+	@Test(enabled = true)
+	public void multisocket_error() throws IOException {
 		InetSocketAddress isa = new InetSocketAddress("239.255.0.113", 1234);
-		try {
-			MulticastSocket mcs = new MulticastSocket(isa);
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
+
+		MulticastSocket mcs = new MulticastSocket(isa);
+
+	}
+
+	@Test(enabled = true)
+	public void multisocket_ok() throws IOException {
+
+		InetAddress ia = InetAddress.getByName("239.255.0.113");
+
+		MulticastSocket mcs = new MulticastSocket(1234);
+		mcs.joinGroup(ia);
+
 	}
 
 }

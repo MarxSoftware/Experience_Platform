@@ -37,8 +37,6 @@ package com.thorstenmarx.webtools.cluster;
  * <http://www.gnu.org/licenses/gpl-3.0.html>.
  * #L%
  */
-import com.thorstenmarx.webtools.api.actions.SegmentService;
-import com.thorstenmarx.webtools.api.analytics.AnalyticsDB;
 import com.thorstenmarx.webtools.api.cluster.Cluster;
 import com.thorstenmarx.webtools.cluster.datalayer.ClusterDataLayer;
 import com.thorstenmarx.webtools.api.datalayer.DataLayer;
@@ -46,13 +44,11 @@ import com.thorstenmarx.webtools.api.cluster.services.LockService;
 import com.thorstenmarx.webtools.api.cluster.services.MessageService;
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.IOException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Future;
 import org.jgroups.JChannel;
 import org.jgroups.ReceiverAdapter;
 import org.jgroups.View;
-import org.jgroups.blocks.executor.ExecutionService;
 import org.jgroups.jmx.JmxConfigurator;
 import org.jgroups.protocols.raft.RAFT;
 import org.jgroups.protocols.raft.Role;
@@ -118,8 +114,8 @@ public class JGroupsCluster extends ReceiverAdapter implements RAFT.RoleChange, 
 			Util.close(raftChannel);
 			Util.close(clusterChannel);
 			
-			segmentExecutionRunner.cancel(true);
-			executorService.shutdownNow();
+//			segmentExecutionRunner.cancel(true);
+//			executorService.shutdownNow();
 		} catch (Exception ex) {
 			throw new IllegalStateException(ex);
 		}
@@ -132,8 +128,8 @@ public class JGroupsCluster extends ReceiverAdapter implements RAFT.RoleChange, 
 		messageService.addRoleChangeListener(this);
 		
 		clusterChannel = new JChannel(new FileInputStream(new File(configPath, "jgroups_cluster.xml")));
-//		clusterChannel.connect(CLUSTER_NAME + "_cluster");
-//		lockService = new JGroupsLockService(clusterChannel);
+		clusterChannel.connect(CLUSTER_NAME + "_cluster");
+		lockService = new JGroupsLockService(clusterChannel);
 //		dataLayer = new ClusterDataLayer(clusterChannel, new File(dataPath, "datalayer"));
 		
 //		executorService = new ExecutionService(clusterChannel);

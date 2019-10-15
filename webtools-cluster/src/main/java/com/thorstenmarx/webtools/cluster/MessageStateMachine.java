@@ -38,16 +38,12 @@ import java.io.DataInput;
 import java.io.DataOutput;
 import java.io.File;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.concurrent.TimeUnit;
 import net.openhft.chronicle.queue.ChronicleQueue;
 import net.openhft.chronicle.queue.ExcerptAppender;
 import net.openhft.chronicle.queue.ExcerptTailer;
 import net.openhft.chronicle.queue.impl.single.SingleChronicleQueueBuilder;
-import net.openhft.chronicle.wire.DocumentContext;
-import org.jgroups.protocols.raft.Role;
 
 /**
  * A key-value store replicating its contents with RAFT via consensus
