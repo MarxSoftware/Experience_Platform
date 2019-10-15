@@ -102,6 +102,13 @@ public class ClusterTest {
 	}
 
 	@Test
+	public void test_send() throws Exception {
+
+		serviceA.send("Hallo Leute");
+		Thread.sleep(2000);
+	}
+
+	@Test
 	public void test_messageservice_publish() throws Exception {
 
 		serviceA.getMessageService().publish(new Message().setType("event").setPayload("{name:'test'}"));

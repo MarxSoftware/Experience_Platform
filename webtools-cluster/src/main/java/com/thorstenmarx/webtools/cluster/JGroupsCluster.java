@@ -37,6 +37,7 @@ package com.thorstenmarx.webtools.cluster;
  * <http://www.gnu.org/licenses/gpl-3.0.html>.
  * #L%
  */
+import com.thorstenmarx.webtools.cluster.messageservice.ReplicatedMessageService;
 import com.thorstenmarx.webtools.api.cluster.Cluster;
 import com.thorstenmarx.webtools.cluster.datalayer.ClusterDataLayer;
 import com.thorstenmarx.webtools.api.datalayer.DataLayer;
@@ -47,6 +48,7 @@ import java.io.FileInputStream;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Future;
 import org.jgroups.JChannel;
+import org.jgroups.Message;
 import org.jgroups.ReceiverAdapter;
 import org.jgroups.View;
 import org.jgroups.jmx.JmxConfigurator;
@@ -120,6 +122,10 @@ public class JGroupsCluster extends ReceiverAdapter implements RAFT.RoleChange, 
 			throw new IllegalStateException(ex);
 		}
 	}
+	
+	public void send (final String message) throws Exception {
+		clusterChannel.send(new Message(null, message));
+	}
 
 	public void start(final File configPath, final boolean follower, final long timeout, final File dataPath) throws Exception {
 		raftChannel = new JChannel(new FileInputStream(new File(configPath, "jgroups_raft.xml"))).name(name);
@@ -129,6 +135,9 @@ public class JGroupsCluster extends ReceiverAdapter implements RAFT.RoleChange, 
 		
 		clusterChannel = new JChannel(new FileInputStream(new File(configPath, "jgroups_cluster.xml")));
 		clusterChannel.connect(CLUSTER_NAME + "_cluster");
+		clusterChannel.setReceiver((message) -> {
+			System.out.println(message.getObject().toString());
+		});
 		lockService = new JGroupsLockService(clusterChannel);
 //		dataLayer = new ClusterDataLayer(clusterChannel, new File(dataPath, "datalayer"));
 		

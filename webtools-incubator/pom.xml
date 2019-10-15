@@ -79,7 +79,7 @@
 		<dependency>
 			<groupId>org.jgroups</groupId>
 			<artifactId>jgroups</artifactId>
-			<version>4.0.20.Final</version>
+			<version>4.0.21.Final</version>
 		</dependency>
 		<dependency>
 			<groupId>org.jgroups</groupId>
@@ -103,6 +103,11 @@
 		<dependency>
 			<groupId>io.github.pcmind</groupId>
 			<artifactId>leveldb</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.rocksdb</groupId>
+			<artifactId>rocksdbjni</artifactId>
+			<version>6.2.4</version>
 		</dependency>
 
 		<!--dependency>
@@ -181,7 +186,7 @@
 		<url>git@bitbucket.org:thmarx/webtools.git</url>
 		<tag>v2.2.0</tag>
 	</scm>
-<!--	<distributionManagement>
+	<!--	<distributionManagement>
 		<repository>
 			<id>bintray-wpdigitalexperience-ExperiencePlatform</id>
 			<name>wpdigitalexperience-ExperiencePlatform</name>

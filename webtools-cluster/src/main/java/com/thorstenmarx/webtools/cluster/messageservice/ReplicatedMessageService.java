@@ -14,7 +14,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package com.thorstenmarx.webtools.cluster;
+package com.thorstenmarx.webtools.cluster.messageservice;
 
 /*-
  * #%L
@@ -91,7 +91,7 @@ public class ReplicatedMessageService implements MessageService {
 		messageListeners.remove(listener);
 	}
 
-	protected void start(final JChannel channel, String name, boolean follower, long timeout, final File dataPath) throws Exception {
+	public void start(final JChannel channel, String name, boolean follower, long timeout, final File dataPath) throws Exception {
 		ch = channel;
 		rsm = new MessageStateMachine(ch, dataPath).raftId(name).timeout(timeout);
 		if (follower) {
