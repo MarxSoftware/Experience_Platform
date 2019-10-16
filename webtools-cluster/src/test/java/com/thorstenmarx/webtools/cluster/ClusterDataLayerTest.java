@@ -40,9 +40,7 @@ package com.thorstenmarx.webtools.cluster;
 import com.thorstenmarx.webtools.api.cluster.Message;
 import com.thorstenmarx.webtools.api.datalayer.Data;
 import com.thorstenmarx.webtools.api.cluster.services.LockService;
-import com.thorstenmarx.webtools.api.cluster.services.MessageService;
 import java.io.File;
-import java.io.IOException;
 import java.io.Serializable;
 import java.util.HashSet;
 import java.util.List;
@@ -52,21 +50,17 @@ import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Future;
 import java.util.concurrent.atomic.AtomicInteger;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import org.apache.commons.io.FileUtils;
 import org.assertj.core.api.Assertions;
 import org.testng.annotations.AfterClass;
 import org.testng.annotations.BeforeClass;
-import org.testng.annotations.BeforeMethod;
-import org.testng.annotations.BeforeTest;
 import org.testng.annotations.Test;
 
 /**
  *
  * @author marx
  */
-public class ClusterTest {
+public class ClusterDataLayerTest {
 
 	JGroupsCluster serviceA;
 	JGroupsCluster serviceB;
@@ -79,17 +73,6 @@ public class ClusterTest {
 	AtomicInteger node_b_count = new AtomicInteger(0);
 	AtomicInteger node_c_count = new AtomicInteger(0);
 
-	@BeforeMethod
-	public void reset () {
-		counta.set(0);
-		countb.set(0);
-		countc.set(0);
-		
-		node_a_count.set(0);
-		node_b_count.set(0);
-		node_c_count.set(0);
-	}
-	
 	@BeforeClass
 	public void setUpClass() throws Exception {
 		FileUtils.deleteDirectory(new File("c:\\entwicklung\\temp\\raft"));
@@ -104,19 +87,19 @@ public class ClusterTest {
 		serviceA.getRAFTMessageService().registerMessageListener((m) -> {
 			counta.incrementAndGet();
 		});
-		serviceB.getRAFTMessageService().registerMessageListener((m) -> {
+		serviceA.getRAFTMessageService().registerMessageListener((m) -> {
 			countb.incrementAndGet();
 		});
-		serviceC.getRAFTMessageService().registerMessageListener((m) -> {
+		serviceA.getRAFTMessageService().registerMessageListener((m) -> {
 			countc.incrementAndGet();
 		});
 		serviceA.getMessageService().registerMessageListener((m) -> {
 			node_a_count.incrementAndGet();
 		});
-		serviceB.getMessageService().registerMessageListener((m) -> {
+		serviceA.getMessageService().registerMessageListener((m) -> {
 			node_b_count.incrementAndGet();
 		});
-		serviceC.getMessageService().registerMessageListener((m) -> {
+		serviceA.getMessageService().registerMessageListener((m) -> {
 			node_c_count.incrementAndGet();
 		});
 	}
@@ -130,83 +113,86 @@ public class ClusterTest {
 		serviceC.close();
 	}
 
-	@Test
-	public void test_send() throws Exception {
-
-		serviceA.send("Hallo Leute");
-		Thread.sleep(2000);
-	}
-
-	@Test
-	public void test_raft_messageservice_publish() throws Exception {
-
-		serviceA.getRAFTMessageService().publish(new Message().setType("event").setPayload("{name:'test'}"));
-		serviceB.getRAFTMessageService().publish(new Message().setType("event").setPayload("{name:'test'}"));
-		serviceC.getRAFTMessageService().publish(new Message().setType("event").setPayload("{name:'test'}"));
-
-		Thread.sleep(2000);
-
-		Assertions.assertThat(counta.intValue()).isEqualTo(3);
-		Assertions.assertThat(countb.intValue()).isEqualTo(3);
-		Assertions.assertThat(countc.intValue()).isEqualTo(3);
-	}
 	
-	@Test
-	public void test_messageservice_publish() throws Exception {
-
-		serviceA.getMessageService().publish(new Message().setType("event").setPayload("{name:'test'}"));
-		serviceB.getMessageService().publish(new Message().setType("event").setPayload("{name:'test'}"));
+	@Test(enabled = false)
+	public void test_datalayer_single() throws Exception {
+		serviceA.getDataLayer().add("uid", "name", new MyData("uid_name", "thats my name"));
 
 		Thread.sleep(2000);
 
-		Assertions.assertThat(node_a_count.intValue()).isEqualTo(1);
-		Assertions.assertThat(node_b_count.intValue()).isEqualTo(1);
-		Assertions.assertThat(node_c_count.intValue()).isEqualTo(2);
-	}
-	
-	@Test
-	public void test_messageservice_response () throws Exception {
-		MessageService.MessageListener listener = (message) -> {
-			Message m = new Message().setType("response").setSender(message.getSender());
-			try {
-				serviceC.getMessageService().publish(m);
-				serviceC.getMessageService().publish(m);
-			} catch (IOException ex) {
-				throw new RuntimeException(ex);
-			}
-		};
-		
-		serviceC.getMessageService().registerMessageListener(listener);
-		serviceA.getMessageService().publish(new Message().setType("event").setPayload("{name:'test'}"));
-		Thread.sleep(2000);
-		serviceC.getMessageService().unregisterMessageListener(listener);
-		
-		Thread.sleep(2000);
-		
-		Assertions.assertThat(node_a_count.intValue()).isEqualTo(2);
-		Assertions.assertThat(node_b_count.intValue()).isEqualTo(1);
-		Assertions.assertThat(node_c_count.intValue()).isEqualTo(1);
+		Assertions.assertThat(serviceC.getDataLayer().exists("uid", "name")).isTrue();
+
+		Optional<List<MyData>> myDataList = serviceC.getDataLayer().list("uid", "name", MyData.class);
+		Assertions.assertThat(myDataList).isNotNull().isPresent();
+		Assertions.assertThat(myDataList.get().size()).isEqualTo(1);
 	}
 
-	@Test
-	public void test_lockservice_lock() throws Exception {
+	@Test(enabled = false)
+	public void test_datalayer_multi() throws Exception {
+		serviceA.getDataLayer().add("uid1", "name", new MyData("uid_name", "thats my name"));
+		serviceA.getDataLayer().add("uid1", "name", new MyData("uid_name", "thats other data"));
 
-		LockService.Lock lock = serviceA.getLockService().getLock("test");
-		LockService.Lock lock_b = serviceB.getLockService().getLock("test");
-		LockService.Lock lock_c = serviceC.getLockService().getLock("test");
+		Thread.sleep(2000);
 
-		Assertions.assertThat(lock).isNotNull();
+		Assertions.assertThat(serviceC.getDataLayer().exists("uid1", "name")).isTrue();
 
-		lock.lock();
-		Thread.sleep(1000);
-		try {
-			Assertions.assertThat(lock_b.tryLock()).isEqualTo(false);
-			Assertions.assertThat(lock_c.tryLock()).isEqualTo(false);
-		} finally {
-			lock.unlock();
+		Optional<List<MyData>> myDataList = serviceC.getDataLayer().list("uid1", "name", MyData.class);
+		Assertions.assertThat(myDataList).isNotNull().isPresent();
+		Assertions.assertThat(myDataList.get().size()).isEqualTo(2);
+	}
+
+	@Test(enabled = false)
+	public void test_datalayer_each() throws Exception {
+		serviceA.getDataLayer().add("uid1", "name1", new MyData("uid_name", "thats my name"));
+		serviceA.getDataLayer().add("uid2", "name1", new MyData("uid_name", "thats other data"));
+		serviceA.getDataLayer().add("uid3", "name2", new MyData("uid_name", "thats other data"));
+
+		Thread.sleep(2000);
+
+		Set<String> users = new HashSet<>();
+		serviceC.getDataLayer().each((uid, data) -> {
+			users.add(uid);
+		}, "name1", MyData.class);
+
+		Assertions.assertThat(users).hasSize(2);
+		Assertions.assertThat(users).containsExactlyInAnyOrder("uid1", "uid2");
+	}
+
+	@Test(enabled = false)
+	public void test_datalayer_clear() throws Exception {
+		serviceA.getDataLayer().add("uid1", "name1", new MyData("uid_name", "thats my name"));
+		serviceA.getDataLayer().add("uid2", "name1", new MyData("uid_name", "thats other data"));
+		serviceA.getDataLayer().add("uid3", "name2", new MyData("uid_name", "thats other data"));
+
+		Thread.sleep(2000);
+
+		serviceA.getDataLayer().clear("name1");
+
+		Thread.sleep(2000);
+
+		Set<String> users = new HashSet<>();
+		serviceC.getDataLayer().each((uid, data) -> {
+			users.add(uid);
+		}, "name1", MyData.class);
+
+		Assertions.assertThat(users).isEmpty();
+	}
+
+	public static class MyData implements Data, Serializable {
+
+		public final String key;
+		public final String data;
+
+		public MyData(final String key, final String data) {
+			this.key = key;
+			this.data = data;
 		}
 
-		Assertions.assertThat(lock_c.tryLock()).isEqualTo(true);
+		@Override
+		public String getKey() {
+			return key;
+		}
+
 	}
 
 }

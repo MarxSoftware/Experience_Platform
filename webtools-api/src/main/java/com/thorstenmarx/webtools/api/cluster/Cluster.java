@@ -56,6 +56,5 @@ public interface Cluster {
 
 	MessageService getMessageService();
 	
-	ExecutorService getExecutorService ();
-	
+	MessageService getRAFTMessageService();
 }

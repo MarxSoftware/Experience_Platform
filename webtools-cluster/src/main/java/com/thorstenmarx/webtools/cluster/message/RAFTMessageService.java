@@ -14,7 +14,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package com.thorstenmarx.webtools.cluster.messageservice;
+package com.thorstenmarx.webtools.cluster.message;
 
 /*-
  * #%L
@@ -54,14 +54,14 @@ import org.jgroups.protocols.raft.RAFT;
  * @author Bela Ban
  * @since 0.1
  */
-public class ReplicatedMessageService implements MessageService {
+public class RAFTMessageService implements MessageService {
 
 	protected JChannel ch;
 	protected MessageStateMachine rsm;
 
 	private final List<MessageListener> messageListeners = new CopyOnWriteArrayList<>();
 
-	public ReplicatedMessageService() {
+	public RAFTMessageService() {
 	}
 
 	@Override
@@ -69,7 +69,7 @@ public class ReplicatedMessageService implements MessageService {
 		try {
 			rsm.append(message);
 		} catch (Exception ex) {
-			Logger.getLogger(ReplicatedMessageService.class.getName()).log(Level.SEVERE, null, ex);
+			Logger.getLogger(RAFTMessageService.class.getName()).log(Level.SEVERE, null, ex);
 		}
 	}
 

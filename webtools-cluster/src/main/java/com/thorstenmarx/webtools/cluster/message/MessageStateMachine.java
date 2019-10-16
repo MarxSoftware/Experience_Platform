@@ -1,4 +1,4 @@
-package com.thorstenmarx.webtools.cluster.messageservice;
+package com.thorstenmarx.webtools.cluster.message;
 
 /*-
  * #%L

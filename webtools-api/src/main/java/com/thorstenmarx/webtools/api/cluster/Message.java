@@ -44,14 +44,27 @@ import java.io.Serializable;
 /**
  *
  * @author marx
+ * @param <T>
  */
-public class Message implements Serializable {
+public class Message<T> implements Serializable {
+	
+	
+	transient private T sender;
 	
 	private String type;
 	private String payload;
 	
 	public Message() {
 		
+	}
+
+	public T getSender() {
+		return sender;
+	}
+
+	public Message setSender(T sender) {
+		this.sender = sender;
+		return this;
 	}
 
 	public String getType() {

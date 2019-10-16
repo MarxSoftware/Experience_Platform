@@ -37,12 +37,14 @@ package com.thorstenmarx.webtools.cluster;
  * <http://www.gnu.org/licenses/gpl-3.0.html>.
  * #L%
  */
-import com.thorstenmarx.webtools.cluster.messageservice.ReplicatedMessageService;
+import com.thorstenmarx.webtools.cluster.lock.JGroupsLockService;
+import com.thorstenmarx.webtools.cluster.message.RAFTMessageService;
 import com.thorstenmarx.webtools.api.cluster.Cluster;
 import com.thorstenmarx.webtools.cluster.datalayer.ClusterDataLayer;
 import com.thorstenmarx.webtools.api.datalayer.DataLayer;
 import com.thorstenmarx.webtools.api.cluster.services.LockService;
 import com.thorstenmarx.webtools.api.cluster.services.MessageService;
+import com.thorstenmarx.webtools.cluster.message.DefaultMessageService;
 import java.io.File;
 import java.io.FileInputStream;
 import java.util.concurrent.ExecutorService;
@@ -71,27 +73,17 @@ public class JGroupsCluster extends ReceiverAdapter implements RAFT.RoleChange, 
 	
 	public final String name;
 
-	private final ReplicatedMessageService messageService;
+	private final RAFTMessageService raftMessageService;
+	private MessageService messageService;
 	private LockService lockService;
 	private ClusterDataLayer dataLayer;
 	private JChannel clusterChannel;
-
-	private ExecutorService executorService;
-	
-	private ExecutorService service;
-	private Future<?> segmentExecutionRunner;
-	
 	
 	private Role currentRole;
 
 	public JGroupsCluster(final String name) {
 		this.name = name;
-		messageService = new ReplicatedMessageService();
-	}
-
-	@Override
-	public ExecutorService getExecutorService () {
-		return executorService;
+		raftMessageService = new RAFTMessageService();
 	}
 	
 	@Override
@@ -111,13 +103,11 @@ public class JGroupsCluster extends ReceiverAdapter implements RAFT.RoleChange, 
 
 	public void close() {
 		try {
-			messageService.close();
+			raftMessageService.close();
 //			dataLayer.close();
 			Util.close(raftChannel);
 			Util.close(clusterChannel);
-			
-//			segmentExecutionRunner.cancel(true);
-//			executorService.shutdownNow();
+		
 		} catch (Exception ex) {
 			throw new IllegalStateException(ex);
 		}
@@ -130,8 +120,8 @@ public class JGroupsCluster extends ReceiverAdapter implements RAFT.RoleChange, 
 	public void start(final File configPath, final boolean follower, final long timeout, final File dataPath) throws Exception {
 		raftChannel = new JChannel(new FileInputStream(new File(configPath, "jgroups_raft.xml"))).name(name);
 		raftChannel.setReceiver(this);
-		messageService.start(raftChannel, name, follower, timeout, new File(dataPath, "messages"));
-		messageService.addRoleChangeListener(this);
+		raftMessageService.start(raftChannel, name, follower, timeout, new File(dataPath, "messages"));
+		raftMessageService.addRoleChangeListener(this);
 		
 		clusterChannel = new JChannel(new FileInputStream(new File(configPath, "jgroups_cluster.xml")));
 		clusterChannel.connect(CLUSTER_NAME + "_cluster");
@@ -141,7 +131,7 @@ public class JGroupsCluster extends ReceiverAdapter implements RAFT.RoleChange, 
 		lockService = new JGroupsLockService(clusterChannel);
 //		dataLayer = new ClusterDataLayer(clusterChannel, new File(dataPath, "datalayer"));
 		
-//		executorService = new ExecutionService(clusterChannel);
+		messageService = new DefaultMessageService(clusterChannel);
 		
 		try {
 
@@ -167,5 +157,10 @@ public class JGroupsCluster extends ReceiverAdapter implements RAFT.RoleChange, 
 			System.out.println("old leader starts actionsystem coordination");
 		}
 		currentRole = role;
+	}
+
+	@Override
+	public MessageService getRAFTMessageService() {
+		return raftMessageService;
 	}
 }
