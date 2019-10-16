@@ -70,19 +70,19 @@ public class ClusterMassTest {
 		serviceB = new JGroupsCluster("B");
 		serviceC = new JGroupsCluster("C");
 
-		serviceA.getMessageService().registerMessageListener((m) -> {
-			counta.incrementAndGet();
-		});
-		serviceA.getMessageService().registerMessageListener((m) -> {
-			countb.incrementAndGet();
-		});
-		serviceA.getMessageService().registerMessageListener((m) -> {
-			countc.incrementAndGet();
-		});
-
 		serviceA.start(new File("etc/a"), false, 3000, new File("target/messages-a-" + System.currentTimeMillis()));
 		serviceB.start(new File("etc/b"), false, 3000, new File("target/messages-b-" + System.currentTimeMillis()));
 		serviceC.start(new File("etc/c"), false, 3000, new File("target/messages-c-" + System.currentTimeMillis()));
+		
+		serviceA.getRAFTMessageService().registerMessageListener((m) -> {
+			counta.incrementAndGet();
+		});
+		serviceA.getRAFTMessageService().registerMessageListener((m) -> {
+			countb.incrementAndGet();
+		});
+		serviceA.getRAFTMessageService().registerMessageListener((m) -> {
+			countc.incrementAndGet();
+		});
 	}
 
 	@AfterMethod
@@ -104,7 +104,7 @@ public class ClusterMassTest {
 	public void test_mass_publish(final int count) throws Exception {
 
 		for (int i = 0; i < count; i++) {
-			serviceA.getMessageService().publish(new Message().setType("event").setPayload("{name:'test'}"));
+			serviceA.getRAFTMessageService().publish(new Message().setType("event").setPayload("{name:'test'}"));
 		}
 
 		Thread.sleep(2000);
