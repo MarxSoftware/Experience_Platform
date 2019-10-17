@@ -57,4 +57,9 @@ public interface Cluster {
 	MessageService getMessageService();
 	
 	MessageService getRAFTMessageService();
+	
+	void registerRoleChangeListener (final NodeRoleChangeListener roleChangeListener);
+	void unregisterRoleChangeListener (final NodeRoleChangeListener roleChangeListener);
+	
+	NodeRole getRole ();
 }

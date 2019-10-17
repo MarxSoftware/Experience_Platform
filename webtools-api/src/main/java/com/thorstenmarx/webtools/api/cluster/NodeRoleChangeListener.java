@@ -14,11 +14,11 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package com.thorstenmarx.webtools.store;
+package com.thorstenmarx.webtools.api.cluster;
 
 /*-
  * #%L
- * webtools-incubator
+ * webtools-api
  * %%
  * Copyright (C) 2016 - 2019 WP DigitalExperience
  * %%
@@ -38,36 +38,10 @@ package com.thorstenmarx.webtools.store;
  * #L%
  */
 
-import org.iq80.leveldb.impl.Iq80DBFactory;
-import org.rocksdb.Options;
-import org.rocksdb.RocksDB;
-import org.rocksdb.RocksDBException;
-
 /**
  *
  * @author marx
  */
-public class RocksDBTest {
-
-	public static void main(String... args) {
-		RocksDB.loadLibrary();
-
-		// the Options class contains a set of configurable DB options
-		// that determines the behaviour of the database.
-		try (final Options options = new Options().setCreateIfMissing(true)) {
-
-			// a factory method that returns a RocksDB instance
-			try (final RocksDB db = RocksDB.open(options, "target/rocksdb-" + System.currentTimeMillis())) {
-				long before = System.currentTimeMillis();
-				for (int i = 0; i < 100000; i++) {
-					db.put(Iq80DBFactory.bytes("name"), Iq80DBFactory.bytes("thorsten " + 1));
-				}
-				long after = System.currentTimeMillis();
-				System.out.format("took: %dms", (after - before));
-			}
-			
-		} catch (RocksDBException e) {
-			e.printStackTrace();
-		}
-	}
+public interface NodeRoleChangeListener {
+	public void roleChanged (final NodeRole newRole);
 }

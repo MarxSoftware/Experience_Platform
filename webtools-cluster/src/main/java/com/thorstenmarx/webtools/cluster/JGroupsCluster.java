@@ -40,15 +40,17 @@ package com.thorstenmarx.webtools.cluster;
 import com.thorstenmarx.webtools.cluster.lock.JGroupsLockService;
 import com.thorstenmarx.webtools.cluster.message.RAFTMessageService;
 import com.thorstenmarx.webtools.api.cluster.Cluster;
+import com.thorstenmarx.webtools.api.cluster.NodeRole;
 import com.thorstenmarx.webtools.cluster.datalayer.ClusterDataLayer;
 import com.thorstenmarx.webtools.api.datalayer.DataLayer;
 import com.thorstenmarx.webtools.api.cluster.services.LockService;
 import com.thorstenmarx.webtools.api.cluster.services.MessageService;
 import com.thorstenmarx.webtools.cluster.message.DefaultMessageService;
+import com.thorstenmarx.webtools.cluster.message.MessageStateMachine;
 import java.io.File;
 import java.io.FileInputStream;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Future;
+import java.util.List;
+import java.util.concurrent.CopyOnWriteArrayList;
 import org.jgroups.JChannel;
 import org.jgroups.Message;
 import org.jgroups.ReceiverAdapter;
@@ -57,6 +59,7 @@ import org.jgroups.jmx.JmxConfigurator;
 import org.jgroups.protocols.raft.RAFT;
 import org.jgroups.protocols.raft.Role;
 import org.jgroups.util.Util;
+import com.thorstenmarx.webtools.api.cluster.NodeRoleChangeListener;
 
 /**
  * Demos {@link MessageStateMachine}
@@ -80,11 +83,23 @@ public class JGroupsCluster extends ReceiverAdapter implements RAFT.RoleChange, 
 	private JChannel clusterChannel;
 	
 	private Role currentRole;
+	
+	private List<NodeRoleChangeListener> roleChangeListeners = new CopyOnWriteArrayList<>();
 
 	public JGroupsCluster(final String name) {
 		this.name = name;
 		raftMessageService = new RAFTMessageService();
 	}
+	
+	@Override
+	public void registerRoleChangeListener (final NodeRoleChangeListener roleChangeListener) {
+		roleChangeListeners.add(roleChangeListener);
+	}
+	@Override
+	public void unregisterRoleChangeListener (final NodeRoleChangeListener roleChangeListener) {
+		roleChangeListeners.remove(roleChangeListener);
+	}
+	
 	
 	@Override
 	public MessageService getMessageService() {
@@ -159,6 +174,25 @@ public class JGroupsCluster extends ReceiverAdapter implements RAFT.RoleChange, 
 			System.out.println("old leader starts actionsystem coordination");
 		}
 		currentRole = role;
+		
+		NodeRole nodeRole = getRole();
+		
+		roleChangeListeners.forEach((l) -> l.roleChanged(nodeRole));
+	}
+	
+	@Override
+	public NodeRole getRole () {
+		switch (this.currentRole) {
+			case Candidate:
+				return NodeRole.Candidate;
+			case Follower: 
+				return NodeRole.Follower;
+			case Leader:
+				return NodeRole.Leader;
+			default:
+				return NodeRole.UNDEFINED;
+		}
+		
 	}
 
 	@Override
