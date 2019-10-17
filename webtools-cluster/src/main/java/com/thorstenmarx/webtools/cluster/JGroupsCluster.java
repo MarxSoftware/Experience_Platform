@@ -40,6 +40,7 @@ package com.thorstenmarx.webtools.cluster;
 import com.thorstenmarx.webtools.cluster.lock.JGroupsLockService;
 import com.thorstenmarx.webtools.cluster.message.RAFTMessageService;
 import com.thorstenmarx.webtools.api.cluster.Cluster;
+import com.thorstenmarx.webtools.api.cluster.Node;
 import com.thorstenmarx.webtools.api.cluster.NodeRole;
 import com.thorstenmarx.webtools.cluster.datalayer.ClusterDataLayer;
 import com.thorstenmarx.webtools.api.datalayer.DataLayer;
@@ -60,6 +61,8 @@ import org.jgroups.protocols.raft.RAFT;
 import org.jgroups.protocols.raft.Role;
 import org.jgroups.util.Util;
 import com.thorstenmarx.webtools.api.cluster.NodeRoleChangeListener;
+import java.util.ArrayList;
+import org.jgroups.Address;
 
 /**
  * Demos {@link MessageStateMachine}
@@ -79,7 +82,6 @@ public class JGroupsCluster extends ReceiverAdapter implements RAFT.RoleChange, 
 	private final RAFTMessageService raftMessageService;
 	private MessageService messageService;
 	private LockService lockService;
-	private ClusterDataLayer dataLayer;
 	private JChannel clusterChannel;
 	
 	private Role currentRole;
@@ -111,15 +113,10 @@ public class JGroupsCluster extends ReceiverAdapter implements RAFT.RoleChange, 
 		return lockService;
 	}
 
-	@Override
-	public DataLayer getDataLayer() {
-		return dataLayer;
-	}
 
 	public void close() {
 		try {
 			raftMessageService.close();
-//			dataLayer.close();
 			RAFT raft = raftChannel.getProtocolStack().findProtocol(RAFT.class);
 			raft.log().close();
 			Util.close(raftChannel);
@@ -146,7 +143,6 @@ public class JGroupsCluster extends ReceiverAdapter implements RAFT.RoleChange, 
 			System.out.println(message.getObject().toString());
 		});
 		lockService = new JGroupsLockService(clusterChannel);
-//		dataLayer = new ClusterDataLayer(clusterChannel, new File(dataPath, "datalayer"));
 		
 		messageService = new DefaultMessageService(clusterChannel);
 		
@@ -198,5 +194,19 @@ public class JGroupsCluster extends ReceiverAdapter implements RAFT.RoleChange, 
 	@Override
 	public MessageService getRAFTMessageService() {
 		return raftMessageService;
+	}
+
+	@Override
+	public List<Node<?>> getNodes() {
+		final Address self = clusterChannel.getAddress();
+		final List<Node<?>> nodes = new ArrayList<>();
+		clusterChannel.getView().getMembers().forEach((a) -> {
+			Node<Address> node = new Node<>();
+			node.setAddress(a);
+			node.setSelf(self.equals(a));
+			node.setCoordinator(clusterChannel.getAddress().equals(clusterChannel.getView().getCoord()));
+		});
+		
+		return nodes;
 	}
 }

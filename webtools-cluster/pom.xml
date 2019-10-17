@@ -5,8 +5,16 @@
 	<groupId>com.thorstenmarx.webtools</groupId>
 	<artifactId>webtools-cluster</artifactId>
 	<version>3.3.0-SNAPSHOT</version>
+	
+	<parent>
+		<groupId>com.thorstenmarx.webtools</groupId>
+		<artifactId>webtools-parent</artifactId>
+		<version>3.3.0-SNAPSHOT</version>
+		<relativePath>../webtools-parent</relativePath>
+	</parent>
+	
 	<name>webtools-cluster</name>
-	<description>Incubator</description>
+	<description>Cluster</description>
 	<inceptionYear>2016</inceptionYear>
 	<packaging>jar</packaging>
 	<organization>
@@ -18,12 +26,7 @@
 		<maven.compiler.target>12</maven.compiler.target>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 	</properties>
-	<repositories>
-		<repository>
-			<id>jcenter</id>
-			<url>https://jcenter.bintray.com/</url>
-		</repository>
-	</repositories>
+	
 	<dependencyManagement>
 		<dependencies>
 			<dependency>
@@ -121,14 +124,6 @@
 		<url>git@bitbucket.org:thmarx/webtools.git</url>
 		<tag>v2.2.0</tag>
 	</scm>
-	<distributionManagement>
-		<repository>
-			<id>bintray-thmarx-maven</id>
-			<name>thmarx-maven</name>
-			<url>https://api.bintray.com/maven/thmarx/maven/webtools/</url>
-			<!-- ;publish=1 -->
-		</repository>
-	</distributionManagement>
 	<build>
 		<plugins>
 			<plugin>

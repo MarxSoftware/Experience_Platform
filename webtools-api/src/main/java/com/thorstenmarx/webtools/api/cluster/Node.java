@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2019 Thorsten Marx
+ * Copyright (C) 2019 WP DigitalExperience
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -20,7 +20,7 @@ package com.thorstenmarx.webtools.api.cluster;
  * #%L
  * webtools-api
  * %%
- * Copyright (C) 2016 - 2019 Thorsten Marx
+ * Copyright (C) 2016 - 2019 WP DigitalExperience
  * %%
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as
@@ -37,29 +37,46 @@ package com.thorstenmarx.webtools.api.cluster;
  * <http://www.gnu.org/licenses/gpl-3.0.html>.
  * #L%
  */
-import com.thorstenmarx.webtools.api.annotations.API;
-import com.thorstenmarx.webtools.api.datalayer.DataLayer;
-import com.thorstenmarx.webtools.api.cluster.services.LockService;
-import com.thorstenmarx.webtools.api.cluster.services.MessageService;
-import java.util.List;
 
 /**
  *
  * @author marx
  */
-@API(since = "3.1.0", status = API.Status.Experimental)
-public interface Cluster {
-
-	List<Node<?>> getNodes();
-
-	LockService getLockService();
-
-	MessageService getMessageService();
+public class Node<T> {
 	
-	MessageService getRAFTMessageService();
+	private T address;
 	
-	void registerRoleChangeListener (final NodeRoleChangeListener roleChangeListener);
-	void unregisterRoleChangeListener (final NodeRoleChangeListener roleChangeListener);
+	private boolean self = false;
 	
-	NodeRole getRole ();
+	private boolean coordinator = false;
+
+	public boolean isCoordinator() {
+		return coordinator;
+	}
+
+	public void setCoordinator(boolean coordinator) {
+		this.coordinator = coordinator;
+	}
+	
+	
+
+	public boolean isSelf() {
+		return self;
+	}
+
+	public void setSelf(boolean self) {
+		this.self = self;
+	}
+
+	
+	
+	public T getAddress() {
+		return address;
+	}
+
+	public void setAddress(T address) {
+		this.address = address;
+	}
+	
+	
 }
