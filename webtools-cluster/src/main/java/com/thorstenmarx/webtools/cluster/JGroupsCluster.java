@@ -105,6 +105,8 @@ public class JGroupsCluster extends ReceiverAdapter implements RAFT.RoleChange, 
 		try {
 			raftMessageService.close();
 //			dataLayer.close();
+			RAFT raft = raftChannel.getProtocolStack().findProtocol(RAFT.class);
+			raft.log().close();
 			Util.close(raftChannel);
 			Util.close(clusterChannel);
 		
