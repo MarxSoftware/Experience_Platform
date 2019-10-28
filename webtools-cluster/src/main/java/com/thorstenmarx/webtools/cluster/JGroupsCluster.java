@@ -42,8 +42,6 @@ import com.thorstenmarx.webtools.cluster.message.RAFTMessageService;
 import com.thorstenmarx.webtools.api.cluster.Cluster;
 import com.thorstenmarx.webtools.api.cluster.Node;
 import com.thorstenmarx.webtools.api.cluster.NodeRole;
-import com.thorstenmarx.webtools.cluster.datalayer.ClusterDataLayer;
-import com.thorstenmarx.webtools.api.datalayer.DataLayer;
 import com.thorstenmarx.webtools.api.cluster.services.LockService;
 import com.thorstenmarx.webtools.api.cluster.services.MessageService;
 import com.thorstenmarx.webtools.cluster.message.DefaultMessageService;
@@ -91,6 +89,10 @@ public class JGroupsCluster extends ReceiverAdapter implements RAFT.RoleChange, 
 	public JGroupsCluster(final String name) {
 		this.name = name;
 		raftMessageService = new RAFTMessageService();
+	}
+	
+	public DefaultTopic createTopic (final String name, final MessageService.MessageListener listener) {
+		return new DefaultTopic(messageService, name, listener);
 	}
 	
 	@Override
