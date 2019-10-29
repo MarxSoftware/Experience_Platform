@@ -38,28 +38,16 @@ package com.thorstenmarx.webtools.cluster;
  * #L%
  */
 import com.thorstenmarx.webtools.api.cluster.Message;
-import com.thorstenmarx.webtools.api.datalayer.Data;
 import com.thorstenmarx.webtools.api.cluster.services.LockService;
 import com.thorstenmarx.webtools.api.cluster.services.MessageService;
 import java.io.File;
 import java.io.IOException;
-import java.io.Serializable;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Optional;
-import java.util.Set;
-import java.util.concurrent.Callable;
-import java.util.concurrent.ExecutionException;
-import java.util.concurrent.Future;
 import java.util.concurrent.atomic.AtomicInteger;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import org.apache.commons.io.FileUtils;
 import org.assertj.core.api.Assertions;
 import org.testng.annotations.AfterClass;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.BeforeMethod;
-import org.testng.annotations.BeforeTest;
 import org.testng.annotations.Test;
 
 /**

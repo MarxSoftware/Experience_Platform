@@ -59,6 +59,7 @@ import org.jgroups.protocols.raft.RAFT;
 import org.jgroups.protocols.raft.Role;
 import org.jgroups.util.Util;
 import com.thorstenmarx.webtools.api.cluster.NodeRoleChangeListener;
+import java.io.Serializable;
 import java.util.ArrayList;
 import org.jgroups.Address;
 
@@ -91,8 +92,8 @@ public class JGroupsCluster extends ReceiverAdapter implements RAFT.RoleChange, 
 		raftMessageService = new RAFTMessageService();
 	}
 	
-	public DefaultTopic createTopic (final String name, final MessageService.MessageListener listener) {
-		return new DefaultTopic(messageService, name, listener);
+	public <T extends Serializable> DefaultTopic<T> createTopic (final String name, final DefaultTopic.TopicListener<T> listener, final Class<T> type ) {
+		return new DefaultTopic(messageService, name, listener, type);
 	}
 	
 	@Override

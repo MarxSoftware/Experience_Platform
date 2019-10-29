@@ -16,30 +16,43 @@
  */
 package com.thorstenmarx.webtools.cluster;
 
+import com.google.gson.Gson;
 import com.thorstenmarx.webtools.api.cluster.Message;
 import com.thorstenmarx.webtools.api.cluster.services.MessageService;
+import java.io.IOException;
+import java.io.Serializable;
 
 /**
  *
  * @author marx
+ * @param <T>
  */
-public class DefaultTopic implements MessageService.MessageListener {
+public class DefaultTopic<T extends Serializable> implements MessageService.MessageListener {
 
 	final MessageService messageService;
 	final String topicName;
-	final MessageService.MessageListener listener;
-
-	protected DefaultTopic(final MessageService messageService, final String topicName, final MessageService.MessageListener listener) {
+	final TopicListener<T> listener;
+	final Class<T> type;
+	final Gson gson;
+	
+	protected DefaultTopic(final MessageService messageService, final String topicName, final TopicListener<T> listener, final Class<T> type) {
+		this.gson = new Gson();
 		this.messageService = messageService;
 		this.topicName = topicName;
 		this.listener = listener;
+		this.type = type;
 		messageService.registerMessageListener(this);
 	}
 
+	public void publish (final T message) throws IOException {
+		Message raw_message = new Message().setType(topicName).setPayload(gson.toJson(message));
+		messageService.publish(raw_message);
+	}
+	
 	@Override
 	public void handle(final Message message) {
 		if (message.getType().equals(topicName)) {
-			listener.handle(message);
+			listener.handle(gson.fromJson(message.getPayload(), type));
 		}
 	}
 
@@ -47,5 +60,7 @@ public class DefaultTopic implements MessageService.MessageListener {
 		messageService.unregisterMessageListener(this);
 	}
 	
-	
+	public static interface TopicListener<T extends Serializable> {
+		public void handle (T message);
+	}
 }
