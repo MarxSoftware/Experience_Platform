@@ -40,10 +40,6 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
-import net.openhft.chronicle.queue.ChronicleQueue;
-import net.openhft.chronicle.queue.ExcerptAppender;
-import net.openhft.chronicle.queue.ExcerptTailer;
-import net.openhft.chronicle.queue.impl.single.SingleChronicleQueueBuilder;
 
 /**
  * A key-value store replicating its contents with RAFT via consensus
@@ -60,8 +56,6 @@ public class MessageStateMachine implements StateMachine {
 	// Hashmap for the contents. Doesn't need to be reentrant, as updates will be applied sequentially
 //	protected final Map<K, V> map = new HashMap<>();
 
-	protected final ChronicleQueue queue;
-
 	protected static final byte PUT = 1;
 
 	protected Gson gson = new Gson();
@@ -70,11 +64,9 @@ public class MessageStateMachine implements StateMachine {
 		this.ch = ch;
 		this.raft = new RaftHandle(this.ch, this);
 
-		this.queue = SingleChronicleQueueBuilder.binary(dataPath).build();
 	}
 
 	public void close() {
-		this.queue.close();
 	}
 
 	public void addRoleChangeListener(RAFT.RoleChange listener) {
@@ -179,12 +171,12 @@ public class MessageStateMachine implements StateMachine {
 		if (other.getClass() != getClass()) {
 			return false;
 		}
-		return queue.equals(((MessageStateMachine) other).queue);
+		return true;
 	}
 
 	@Override
 	public int hashCode() {
-		return queue.hashCode();
+		return 1;
 	}
 
 	/**
@@ -217,28 +209,18 @@ public class MessageStateMachine implements StateMachine {
 
 	@Override
 	public void readContentFrom(DataInput in) throws Exception {
-		int size = Bits.readInt(in);
-		for (int i = 0; i < size; i++) {
-			Message message = Util.objectFromStream(in);
-			final ExcerptAppender appender = queue.acquireAppender();
-			appender.writeText(gson.toJson(message));
-		}
+		
 	}
 
 	@Override
 	public void writeContentTo(DataOutput out) throws Exception {
 
-		ExcerptTailer tailer = queue.createTailer();
-		String content = null;
-		while ((content = tailer.readText()) != null) {
-			Message message = gson.fromJson(content, Message.class);
-			Util.objectToStream(message, out);
-		}
+		
 	}
 
 	///////////////////////////////////// End of StateMachine callbacks ///////////////////////////////////
 	public String toString() {
-		return queue.toString();
+		return "MessageStateMachine";
 	}
 
 	protected void notifyPut(final Message message) {

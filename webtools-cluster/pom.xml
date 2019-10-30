@@ -44,23 +44,18 @@
 			<artifactId>webtools-api</artifactId>
 		</dependency>
 		<dependency>
-			<groupId>net.openhft</groupId>
-			<artifactId>chronicle-queue</artifactId>
-			<version>5.17.21</version>
-		</dependency>
-		<dependency>
 			<groupId>com.google.code.gson</groupId>
 			<artifactId>gson</artifactId>
 		</dependency>
 		<dependency>
 			<groupId>org.jgroups</groupId>
 			<artifactId>jgroups</artifactId>
-			<version>4.0.21.Final</version>
+			<version>4.1.7.Final</version>
 		</dependency>
 		<dependency>
 			<groupId>org.jgroups</groupId>
 			<artifactId>jgroups-raft</artifactId>
-			<version>0.4.3.Final</version>
+			<version>0.5.0.Final</version>
 			<exclusions>
 				<exclusion>
 					<groupId>org.fusesource.leveldbjni</groupId>

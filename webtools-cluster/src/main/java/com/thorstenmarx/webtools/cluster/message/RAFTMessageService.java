@@ -104,6 +104,7 @@ public class RAFTMessageService implements MessageService {
 
 	protected static void disableElections(JChannel ch) {
 		ELECTION election = ch.getProtocolStack().findProtocol(ELECTION.class);
+		
 		if (election != null) {
 			election.noElections(true);
 		}

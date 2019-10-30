@@ -58,7 +58,7 @@ public class ClusterTopicTest {
 
 	AtomicInteger counta = new AtomicInteger(0);
 	
-	DefaultTopic<String> topic_b;
+	Topic<String> topic_b;
 
 	@BeforeMethod
 	public void setUpClass() throws Exception {
@@ -71,7 +71,7 @@ public class ClusterTopicTest {
 		serviceB.start(new File("etc/b"), false, 3000, new File("target/messages-b-" + System.currentTimeMillis()));
 		serviceC.start(new File("etc/c"), false, 3000, new File("target/messages-c-" + System.currentTimeMillis()));
 		
-		DefaultTopic.TopicListener<String> topicListener = (m) -> {
+		Topic.Receiver<String> topicListener = (m) -> {
 			System.out.println(m);
 			counta.incrementAndGet();
 		};

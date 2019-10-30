@@ -85,14 +85,18 @@ public class JGroupsCluster extends ReceiverAdapter implements RAFT.RoleChange, 
 	
 	private Role currentRole;
 	
-	private List<NodeRoleChangeListener> roleChangeListeners = new CopyOnWriteArrayList<>();
+	private final List<NodeRoleChangeListener> roleChangeListeners = new CopyOnWriteArrayList<>();
 
 	public JGroupsCluster(final String name) {
 		this.name = name;
 		raftMessageService = new RAFTMessageService();
 	}
 	
-	public <T extends Serializable> DefaultTopic<T> createTopic (final String name, final DefaultTopic.TopicListener<T> listener, final Class<T> type ) {
+	public String getName () {
+		return name;
+	}
+	
+	public <T extends Serializable> Topic<T> createTopic (final String name, final Topic.Receiver<T> listener, final Class<T> type ) {
 		return new DefaultTopic(messageService, name, listener, type);
 	}
 	
@@ -150,10 +154,7 @@ public class JGroupsCluster extends ReceiverAdapter implements RAFT.RoleChange, 
 		messageService = new DefaultMessageService(clusterChannel);
 		
 		try {
-
-			JmxConfigurator.unregisterChannel(raftChannel, Util.getMBeanServer(), CLUSTER_NAME_RAFT);
 			raftChannel.connect(CLUSTER_NAME_RAFT);
-			Util.registerChannel(raftChannel, CLUSTER_NAME_RAFT);
 		} finally {
 
 		}
