@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2019 Thorsten Marx
+ * Copyright (C) 2019 WP DigitalExperience
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -14,13 +14,13 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package com.thorstenmarx.webtools.cluster.lock;
+package com.thorstenmarx.webtools.api.cluster.services;
 
 /*-
  * #%L
- * webtools-cluster
+ * webtools-api
  * %%
- * Copyright (C) 2016 - 2019 Thorsten Marx
+ * Copyright (C) 2016 - 2019 WP DigitalExperience
  * %%
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as
@@ -37,67 +37,25 @@ package com.thorstenmarx.webtools.cluster.lock;
  * <http://www.gnu.org/licenses/gpl-3.0.html>.
  * #L%
  */
-
-import com.thorstenmarx.webtools.api.cluster.services.LockService;
-import java.util.concurrent.TimeUnit;
-import org.jgroups.JChannel;
+import java.io.Serializable;
 
 /**
  *
  * @author marx
  */
-public class JGroupsLockService implements LockService {
+public interface MessageReplicator<T extends Serializable> {
 
-	private final org.jgroups.blocks.locking.LockService lockService;
+	void replicate(final T message);
 	
-	public JGroupsLockService (final JChannel channel) {
-		this.lockService = new org.jgroups.blocks.locking.LockService(channel);
+	public static class ReplicationMessage implements Serializable{
+		public String uuid;
+		public String source;
+		public String target;
+		public String message;
+		public boolean commited = false;
 	}
 	
-	@Override
-	public Lock getLock(String name) {
-		return new JGroupsLock(lockService.getLock(name));
-	}
-
-	@Override
-	public void unlockAll() {
-		lockService.unlockAll();
-	}
-
-	@Override
-	public void unlockForce(final String name) {
-		lockService.unlockForce(name);
-	}
-	
-	
-	
-	public static class JGroupsLock implements Lock {
-
-		final java.util.concurrent.locks.Lock lock;
-		
-		public JGroupsLock (final java.util.concurrent.locks.Lock lock) {
-			this.lock = lock;
-		}
-		
-		@Override
-		public void lock() {
-			lock.lock();
-		}
-		
-		@Override
-		public void unlock() {
-			lock.unlock();
-		}
-
-		@Override
-		public boolean tryLock() {
-			return lock.tryLock();
-		}
-		
-		@Override
-		public boolean tryLock (final long time, final TimeUnit unit) throws InterruptedException {
-			return lock.tryLock(time, unit);
-		}
-		
+	public static interface Handler<T extends Serializable> {
+		public void handle (T message);
 	}
 }

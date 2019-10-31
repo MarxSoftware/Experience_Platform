@@ -14,7 +14,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package com.thorstenmarx.webtools.cluster;
+package com.thorstenmarx.webtools.api.cluster.services;
 
 /*-
  * #%L
@@ -54,8 +54,5 @@ public interface Topic<T extends Serializable> {
 	
 	public static interface Receiver<T extends Serializable> {
 		public void receive (T message);
-	}
-	public static interface Handler<T extends Serializable> {
-		public void handle (T message);
 	}
 }
