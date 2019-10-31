@@ -53,14 +53,8 @@
 			<artifactId>snakeyaml</artifactId>
 		</dependency>
 		<dependency>
-			<groupId>net.openhft</groupId>
-			<artifactId>chronicle-queue</artifactId>
-			<version>5.17.21</version>
-		</dependency>
-		<dependency>
 			<groupId>com.google.code.gson</groupId>
 			<artifactId>gson</artifactId>
-			<version>2.8.5</version>
 		</dependency>
 		<dependency>
 			<groupId>com.alibaba</groupId>
@@ -76,26 +70,7 @@
 			<groupId>com.h2database</groupId>
 			<artifactId>h2-mvstore</artifactId>
 		</dependency>
-		<dependency>
-			<groupId>org.jgroups</groupId>
-			<artifactId>jgroups</artifactId>
-			<version>4.0.21.Final</version>
-		</dependency>
-		<dependency>
-			<groupId>org.jgroups</groupId>
-			<artifactId>jgroups-raft</artifactId>
-			<version>0.4.3.Final</version>
-			<exclusions>
-				<exclusion>
-					<groupId>org.fusesource.leveldbjni</groupId>
-					<artifactId>leveldbjni-all</artifactId>
-				</exclusion>
-				<exclusion>
-					<groupId>org.mapdb</groupId>
-					<artifactId>mapdb</artifactId>
-				</exclusion>
-			</exclusions>
-		</dependency>
+		
 		<dependency>
 			<groupId>io.github.pcmind</groupId>
 			<artifactId>leveldb-api</artifactId>
@@ -120,17 +95,7 @@
 			<artifactId>leveldb</artifactId>
 			<version>0.10</version>
 		</dependency-->
-		
-		<dependency>
-			<groupId>io.undertow</groupId>
-			<artifactId>undertow-websockets-jsr</artifactId>
-			<version>2.0.7.Final</version>
-		</dependency>
-		<dependency>
-			<groupId>org.asynchttpclient</groupId>
-			<artifactId>async-http-client</artifactId>
-			<version>2.4.7</version>
-		</dependency>
+
 		<dependency>
 			<groupId>org.apache.logging.log4j</groupId>
 			<artifactId>log4j-api</artifactId>

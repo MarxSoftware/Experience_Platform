@@ -37,13 +37,16 @@ package com.thorstenmarx.webtools.api.cluster.services;
  * <http://www.gnu.org/licenses/gpl-3.0.html>.
  * #L%
  */
+import com.thorstenmarx.webtools.api.annotations.API;
 import java.io.Serializable;
 
 /**
  *
  * @author marx
+ * @param <T>
  */
-public interface MessageReplicator<T extends Serializable> {
+@API(since = "3.3.0", status = API.Status.Experimental)
+public interface MessageReplicator<T extends Serializable> extends AutoCloseable {
 
 	void replicate(final T message);
 	

@@ -38,9 +38,12 @@ package com.thorstenmarx.webtools.api.cluster;
  * #L%
  */
 import com.thorstenmarx.webtools.api.annotations.API;
-import com.thorstenmarx.webtools.api.datalayer.DataLayer;
 import com.thorstenmarx.webtools.api.cluster.services.LockService;
+import com.thorstenmarx.webtools.api.cluster.services.MessageReplicator;
 import com.thorstenmarx.webtools.api.cluster.services.MessageService;
+import com.thorstenmarx.webtools.api.cluster.services.Topic;
+import com.thorstenmarx.webtools.api.execution.Executor;
+import java.io.Serializable;
 import java.util.List;
 
 /**
@@ -55,11 +58,16 @@ public interface Cluster {
 	LockService getLockService();
 
 	MessageService getMessageService();
-	
+
 	MessageService getRAFTMessageService();
-	
-	void registerRoleChangeListener (final NodeRoleChangeListener roleChangeListener);
-	void unregisterRoleChangeListener (final NodeRoleChangeListener roleChangeListener);
-	
-	NodeRole getRole ();
+
+	<T extends Serializable> Topic<T> createTopic(final String name, final Topic.Receiver<T> listener, final Class<T> type);
+
+	<T extends Serializable> MessageReplicator<T> createReplicator(final String topicName, final Executor executor, final MessageReplicator.Handler<T> handler, final Class<T> type);
+
+	void registerRoleChangeListener(final NodeRoleChangeListener roleChangeListener);
+
+	void unregisterRoleChangeListener(final NodeRoleChangeListener roleChangeListener);
+
+	NodeRole getRole();
 }

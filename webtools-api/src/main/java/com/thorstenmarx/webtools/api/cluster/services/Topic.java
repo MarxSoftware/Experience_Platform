@@ -37,6 +37,7 @@ package com.thorstenmarx.webtools.api.cluster.services;
  * <http://www.gnu.org/licenses/gpl-3.0.html>.
  * #L%
  */
+import com.thorstenmarx.webtools.api.annotations.API;
 import java.io.IOException;
 import java.io.Serializable;
 
@@ -44,9 +45,8 @@ import java.io.Serializable;
  *
  * @author marx
  */
-public interface Topic<T extends Serializable> {
-
-	void close();
+@API(since = "3.3.0", status = API.Status.Experimental)
+public interface Topic<T extends Serializable> extends AutoCloseable {
 
 	void publish(final T message) throws IOException;
 	
