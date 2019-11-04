@@ -105,7 +105,7 @@ public class BaseGuiceModule extends AbstractModule {
 
 	@Provides
 	@Singleton
-	protected ModuleManager moduleManager(AnalyticsDB analyticsDB, SegmentService segmentService, MBassador mBassador, Entities entities, Registry registry, final Injector injector) {
+	protected ModuleManager moduleManager(final AnalyticsDB analyticsDB, final SegmentService segmentService, final MBassador mBassador, final Entities entities, final Registry registry, final Injector injector) {
 		List<String> apiPackages = new ArrayList<>();
 		apiPackages.add("com.thorstenmarx.webtools.api");
 		apiPackages.add("com.thorstenmarx.webtools.collection");
@@ -145,7 +145,7 @@ public class BaseGuiceModule extends AbstractModule {
 		apiPackages.add("jdk.internal.reflect");
 		apiPackages.add("com.google.gson");
 		ModuleAPIClassLoader apiClassLoader = new ModuleAPIClassLoader((URLClassLoader) getClass().getClassLoader(), apiPackages);
-		ModuleManager coreModuleManager = ModuleManagerImpl.create(new File("core_modules"), new CoreModuleContext(new File("./webtools_data/core_modules_data"), mbassador, executor), apiClassLoader, injector::injectMembers);
+		ModuleManager coreModuleManager = ModuleManagerImpl.create(new File("core_modules"), new CoreModuleContext(new File("./webtools_data/core_modules_data"), mbassador, executor), apiClassLoader, injector::injectMembers);		
 		
 		// autoactivate core modules
 		coreModuleManager.configuration().getModules().keySet().forEach((module) -> {

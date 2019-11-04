@@ -27,6 +27,8 @@ import com.thorstenmarx.webtools.api.analytics.AnalyticsDB;
 import com.thorstenmarx.webtools.api.actions.SegmentService;
 import com.thorstenmarx.webtools.api.configuration.Registry;
 import com.thorstenmarx.webtools.api.entities.Entities;
+import java.util.HashMap;
+import java.util.Map;
 import net.engio.mbassy.bus.MBassador;
 
 /**
@@ -41,6 +43,8 @@ public class ModuleContext extends Context {
 	protected final Entities entities;
 	protected final Registry registry;
 	
+	protected final Map<String, Object> parameters = new HashMap<>();
+	
 	public ModuleContext (final AnalyticsDB analyticsDB, final SegmentService segmentService, final MBassador messageBus, final Entities entities, final Registry registry) {
 		this.analyticsDB = analyticsDB;
 		this.segmentService = segmentService;
@@ -48,6 +52,22 @@ public class ModuleContext extends Context {
 		this.entities = entities;
 		this.registry = registry;
 	}
+	
+	public void put (final String name, final Object value) {
+		this.parameters.put(name, value);
+	}
+	public <T> T get(final String name, final Class<T> type, final T defaultValue) {
+		if (!parameters.containsKey(name)) {
+			return defaultValue;
+		} 
+		Object value = parameters.get(name);
+		if (!type.isInstance(value)){
+			return defaultValue;
+		}
+		
+		return type.cast(value);
+	}
+	
 
 	public AnalyticsDB getAnalyticsDB() {
 		return analyticsDB;
