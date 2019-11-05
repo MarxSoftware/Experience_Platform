@@ -57,6 +57,12 @@ public interface Cluster {
 
 	LockService getLockService();
 
+	/**
+	 * The MessageService published Messages to all cluster members.
+	 * The member that sends the meswsage will not call the local message listener.
+	 * 
+	 * @return 
+	 */
 	MessageService getMessageService();
 
 	MessageService getRAFTMessageService();
