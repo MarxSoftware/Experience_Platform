@@ -45,9 +45,9 @@ import net.engio.mbassy.bus.MBassador;
  *
  * @author marx
  */
-public class InfrastructureGuiceModule extends AbstractModule {
+public class SystemGuiceModule extends AbstractModule {
 
-	public InfrastructureGuiceModule() {
+	public SystemGuiceModule() {
 	}
 
 	@Provides
@@ -89,7 +89,7 @@ public class InfrastructureGuiceModule extends AbstractModule {
 		apiPackages.add("jdk.internal.reflect");
 		apiPackages.add("com.google.gson");
 		ModuleAPIClassLoader apiClassLoader = new ModuleAPIClassLoader((URLClassLoader) getClass().getClassLoader(), apiPackages);
-		ModuleManager coreModuleManager = ModuleManagerImpl.create(new File("infrastructure/modules"), context, apiClassLoader, injector::injectMembers);		
+		ModuleManager coreModuleManager = ModuleManagerImpl.create(new File("system_modules/"), context, apiClassLoader, injector::injectMembers);		
 		
 		// autoactivate core modules
 		coreModuleManager.configuration().getModules().keySet().forEach((module) -> {

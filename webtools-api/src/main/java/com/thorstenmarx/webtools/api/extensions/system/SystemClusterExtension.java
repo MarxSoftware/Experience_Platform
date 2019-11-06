@@ -14,7 +14,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package com.thorstenmarx.webtools.api.extensions.core;
+package com.thorstenmarx.webtools.api.extensions.system;
 
 /*-
  * #%L
@@ -47,7 +47,7 @@ import java.io.File;
  *
  * @author marx
  */
-public abstract class CoreClusterExtension extends BaseExtension<CoreModuleContext> {
+public abstract class SystemClusterExtension extends BaseExtension<CoreModuleContext> {
 	
 	public abstract String getName ();
 	

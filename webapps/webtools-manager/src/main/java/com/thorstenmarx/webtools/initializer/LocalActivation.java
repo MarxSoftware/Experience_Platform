@@ -42,7 +42,7 @@ import com.thorstenmarx.webtools.manager.services.UserService;
 import com.thorstenmarx.webtools.manager.utils.Helper;
 import com.thorstenmarx.webtools.api.location.LocationProvider;
 import com.thorstenmarx.webtools.initializer.guice.BaseGuiceModule;
-import com.thorstenmarx.webtools.initializer.guice.InfrastructureGuiceModule;
+import com.thorstenmarx.webtools.initializer.guice.SystemGuiceModule;
 import java.util.Optional;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -59,7 +59,7 @@ public class LocalActivation implements Activation {
 	@Override
 	public void initialize () {
 		Module configModule = Modules.override(new BaseGuiceModule()).with(new LocalGuiceModule());
-		Injector injector = Guice.createInjector(configModule, new InfrastructureGuiceModule());
+		Injector injector = Guice.createInjector(configModule, new SystemGuiceModule());
 		
 		ContextListener.INJECTOR_PROVIDER.injector(injector);
 

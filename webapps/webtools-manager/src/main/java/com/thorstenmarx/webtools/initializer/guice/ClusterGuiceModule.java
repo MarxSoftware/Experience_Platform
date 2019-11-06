@@ -21,7 +21,6 @@ package com.thorstenmarx.webtools.initializer.guice;
  * <http://www.gnu.org/licenses/gpl-3.0.html>.
  * #L%
  */
-import static com.alibaba.fastjson.serializer.SerializerFeature.config;
 import com.google.inject.AbstractModule;
 import com.google.inject.Provides;
 import com.google.inject.Singleton;
@@ -29,9 +28,8 @@ import com.thorstenmarx.modules.api.ModuleManager;
 import com.thorstenmarx.webtools.api.CoreModuleContext;
 import com.thorstenmarx.webtools.api.cluster.Cluster;
 import com.thorstenmarx.webtools.api.execution.Executor;
-import com.thorstenmarx.webtools.api.extensions.core.CoreClusterExtension;
+import com.thorstenmarx.webtools.api.extensions.system.SystemClusterExtension;
 import com.thorstenmarx.webtools.base.Configuration;
-import com.thorstenmarx.webtools.initializer.CoreModuleManager;
 import com.thorstenmarx.webtools.initializer.Infrastructure;
 import java.io.File;
 import java.util.Collections;
@@ -69,7 +67,7 @@ public class ClusterGuiceModule extends AbstractModule {
 	@Provides
 	@Singleton
 	private Cluster cluster (@Infrastructure ModuleManager moduleManager) {
-		final List<CoreClusterExtension> extensions = moduleManager.extensions(CoreClusterExtension.class);
+		final List<SystemClusterExtension> extensions = moduleManager.extensions(SystemClusterExtension.class);
 
 
 		return extensions.get(0).getCluster();
