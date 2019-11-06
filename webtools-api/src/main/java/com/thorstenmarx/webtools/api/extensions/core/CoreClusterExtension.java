@@ -14,7 +14,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package com.thorstenmarx.webtools.api.cluster;
+package com.thorstenmarx.webtools.api.extensions.core;
 
 /*-
  * #%L
@@ -37,47 +37,19 @@ package com.thorstenmarx.webtools.api.cluster;
  * <http://www.gnu.org/licenses/gpl-3.0.html>.
  * #L%
  */
-import com.thorstenmarx.webtools.api.annotations.API;
-import com.thorstenmarx.webtools.api.cluster.services.LockService;
-import com.thorstenmarx.webtools.api.cluster.services.MessageReplicator;
-import com.thorstenmarx.webtools.api.cluster.services.MessageService;
-import com.thorstenmarx.webtools.api.cluster.services.Topic;
-import com.thorstenmarx.webtools.api.execution.Executor;
-import java.io.Serializable;
-import java.util.List;
+
+import com.thorstenmarx.modules.api.BaseExtension;
+import com.thorstenmarx.webtools.api.CoreModuleContext;
+import com.thorstenmarx.webtools.api.cluster.Cluster;
+import java.io.File;
 
 /**
  *
  * @author marx
  */
-@API(since = "3.1.0", status = API.Status.Experimental)
-public interface Cluster {
+public abstract class CoreClusterExtension extends BaseExtension<CoreModuleContext> {
 	
-	void connect () throws Exception;
+	public abstract String getName ();
 	
-	void close () throws Exception;
-
-	List<Node<?>> getNodes();
-
-	LockService getLockService();
-
-	/**
-	 * The MessageService published Messages to all cluster members.
-	 * The member that sends the meswsage will not call the local message listener.
-	 * 
-	 * @return 
-	 */
-	MessageService getMessageService();
-
-	MessageService getRAFTMessageService();
-
-	<T extends Serializable> Topic<T> createTopic(final String name, final Topic.Receiver<T> listener, final Class<T> type);
-
-	<T extends Serializable> MessageReplicator<T> createReplicator(final String topicName, final Executor executor, final MessageReplicator.Handler<T> handler, final Class<T> type);
-
-	void registerRoleChangeListener(final NodeRoleChangeListener roleChangeListener);
-
-	void unregisterRoleChangeListener(final NodeRoleChangeListener roleChangeListener);
-
-	NodeRole getRole();
+	public abstract Cluster getCluster ();
 }

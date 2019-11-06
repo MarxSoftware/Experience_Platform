@@ -21,30 +21,23 @@ package com.thorstenmarx.webtools.initializer.guice;
  * <http://www.gnu.org/licenses/gpl-3.0.html>.
  * #L%
  */
+import static com.alibaba.fastjson.serializer.SerializerFeature.config;
 import com.google.inject.AbstractModule;
 import com.google.inject.Provides;
 import com.google.inject.Singleton;
 import com.thorstenmarx.modules.api.ModuleManager;
-import com.thorstenmarx.webtools.api.analytics.AnalyticsDB;
-import com.thorstenmarx.webtools.base.Configuration;
-import com.thorstenmarx.webtools.ContextListener;
-import com.thorstenmarx.webtools.api.actions.SegmentService;
+import com.thorstenmarx.webtools.api.CoreModuleContext;
 import com.thorstenmarx.webtools.api.cluster.Cluster;
-import com.thorstenmarx.webtools.api.configuration.Registry;
-import com.thorstenmarx.webtools.api.datalayer.DataLayer;
-import com.thorstenmarx.webtools.api.entities.Entities;
-import com.thorstenmarx.webtools.api.extensions.core.CoreAnalyticsDbExtension;
-import com.thorstenmarx.webtools.api.extensions.core.CoreDataLayerExtension;
-import com.thorstenmarx.webtools.api.extensions.core.CoreEntitiesExtension;
-import com.thorstenmarx.webtools.api.extensions.core.CoreRegistryExtension;
-import com.thorstenmarx.webtools.api.location.LocationProvider;
-//import com.thorstenmarx.webtools.cluster.JGroupsCluster;
+import com.thorstenmarx.webtools.api.execution.Executor;
+import com.thorstenmarx.webtools.api.extensions.core.CoreClusterExtension;
+import com.thorstenmarx.webtools.base.Configuration;
 import com.thorstenmarx.webtools.initializer.CoreModuleManager;
-import com.thorstenmarx.webtools.initializer.Internal;
-import java.io.IOException;
+import com.thorstenmarx.webtools.initializer.Infrastructure;
+import java.io.File;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
+import net.engio.mbassy.bus.MBassador;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -55,56 +48,34 @@ public class ClusterGuiceModule extends AbstractModule {
     public ClusterGuiceModule() {
     }
 
-    @Provides
-    @Singleton
-    private AnalyticsDB analyticsDB(final LocationProvider locationProvider, @CoreModuleManager ModuleManager moduleManager) throws IOException {
-        if (ContextListener.STATE.shuttingDown()) {
-            return null;
-        }
-
-        final List<CoreAnalyticsDbExtension> extensions = moduleManager.extensions(CoreAnalyticsDbExtension.class);
-
-		AnalyticsDB db = extensions.get(0).getAnalyticsDb();
-
-        BaseGuiceModule.initAnalyticsFilters(db, locationProvider);
-
-        return db;
-    }
-
-    @Provides
-    @Singleton
-    private Entities entities(@CoreModuleManager ModuleManager moduleManager) {
-        final List<CoreEntitiesExtension> extensions = moduleManager.extensions(CoreEntitiesExtension.class);
-
-		return extensions.get(0).getEntities();
-    }
+	@Provides
+	@Singleton
+	protected CoreModuleContext coreModuleContext (final Configuration configuration, final Executor executor, final MBassador mbassador, final Cluster cluster) {
+		final CoreModuleContext coreModuleContext = new CoreModuleContext(new File("./webtools_data/core_modules_data"), mbassador, executor, cluster);
+		
+		
+		Map<String, Object> analytics = configuration.getMap("analytics", Collections.EMPTY_MAP);
+		if  (analytics.containsKey("shards")) {
+			coreModuleContext.put("analyticsdb.shard.count", analytics.get("shards"));
+		} else {
+			coreModuleContext.put("analyticsdb.shard.count", 3);
+		}
+		
+		
+		return coreModuleContext;
+	}
+   
 	
+	@Provides
+	@Singleton
+	private Cluster cluster (@Infrastructure ModuleManager moduleManager) {
+		final List<CoreClusterExtension> extensions = moduleManager.extensions(CoreClusterExtension.class);
 
-    @Provides
-    @Singleton	
-    private Registry registry(@CoreModuleManager ModuleManager moduleManager) {
-		final List<CoreRegistryExtension> extensions = moduleManager.extensions(CoreRegistryExtension.class);
-		return extensions.get(0).getRegistry();
-    }
-	
-//	@Provides
-//	@Singleton
-//	private Cluster cluster (@Internal final AnalyticsDB db, final SegmentService segmentService, final Configuration config) {
-//		Map nodeConfig = config.getMap("node", Collections.EMPTY_MAP);
-//		if (nodeConfig.isEmpty()) {
-//			throw new IllegalStateException("node config not available");
-//		}
-//		Cluster cluster = new JGroupsCluster((String) nodeConfig.get("name"), segmentService, db);
-//		
-//		return cluster;
-//	}
 
-    @Provides
-    @Singleton
-    private DataLayer datalayer(@CoreModuleManager ModuleManager moduleManager) {
-        final List<CoreDataLayerExtension> extensions = moduleManager.extensions(CoreDataLayerExtension.class);
-		return extensions.get(0).getDataLayer();
-    }
+		return extensions.get(0).getCluster();
+	}
+
+   
 
     @Override
     protected void configure() {

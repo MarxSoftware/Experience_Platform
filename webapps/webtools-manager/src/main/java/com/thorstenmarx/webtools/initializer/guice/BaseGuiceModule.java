@@ -60,7 +60,9 @@ import java.io.IOException;
 import java.net.URLClassLoader;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
+import java.util.Map;
 import net.engio.mbassy.bus.MBassador;
 
 /**
@@ -126,8 +128,24 @@ public class BaseGuiceModule extends AbstractModule {
 	
 	@Provides
 	@Singleton
+	protected CoreModuleContext coreModuleContext (final Configuration configuration, final Executor executor, final MBassador mbassador) {
+		final CoreModuleContext coreModuleContext = new CoreModuleContext(new File("./webtools_data/core_modules_data"), mbassador, executor);
+		
+		Map<String, Object> analytics = configuration.getMap("analytics", Collections.EMPTY_MAP);
+		if  (analytics.containsKey("shards")) {
+			coreModuleContext.put("analyticsdb.shard.count", analytics.get("shards"));
+		} else {
+			coreModuleContext.put("analyticsdb.shard.count", 3);
+		}
+		
+		
+		return coreModuleContext;
+	}
+	
+	@Provides
+	@Singleton
 	@CoreModuleManager
-	protected ModuleManager coreModuleManager(final Injector injector, final Executor executor, final MBassador mbassador) {
+	protected ModuleManager coreModuleManager(final Injector injector, final CoreModuleContext context) {
 		List<String> apiPackages = new ArrayList<>();
 		apiPackages.add("com.thorstenmarx.webtools.api");
 		apiPackages.add("com.thorstenmarx.webtools.collection");
@@ -145,7 +163,7 @@ public class BaseGuiceModule extends AbstractModule {
 		apiPackages.add("jdk.internal.reflect");
 		apiPackages.add("com.google.gson");
 		ModuleAPIClassLoader apiClassLoader = new ModuleAPIClassLoader((URLClassLoader) getClass().getClassLoader(), apiPackages);
-		ModuleManager coreModuleManager = ModuleManagerImpl.create(new File("core_modules"), new CoreModuleContext(new File("./webtools_data/core_modules_data"), mbassador, executor), apiClassLoader, injector::injectMembers);		
+		ModuleManager coreModuleManager = ModuleManagerImpl.create(new File("core_modules"), context, apiClassLoader, injector::injectMembers);		
 		
 		// autoactivate core modules
 		coreModuleManager.configuration().getModules().keySet().forEach((module) -> {

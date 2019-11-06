@@ -26,6 +26,8 @@ import com.google.gson.Gson;
 import com.google.inject.Guice;
 import com.google.inject.Injector;
 import com.google.inject.Key;
+import com.google.inject.util.Modules;
+import com.google.inject.Module;
 import com.thorstenmarx.modules.api.ModuleManager;
 import com.thorstenmarx.webtools.ContextListener;
 import com.thorstenmarx.webtools.Fields;
@@ -44,6 +46,8 @@ import com.thorstenmarx.webtools.api.location.LocationProvider;
 import com.thorstenmarx.webtools.initializer.guice.BaseGuiceModule;
 //import com.thorstenmarx.webtools.cluster.JGroupsCluster;
 import com.thorstenmarx.webtools.initializer.guice.ClusterGuiceModule;
+import com.thorstenmarx.webtools.initializer.guice.InfrastructureGuiceModule;
+import com.thorstenmarx.webtools.initializer.guice.LocalGuiceModule;
 import java.io.File;
 import java.util.List;
 import java.util.Map;
@@ -65,7 +69,11 @@ public class ClusterActivation implements Activation {
 	
 	@Override
 	public void initialize () {
-		Injector injector = Guice.createInjector(new ClusterGuiceModule(), new BaseGuiceModule());
+		
+		Module tempModule = Modules.override(new BaseGuiceModule()).with(new LocalGuiceModule());
+		Module configModule = Modules.override(tempModule).with(new ClusterGuiceModule());
+		Injector injector = Guice.createInjector(configModule, new InfrastructureGuiceModule());
+		
 		ContextListener.INJECTOR_PROVIDER.injector(injector);
 
 		Cluster cluster = ContextListener.INJECTOR_PROVIDER.injector().getInstance(Cluster.class);
@@ -131,6 +139,13 @@ public class ClusterActivation implements Activation {
 			LOGGER.error("", ex);
 		}
 		moduleManager = ContextListener.INJECTOR_PROVIDER.injector().getInstance(Key.get(ModuleManager.class, CoreModuleManager.class));
+		try {
+			
+			moduleManager.close();
+		} catch (Exception ex) {
+			LOGGER.error("", ex);
+		}
+		moduleManager = ContextListener.INJECTOR_PROVIDER.injector().getInstance(Key.get(ModuleManager.class, Infrastructure.class));
 		try {
 			
 			moduleManager.close();
