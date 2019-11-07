@@ -73,14 +73,6 @@ public class ClusterActivation implements Activation {
 		Injector injector = Guice.createInjector(configModule, new SystemGuiceModule());
 		
 		ContextListener.INJECTOR_PROVIDER.injector(injector);
-
-		Cluster cluster = ContextListener.INJECTOR_PROVIDER.injector().getInstance(Cluster.class);
-//		try {
-//			((JGroupsCluster)cluster).start(new File("webtools_data/conf"), false, 3000, new File("webtools_data/data/"));
-//		} catch (Exception ex) {
-//			LOGGER.error("error start node", ex);
-//			throw new IllegalStateException(ex);
-//		}
 		
 		EventBus eventBus = new EventBus();
 		Lookup.getDefault().register(EventBus.class, eventBus);
@@ -114,20 +106,32 @@ public class ClusterActivation implements Activation {
 		
 		// init module manager by get the instance from guice
 		ContextListener.INJECTOR_PROVIDER.injector().getInstance(ModuleManager.class);
+		
+		// Connect the cluster
+		try {
+			Cluster cluster = ContextListener.INJECTOR_PROVIDER.injector().getInstance(Cluster.class);
+			if (cluster != null) {
+				cluster.connect();
+			} else {
+				throw new IllegalStateException("no cluster implementation evailable");
+			}
+		} catch (Exception ex) {
+			throw new IllegalStateException(ex);
+		}
 	}
 	
 	@Override
 	public void destroy () {
 		ContextListener.STATE.shuttingDown(true);
 
-//		try {
-//			Cluster cluster = ContextListener.INJECTOR_PROVIDER.injector().getInstance(Cluster.class);
-//			if (cluster != null) {
-//				((JGroupsCluster)cluster).close();
-//			}
-//		} catch (Exception ex) {
-//			LOGGER.error("", ex);
-//		}
+		try {
+			Cluster cluster = ContextListener.INJECTOR_PROVIDER.injector().getInstance(Cluster.class);
+			if (cluster != null) {
+				cluster.close();
+			}
+		} catch (Exception ex) {
+			LOGGER.error("", ex);
+		}
 
 		// close modulemanager
 		ModuleManager moduleManager = ContextListener.INJECTOR_PROVIDER.injector().getInstance(ModuleManager.class);
