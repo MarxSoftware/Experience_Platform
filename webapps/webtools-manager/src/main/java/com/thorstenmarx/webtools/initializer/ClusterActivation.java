@@ -46,6 +46,7 @@ import com.thorstenmarx.webtools.api.location.LocationProvider;
 import com.thorstenmarx.webtools.initializer.guice.BaseGuiceModule;
 //import com.thorstenmarx.webtools.cluster.JGroupsCluster;
 import com.thorstenmarx.webtools.initializer.guice.ClusterGuiceModule;
+import com.thorstenmarx.webtools.initializer.guice.CommonGuiceModule;
 import com.thorstenmarx.webtools.initializer.guice.SystemGuiceModule;
 import com.thorstenmarx.webtools.initializer.guice.LocalGuiceModule;
 import java.io.File;
@@ -71,6 +72,7 @@ public class ClusterActivation implements Activation {
 	public void initialize () {
 		
 		Module tempModule = Modules.override(new BaseGuiceModule()).with(new LocalGuiceModule());
+		tempModule = Modules.combine(tempModule, new CommonGuiceModule());
 		Module configModule = Modules.override(tempModule).with(new ClusterGuiceModule());
 		Injector injector = Guice.createInjector(configModule, new SystemGuiceModule());
 		

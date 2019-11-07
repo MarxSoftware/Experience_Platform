@@ -37,9 +37,9 @@
 		<copy todir="${target.folder}/webtools_data">
 			<fileset dir="distribution/webtools_data"/>
 		</copy>
-		<echo>add core modules</echo>
-		<copy todir="${target.folder}/core_modules">
-			<fileset dir="distribution/core_modules"/>
+		<echo>add modules directory</echo>
+		<copy todir="${target.folder}/modules">
+			<fileset dir="distribution/modules"/>
 		</copy>
 		<echo>add manager application</echo>
 		<unwar src="webapps/webtools-manager/target/webtools-manager-${webtools.version}.war" dest="${target.folder}/webapps/root" />

@@ -3,3 +3,4 @@ build
 logs
 webtools_data/
 core_modules/
+.modules

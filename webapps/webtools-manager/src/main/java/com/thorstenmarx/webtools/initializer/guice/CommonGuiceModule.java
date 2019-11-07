@@ -31,6 +31,7 @@ import com.thorstenmarx.modules.api.ModuleManager;
 import com.thorstenmarx.webtools.api.CoreModuleContext;
 import com.thorstenmarx.webtools.api.execution.Executor;
 import com.thorstenmarx.webtools.base.Configuration;
+import com.thorstenmarx.webtools.initializer.CoreModuleManager;
 import com.thorstenmarx.webtools.initializer.Infrastructure;
 import java.io.File;
 import java.io.IOException;
@@ -45,23 +46,21 @@ import net.engio.mbassy.bus.MBassador;
  *
  * @author marx
  */
-public class SystemGuiceModule extends AbstractModule {
+public class CommonGuiceModule extends AbstractModule {
 
-	public SystemGuiceModule() {
+	public CommonGuiceModule() {
 	}
 
 	@Provides
 	@Singleton
-	@Infrastructure
-	protected CoreModuleContext infrastructureModuleContext (final Configuration configuration, final Executor executor, final MBassador mbassador) {
-		final CoreModuleContext coreModuleContext = new CoreModuleContext(new File("./webtools_data/infrastructure/data"), mbassador, executor);
+	protected CoreModuleContext coreModuleContext (final Configuration configuration, final Executor executor, final MBassador mbassador) {
+		final CoreModuleContext coreModuleContext = new CoreModuleContext(new File("./webtools_data/core_modules_data"), mbassador, executor);
 		
-		// config
-		Map<String, Object> node = configuration.getMap("node", Collections.EMPTY_MAP);
-		if  (node.containsKey("name")) {
-			final File configDir = new File("./webtools_data/conf");
-			coreModuleContext.put("node.name", node.get("name"));
-			coreModuleContext.put("node.config", configDir);
+		Map<String, Object> analytics = configuration.getMap("analytics", Collections.EMPTY_MAP);
+		if  (analytics.containsKey("shards")) {
+			coreModuleContext.put("analyticsdb.shard.count", analytics.get("shards"));
+		} else {
+			coreModuleContext.put("analyticsdb.shard.count", 3);
 		}
 		
 		
@@ -70,8 +69,8 @@ public class SystemGuiceModule extends AbstractModule {
 	
 	@Provides
 	@Singleton
-	@Infrastructure
-	protected ModuleManager infrastructureModuleManager(final Injector injector, @Infrastructure final CoreModuleContext context) {
+	@CoreModuleManager
+	protected ModuleManager coreModuleManager(final Injector injector, final CoreModuleContext context) {
 		List<String> apiPackages = new ArrayList<>();
 		apiPackages.add("com.thorstenmarx.webtools.api");
 		apiPackages.add("com.thorstenmarx.webtools.collection");
@@ -89,7 +88,7 @@ public class SystemGuiceModule extends AbstractModule {
 		apiPackages.add("jdk.internal.reflect");
 		apiPackages.add("com.google.gson");
 		ModuleAPIClassLoader apiClassLoader = new ModuleAPIClassLoader((URLClassLoader) getClass().getClassLoader(), apiPackages);
-		ModuleManager coreModuleManager = ModuleManagerImpl.create(new File("modules/system"), context, apiClassLoader, injector::injectMembers);		
+		ModuleManager coreModuleManager = ModuleManagerImpl.create(new File("modules/common"), context, apiClassLoader, injector::injectMembers);		
 		
 		// autoactivate core modules
 		coreModuleManager.configuration().getModules().keySet().forEach((module) -> {
