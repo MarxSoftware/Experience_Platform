@@ -36,24 +36,20 @@ import com.thorstenmarx.webtools.api.actions.ActionSystem;
 import com.thorstenmarx.webtools.api.analytics.AnalyticsDB;
 import com.thorstenmarx.webtools.api.cluster.Cluster;
 import com.thorstenmarx.webtools.api.configuration.Configuration;
-import com.thorstenmarx.webtools.api.configuration.Registry;
 import com.thorstenmarx.webtools.api.execution.Executor;
 import com.thorstenmarx.webtools.impl.execution.DefaultExecutor;
 import com.thorstenmarx.webtools.manager.model.User;
 import com.thorstenmarx.webtools.manager.services.UserService;
 import com.thorstenmarx.webtools.manager.utils.Helper;
 import com.thorstenmarx.webtools.api.location.LocationProvider;
+import com.thorstenmarx.webtools.initializer.annotations.Common;
+import com.thorstenmarx.webtools.initializer.annotations.Infrastructure;
 import com.thorstenmarx.webtools.initializer.guice.BaseGuiceModule;
-//import com.thorstenmarx.webtools.cluster.JGroupsCluster;
 import com.thorstenmarx.webtools.initializer.guice.ClusterGuiceModule;
 import com.thorstenmarx.webtools.initializer.guice.CommonGuiceModule;
 import com.thorstenmarx.webtools.initializer.guice.SystemGuiceModule;
 import com.thorstenmarx.webtools.initializer.guice.LocalGuiceModule;
-import java.io.File;
-import java.util.List;
-import java.util.Map;
 import java.util.Optional;
-import java.util.logging.Level;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -140,7 +136,7 @@ public class ClusterActivation implements Activation {
 		} catch (Exception ex) {
 			LOGGER.error("", ex);
 		}
-		moduleManager = ContextListener.INJECTOR_PROVIDER.injector().getInstance(Key.get(ModuleManager.class, CoreModuleManager.class));
+		moduleManager = ContextListener.INJECTOR_PROVIDER.injector().getInstance(Key.get(ModuleManager.class, Common.class));
 		try {
 			
 			moduleManager.close();

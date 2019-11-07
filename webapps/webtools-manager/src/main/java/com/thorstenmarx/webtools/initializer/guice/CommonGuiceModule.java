@@ -31,8 +31,7 @@ import com.thorstenmarx.modules.api.ModuleManager;
 import com.thorstenmarx.webtools.api.CoreModuleContext;
 import com.thorstenmarx.webtools.api.execution.Executor;
 import com.thorstenmarx.webtools.base.Configuration;
-import com.thorstenmarx.webtools.initializer.CoreModuleManager;
-import com.thorstenmarx.webtools.initializer.Infrastructure;
+import com.thorstenmarx.webtools.initializer.annotations.Common;
 import java.io.File;
 import java.io.IOException;
 import java.net.URLClassLoader;
@@ -69,7 +68,7 @@ public class CommonGuiceModule extends AbstractModule {
 	
 	@Provides
 	@Singleton
-	@CoreModuleManager
+	@Common
 	protected ModuleManager coreModuleManager(final Injector injector, final CoreModuleContext context) {
 		List<String> apiPackages = new ArrayList<>();
 		apiPackages.add("com.thorstenmarx.webtools.api");

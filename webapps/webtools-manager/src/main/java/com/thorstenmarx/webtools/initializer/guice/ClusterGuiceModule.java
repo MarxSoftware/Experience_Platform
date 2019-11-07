@@ -30,7 +30,7 @@ import com.thorstenmarx.webtools.api.cluster.Cluster;
 import com.thorstenmarx.webtools.api.execution.Executor;
 import com.thorstenmarx.webtools.api.extensions.system.SystemClusterExtension;
 import com.thorstenmarx.webtools.base.Configuration;
-import com.thorstenmarx.webtools.initializer.Infrastructure;
+import com.thorstenmarx.webtools.initializer.annotations.Infrastructure;
 import java.io.File;
 import java.util.Collections;
 import java.util.List;

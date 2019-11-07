@@ -51,7 +51,7 @@ import com.thorstenmarx.webtools.tracking.referrer.ReferrerFilter;
 import com.thorstenmarx.webtools.tracking.useragent.UserAgentFilter;
 import com.thorstenmarx.webtools.tracking.CrawlerUtil;
 import com.thorstenmarx.webtools.api.location.LocationProvider;
-import com.thorstenmarx.webtools.initializer.CoreModuleManager;
+import com.thorstenmarx.webtools.initializer.annotations.Common;
 import com.thorstenmarx.webtools.initializer.MultiModuleManager;
 import com.thorstenmarx.webtools.tracking.location.LocationFilter;
 import com.thorstenmarx.webtools.web.utils.MaxmindLocationProvider;
@@ -128,7 +128,7 @@ public class BaseGuiceModule extends AbstractModule {
 	
 	@Provides
     @Singleton
-    private MultiModuleManager multiModuleManager(@CoreModuleManager ModuleManager coreModuleManager, ModuleManager moduleManager) {
+    private MultiModuleManager multiModuleManager(@Common ModuleManager coreModuleManager, ModuleManager moduleManager) {
         return MultiModuleManager.create(coreModuleManager, moduleManager);
     }
 
@@ -159,7 +159,7 @@ public class BaseGuiceModule extends AbstractModule {
 
 	@Provides
 	@Singleton
-	protected SegmentService segmentService(final @CoreModuleManager ModuleManager moduleManager) {
+	protected SegmentService segmentService(final @Common ModuleManager moduleManager) {
 		final List<CoreActionSystemExtension> extensions = moduleManager.extensions(CoreActionSystemExtension.class);
 		return extensions.get(0).getSegmentService();
 	}

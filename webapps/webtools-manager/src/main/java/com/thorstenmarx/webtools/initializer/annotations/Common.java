@@ -14,7 +14,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package com.thorstenmarx.webtools.initializer;
+package com.thorstenmarx.webtools.initializer.annotations;
 
 /*-
  * #%L
@@ -48,4 +48,4 @@ import static java.lang.annotation.ElementType.FIELD;
 import static java.lang.annotation.ElementType.METHOD;
 
 @BindingAnnotation @Target({ FIELD, PARAMETER, METHOD }) @Retention(RUNTIME)
-public @interface CoreModuleManager {}
+public @interface Common {}

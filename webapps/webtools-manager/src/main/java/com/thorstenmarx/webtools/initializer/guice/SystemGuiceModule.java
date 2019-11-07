@@ -31,7 +31,7 @@ import com.thorstenmarx.modules.api.ModuleManager;
 import com.thorstenmarx.webtools.api.CoreModuleContext;
 import com.thorstenmarx.webtools.api.execution.Executor;
 import com.thorstenmarx.webtools.base.Configuration;
-import com.thorstenmarx.webtools.initializer.Infrastructure;
+import com.thorstenmarx.webtools.initializer.annotations.Infrastructure;
 import java.io.File;
 import java.io.IOException;
 import java.net.URLClassLoader;

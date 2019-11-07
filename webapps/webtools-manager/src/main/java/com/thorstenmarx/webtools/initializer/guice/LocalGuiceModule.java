@@ -40,7 +40,7 @@ import com.thorstenmarx.webtools.api.extensions.core.CoreDataLayerExtension;
 import com.thorstenmarx.webtools.api.extensions.core.CoreEntitiesExtension;
 import com.thorstenmarx.webtools.api.extensions.core.CoreRegistryExtension;
 import com.thorstenmarx.webtools.api.location.LocationProvider;
-import com.thorstenmarx.webtools.initializer.CoreModuleManager;
+import com.thorstenmarx.webtools.initializer.annotations.Common;
 import java.io.IOException;
 import java.util.List;
 import net.engio.mbassy.bus.MBassador;
@@ -52,7 +52,7 @@ public class LocalGuiceModule extends AbstractModule {
 
     @Provides
     @Singleton
-    private AnalyticsDB analyticsDB(final LocationProvider locationProvider, @CoreModuleManager ModuleManager moduleManager) throws IOException {
+    private AnalyticsDB analyticsDB(final LocationProvider locationProvider, @Common ModuleManager moduleManager) throws IOException {
         if (ContextListener.STATE.shuttingDown()) {
             return null;
         }
@@ -68,7 +68,7 @@ public class LocalGuiceModule extends AbstractModule {
 
     @Provides
     @Singleton
-    private Entities entities(@CoreModuleManager ModuleManager moduleManager) {
+    private Entities entities(@Common ModuleManager moduleManager) {
         final List<CoreEntitiesExtension> extensions = moduleManager.extensions(CoreEntitiesExtension.class);
 
 		return extensions.get(0).getEntities();
@@ -76,7 +76,7 @@ public class LocalGuiceModule extends AbstractModule {
 
     @Provides
     @Singleton
-    private Registry registry(@CoreModuleManager ModuleManager moduleManager) {
+    private Registry registry(@Common ModuleManager moduleManager) {
 		final List<CoreRegistryExtension> extensions = moduleManager.extensions(CoreRegistryExtension.class);
 
 		return extensions.get(0).getRegistry();
@@ -84,7 +84,7 @@ public class LocalGuiceModule extends AbstractModule {
 
     @Provides
     @Singleton
-    private DataLayer datalayer(@CoreModuleManager ModuleManager moduleManager) {
+    private DataLayer datalayer(@Common ModuleManager moduleManager) {
         final List<CoreDataLayerExtension> extensions = moduleManager.extensions(CoreDataLayerExtension.class);
 
 		return extensions.get(0).getDataLayer();
@@ -92,7 +92,7 @@ public class LocalGuiceModule extends AbstractModule {
 
 	@Provides
     @Singleton
-    private ActionSystem actionSystem(final @CoreModuleManager ModuleManager moduleManager, final DataLayer datalayer, final Executor executor, final AnalyticsDB analyticsDB, final MBassador mBassador) {
+    private ActionSystem actionSystem(final @Common ModuleManager moduleManager, final DataLayer datalayer, final Executor executor, final AnalyticsDB analyticsDB, final MBassador mBassador) {
         final List<CoreActionSystemExtension> extensions = moduleManager.extensions(CoreActionSystemExtension.class);
 
 		return extensions.get(0).getActionSystem();
@@ -100,7 +100,7 @@ public class LocalGuiceModule extends AbstractModule {
 	
 	@Provides
 	@Singleton
-	protected CacheLayer cachelayer(final @CoreModuleManager ModuleManager moduleManager) {
+	protected CacheLayer cachelayer(final @Common ModuleManager moduleManager) {
 		
 		final List<CoreCacheLayerExtension> extensions = moduleManager.extensions(CoreCacheLayerExtension.class);
 

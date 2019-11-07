@@ -41,6 +41,8 @@ import com.thorstenmarx.webtools.manager.model.User;
 import com.thorstenmarx.webtools.manager.services.UserService;
 import com.thorstenmarx.webtools.manager.utils.Helper;
 import com.thorstenmarx.webtools.api.location.LocationProvider;
+import com.thorstenmarx.webtools.initializer.annotations.Common;
+import com.thorstenmarx.webtools.initializer.annotations.Infrastructure;
 import com.thorstenmarx.webtools.initializer.guice.BaseGuiceModule;
 import com.thorstenmarx.webtools.initializer.guice.CommonGuiceModule;
 import com.thorstenmarx.webtools.initializer.guice.SystemGuiceModule;
@@ -68,7 +70,7 @@ public class LocalActivation implements Activation {
 		Lookup.getDefault().register(EventBus.class, eventBus);
 		Lookup.getDefault().register(AnalyticsDB.class, injector.getInstance(AnalyticsDB.class));
 		
-		injector.getInstance(Key.get(ModuleManager.class, Infrastructure.class));
+		injector.getInstance(Key.get(ModuleManager.class, Common.class));
 
 		UserService users = injector.getInstance(UserService.class);
 		// no users
@@ -109,7 +111,7 @@ public class LocalActivation implements Activation {
 		} catch (Exception ex) {
 			LOGGER.error("", ex);
 		}
-		moduleManager = ContextListener.INJECTOR_PROVIDER.injector().getInstance(Key.get(ModuleManager.class, CoreModuleManager.class));
+		moduleManager = ContextListener.INJECTOR_PROVIDER.injector().getInstance(Key.get(ModuleManager.class, Common.class));
 		try {
 			
 			moduleManager.close();
