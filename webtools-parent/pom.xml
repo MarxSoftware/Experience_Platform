@@ -5,6 +5,7 @@
 	<artifactId>webtools-parent</artifactId>
 	<version>4.0.0-SNAPSHOT</version>
 	<name>webtools-parent</name>
+	<description>webtools parent project</description>
 	<packaging>pom</packaging>
 	<modules>
 		<module>../webtools-bom</module>
@@ -28,6 +29,22 @@
 		<name>WP DigitalExperience</name>
 		<url>https://wp-digitalexperience.com</url>
 	</organization>
+	<licenses>
+		<license>
+			<name>GNU General Public License, Version 3</name>
+			<url>http://www.gnu.org/licenses/gpl-3.0.html</url>
+			<distribution>repo</distribution>
+		</license>
+	</licenses>
+	<developers>
+		<developer>
+			<id>thmarx</id>
+			<name>Thorsten Marx</name>
+			<email>thorsten.marx.1@gmail.com</email>
+			<url>https://thorstenmarx.com</url>
+		</developer>
+	</developers>
+	<url>https://wp-digitalexperience.com</url>
 	<scm>
 		<connection>scm:git:ssh://git@bitbucket.org/thmarx/webtools2.git</connection>
 		<developerConnection>scm:git:ssh://git@bitbucket.org/thmarx/webtools2.git</developerConnection>
