@@ -4,6 +4,7 @@
 	<groupId>com.thorstenmarx.webtools</groupId>
 	<artifactId>webtools-parent</artifactId>
 	<version>4.0.0-SNAPSHOT</version>
+	<name>webtools-parent</name>
 	<packaging>pom</packaging>
 	<modules>
 		<module>../webtools-bom</module>
