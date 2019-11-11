@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2019 Thorsten Marx
+ * Copyright (C) 2019 WP DigitalExperience
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -18,9 +18,9 @@ package com.thorstenmarx.webtools.api.cluster;
 
 /*-
  * #%L
- * webtools-cluster
+ * webtools-api
  * %%
- * Copyright (C) 2016 - 2019 Thorsten Marx
+ * Copyright (C) 2016 - 2019 WP DigitalExperience
  * %%
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as
@@ -38,57 +38,13 @@ package com.thorstenmarx.webtools.api.cluster;
  * #L%
  */
 
-import java.io.Serializable;
-
-
 /**
  *
  * @author marx
- * @param <T>
  */
-public class Message<T> implements Serializable {
-	
-	
-	transient private T sender;
-	
-	private String type;
-	private String payload;
-	
-	public Message() {
-		
-	}
-
-	public T getSender() {
-		return sender;
-	}
-
-	public Message setSender(T sender) {
-		this.sender = sender;
-		return this;
-	}
-
-	public String getType() {
-		return type;
-	}
-
-	public Message setType(String type) {
-		this.type = type;
-		return this;
-	}
-
-	public String getPayload() {
-		return payload;
-	}
-
-	public Message setPayload(String payload) {
-		this.payload = payload;
-		return this;
-	}
-
-	@Override
-	public String toString() {
-		return "Message{" + "type=" + type + ", payload=" + payload + '}';
-	}
-	
-	
+public enum NodeRole {
+	Follower,
+    Candidate,
+    Leader,
+	UNDEFINED
 }

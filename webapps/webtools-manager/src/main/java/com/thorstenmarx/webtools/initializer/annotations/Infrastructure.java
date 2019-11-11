@@ -14,11 +14,11 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package com.thorstenmarx.webtools.api.cluster;
+package com.thorstenmarx.webtools.initializer.annotations;
 
 /*-
  * #%L
- * webtools-cluster
+ * webtools-manager
  * %%
  * Copyright (C) 2016 - 2019 Thorsten Marx
  * %%
@@ -38,57 +38,14 @@ package com.thorstenmarx.webtools.api.cluster;
  * #L%
  */
 
-import java.io.Serializable;
 
+import com.google.inject.BindingAnnotation;
+import java.lang.annotation.Target;
+import java.lang.annotation.Retention;
+import static java.lang.annotation.RetentionPolicy.RUNTIME;
+import static java.lang.annotation.ElementType.PARAMETER;
+import static java.lang.annotation.ElementType.FIELD;
+import static java.lang.annotation.ElementType.METHOD;
 
-/**
- *
- * @author marx
- * @param <T>
- */
-public class Message<T> implements Serializable {
-	
-	
-	transient private T sender;
-	
-	private String type;
-	private String payload;
-	
-	public Message() {
-		
-	}
-
-	public T getSender() {
-		return sender;
-	}
-
-	public Message setSender(T sender) {
-		this.sender = sender;
-		return this;
-	}
-
-	public String getType() {
-		return type;
-	}
-
-	public Message setType(String type) {
-		this.type = type;
-		return this;
-	}
-
-	public String getPayload() {
-		return payload;
-	}
-
-	public Message setPayload(String payload) {
-		this.payload = payload;
-		return this;
-	}
-
-	@Override
-	public String toString() {
-		return "Message{" + "type=" + type + ", payload=" + payload + '}';
-	}
-	
-	
-}
+@BindingAnnotation @Target({ FIELD, PARAMETER, METHOD }) @Retention(RUNTIME)
+public @interface Infrastructure {}

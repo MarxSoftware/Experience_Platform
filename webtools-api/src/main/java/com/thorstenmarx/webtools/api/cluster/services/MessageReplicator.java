@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2019 Thorsten Marx
+ * Copyright (C) 2019 WP DigitalExperience
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -14,13 +14,13 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package com.thorstenmarx.webtools.api.cluster;
+package com.thorstenmarx.webtools.api.cluster.services;
 
 /*-
  * #%L
- * webtools-cluster
+ * webtools-api
  * %%
- * Copyright (C) 2016 - 2019 Thorsten Marx
+ * Copyright (C) 2016 - 2019 WP DigitalExperience
  * %%
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as
@@ -37,58 +37,28 @@ package com.thorstenmarx.webtools.api.cluster;
  * <http://www.gnu.org/licenses/gpl-3.0.html>.
  * #L%
  */
-
+import com.thorstenmarx.webtools.api.annotations.API;
 import java.io.Serializable;
-
 
 /**
  *
  * @author marx
  * @param <T>
  */
-public class Message<T> implements Serializable {
+@API(since = "3.3.0", status = API.Status.Experimental)
+public interface MessageReplicator<T extends Serializable> extends AutoCloseable {
+
+	void replicate(final T message);
 	
-	
-	transient private T sender;
-	
-	private String type;
-	private String payload;
-	
-	public Message() {
-		
-	}
-
-	public T getSender() {
-		return sender;
-	}
-
-	public Message setSender(T sender) {
-		this.sender = sender;
-		return this;
-	}
-
-	public String getType() {
-		return type;
-	}
-
-	public Message setType(String type) {
-		this.type = type;
-		return this;
-	}
-
-	public String getPayload() {
-		return payload;
-	}
-
-	public Message setPayload(String payload) {
-		this.payload = payload;
-		return this;
-	}
-
-	@Override
-	public String toString() {
-		return "Message{" + "type=" + type + ", payload=" + payload + '}';
+	public static class ReplicationMessage implements Serializable{
+		public String uuid;
+		public String source;
+		public String target;
+		public String message;
+		public boolean commited = false;
 	}
 	
-	
+	public static interface Handler<T extends Serializable> {
+		public void handle (T message);
+	}
 }

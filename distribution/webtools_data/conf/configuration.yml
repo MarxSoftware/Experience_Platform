@@ -1,11 +1,9 @@
 mode : local
-websocket :
-    allowedhosts : localhost,server1.local
 data:
     dir : webtools_data/data
 
 analytics:
-    shards: 10
+    shards: 3
 
 tracking:
     url: http://localhost:8080/track

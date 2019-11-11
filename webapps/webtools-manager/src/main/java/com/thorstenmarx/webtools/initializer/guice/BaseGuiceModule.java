@@ -51,7 +51,7 @@ import com.thorstenmarx.webtools.tracking.referrer.ReferrerFilter;
 import com.thorstenmarx.webtools.tracking.useragent.UserAgentFilter;
 import com.thorstenmarx.webtools.tracking.CrawlerUtil;
 import com.thorstenmarx.webtools.api.location.LocationProvider;
-import com.thorstenmarx.webtools.initializer.CoreModuleManager;
+import com.thorstenmarx.webtools.initializer.annotations.Common;
 import com.thorstenmarx.webtools.initializer.MultiModuleManager;
 import com.thorstenmarx.webtools.tracking.location.LocationFilter;
 import com.thorstenmarx.webtools.web.utils.MaxmindLocationProvider;
@@ -60,7 +60,9 @@ import java.io.IOException;
 import java.net.URLClassLoader;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
+import java.util.Map;
 import net.engio.mbassy.bus.MBassador;
 
 /**
@@ -105,7 +107,7 @@ public class BaseGuiceModule extends AbstractModule {
 
 	@Provides
 	@Singleton
-	protected ModuleManager moduleManager(AnalyticsDB analyticsDB, SegmentService segmentService, MBassador mBassador, Entities entities, Registry registry, final Injector injector) {
+	protected ModuleManager moduleManager(final AnalyticsDB analyticsDB, final SegmentService segmentService, final MBassador mBassador, final Entities entities, final Registry registry, final Injector injector) {
 		List<String> apiPackages = new ArrayList<>();
 		apiPackages.add("com.thorstenmarx.webtools.api");
 		apiPackages.add("com.thorstenmarx.webtools.collection");
@@ -121,47 +123,12 @@ public class BaseGuiceModule extends AbstractModule {
 		apiPackages.add("java.internal.reflect");
 		apiPackages.add("jdk.internal.reflect");
 		ModuleAPIClassLoader apiClassLoader = new ModuleAPIClassLoader((URLClassLoader) getClass().getClassLoader(), apiPackages);
-		return ModuleManagerImpl.create(new File("webtools_data"), new ModuleContext(analyticsDB, segmentService, mBassador, entities, registry), apiClassLoader, injector::injectMembers);
-	}
-	
-	@Provides
-	@Singleton
-	@CoreModuleManager
-	protected ModuleManager coreModuleManager(final Injector injector, final Executor executor, final MBassador mbassador) {
-		List<String> apiPackages = new ArrayList<>();
-		apiPackages.add("com.thorstenmarx.webtools.api");
-		apiPackages.add("com.thorstenmarx.webtools.collection");
-		apiPackages.add("com.thorstenmarx.webtools.streams");
-		apiPackages.add("com.thorstenmarx.webtools.scripting");
-		apiPackages.add("net.engio.mbassy");
-		apiPackages.add("org.apache.wicket");
-		apiPackages.add("de.agilecoders.wicket");
-		apiPackages.add("com.googlecode.wickedcharts");
-		apiPackages.add("com.alibaba.fastjson");
-		apiPackages.add("org.slf4j");
-		apiPackages.add("javax.ws.rs");
-		apiPackages.add("javax.inject");
-		apiPackages.add("java.internal.reflect");
-		apiPackages.add("jdk.internal.reflect");
-		apiPackages.add("com.google.gson");
-		ModuleAPIClassLoader apiClassLoader = new ModuleAPIClassLoader((URLClassLoader) getClass().getClassLoader(), apiPackages);
-		ModuleManager coreModuleManager = ModuleManagerImpl.create(new File("core_modules"), new CoreModuleContext(new File("./webtools_data/core_modules_data"), mbassador, executor), apiClassLoader, injector::injectMembers);
-		
-		// autoactivate core modules
-		coreModuleManager.configuration().getModules().keySet().forEach((module) -> {
-			try {
-				coreModuleManager.activateModule(module);
-			} catch (IOException ex) {
-				throw new IllegalStateException(ex);
-			}
-		});
-		
-		return coreModuleManager;
+		return ModuleManagerImpl.create(new File("webtools_modules/extensions"), new ModuleContext(analyticsDB, segmentService, mBassador, entities, registry), apiClassLoader, injector::injectMembers);
 	}
 	
 	@Provides
     @Singleton
-    private MultiModuleManager multiModuleManager(@CoreModuleManager ModuleManager coreModuleManager, ModuleManager moduleManager) {
+    private MultiModuleManager multiModuleManager(@Common ModuleManager coreModuleManager, ModuleManager moduleManager) {
         return MultiModuleManager.create(coreModuleManager, moduleManager);
     }
 
@@ -192,7 +159,7 @@ public class BaseGuiceModule extends AbstractModule {
 
 	@Provides
 	@Singleton
-	protected SegmentService segmentService(final @CoreModuleManager ModuleManager moduleManager) {
+	protected SegmentService segmentService(final @Common ModuleManager moduleManager) {
 		final List<CoreActionSystemExtension> extensions = moduleManager.extensions(CoreActionSystemExtension.class);
 		return extensions.get(0).getSegmentService();
 	}

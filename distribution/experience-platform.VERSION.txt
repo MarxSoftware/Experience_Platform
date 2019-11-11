@@ -1,4 +1,7 @@
-webtoosl-3.2.0 - 11.10.2019
+webtools-3.3.0 - 11.11.2019
+ [Feature] Improvments and changes for cluster support
+
+webtools-3.2.0 - 11.10.2019
  [Bugfix] Fix major clean up issue in ActionSystem
  [Feature] Extract ActionSystem into core module
  [Bugfix] Fix user id cookie issue

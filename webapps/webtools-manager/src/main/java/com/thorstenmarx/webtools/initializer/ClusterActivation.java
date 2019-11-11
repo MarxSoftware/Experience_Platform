@@ -26,6 +26,8 @@ import com.google.gson.Gson;
 import com.google.inject.Guice;
 import com.google.inject.Injector;
 import com.google.inject.Key;
+import com.google.inject.util.Modules;
+import com.google.inject.Module;
 import com.thorstenmarx.modules.api.ModuleManager;
 import com.thorstenmarx.webtools.ContextListener;
 import com.thorstenmarx.webtools.Fields;
@@ -34,21 +36,20 @@ import com.thorstenmarx.webtools.api.actions.ActionSystem;
 import com.thorstenmarx.webtools.api.analytics.AnalyticsDB;
 import com.thorstenmarx.webtools.api.cluster.Cluster;
 import com.thorstenmarx.webtools.api.configuration.Configuration;
-import com.thorstenmarx.webtools.api.configuration.Registry;
 import com.thorstenmarx.webtools.api.execution.Executor;
 import com.thorstenmarx.webtools.impl.execution.DefaultExecutor;
 import com.thorstenmarx.webtools.manager.model.User;
 import com.thorstenmarx.webtools.manager.services.UserService;
 import com.thorstenmarx.webtools.manager.utils.Helper;
 import com.thorstenmarx.webtools.api.location.LocationProvider;
+import com.thorstenmarx.webtools.initializer.annotations.Common;
+import com.thorstenmarx.webtools.initializer.annotations.Infrastructure;
 import com.thorstenmarx.webtools.initializer.guice.BaseGuiceModule;
-//import com.thorstenmarx.webtools.cluster.JGroupsCluster;
 import com.thorstenmarx.webtools.initializer.guice.ClusterGuiceModule;
-import java.io.File;
-import java.util.List;
-import java.util.Map;
+import com.thorstenmarx.webtools.initializer.guice.CommonGuiceModule;
+import com.thorstenmarx.webtools.initializer.guice.SystemGuiceModule;
+import com.thorstenmarx.webtools.initializer.guice.LocalGuiceModule;
 import java.util.Optional;
-import java.util.logging.Level;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -65,16 +66,13 @@ public class ClusterActivation implements Activation {
 	
 	@Override
 	public void initialize () {
-		Injector injector = Guice.createInjector(new ClusterGuiceModule(), new BaseGuiceModule());
+		
+		Module tempModule = Modules.override(new BaseGuiceModule()).with(new LocalGuiceModule());
+		tempModule = Modules.combine(tempModule, new CommonGuiceModule());
+		Module configModule = Modules.override(tempModule).with(new ClusterGuiceModule());
+		Injector injector = Guice.createInjector(configModule, new SystemGuiceModule());
+		
 		ContextListener.INJECTOR_PROVIDER.injector(injector);
-
-		Cluster cluster = ContextListener.INJECTOR_PROVIDER.injector().getInstance(Cluster.class);
-//		try {
-//			((JGroupsCluster)cluster).start(new File("webtools_data/conf"), false, 3000, new File("webtools_data/data/"));
-//		} catch (Exception ex) {
-//			LOGGER.error("error start node", ex);
-//			throw new IllegalStateException(ex);
-//		}
 		
 		EventBus eventBus = new EventBus();
 		Lookup.getDefault().register(EventBus.class, eventBus);
@@ -108,20 +106,32 @@ public class ClusterActivation implements Activation {
 		
 		// init module manager by get the instance from guice
 		ContextListener.INJECTOR_PROVIDER.injector().getInstance(ModuleManager.class);
+		
+		// Connect the cluster
+		try {
+			Cluster cluster = ContextListener.INJECTOR_PROVIDER.injector().getInstance(Cluster.class);
+			if (cluster != null) {
+				cluster.connect();
+			} else {
+				throw new IllegalStateException("no cluster implementation evailable");
+			}
+		} catch (Exception ex) {
+			throw new IllegalStateException(ex);
+		}
 	}
 	
 	@Override
 	public void destroy () {
 		ContextListener.STATE.shuttingDown(true);
 
-//		try {
-//			Cluster cluster = ContextListener.INJECTOR_PROVIDER.injector().getInstance(Cluster.class);
-//			if (cluster != null) {
-//				((JGroupsCluster)cluster).close();
-//			}
-//		} catch (Exception ex) {
-//			LOGGER.error("", ex);
-//		}
+		try {
+			Cluster cluster = ContextListener.INJECTOR_PROVIDER.injector().getInstance(Cluster.class);
+			if (cluster != null) {
+				cluster.close();
+			}
+		} catch (Exception ex) {
+			LOGGER.error("", ex);
+		}
 
 		// close modulemanager
 		ModuleManager moduleManager = ContextListener.INJECTOR_PROVIDER.injector().getInstance(ModuleManager.class);
@@ -130,7 +140,14 @@ public class ClusterActivation implements Activation {
 		} catch (Exception ex) {
 			LOGGER.error("", ex);
 		}
-		moduleManager = ContextListener.INJECTOR_PROVIDER.injector().getInstance(Key.get(ModuleManager.class, CoreModuleManager.class));
+		moduleManager = ContextListener.INJECTOR_PROVIDER.injector().getInstance(Key.get(ModuleManager.class, Common.class));
+		try {
+			
+			moduleManager.close();
+		} catch (Exception ex) {
+			LOGGER.error("", ex);
+		}
+		moduleManager = ContextListener.INJECTOR_PROVIDER.injector().getInstance(Key.get(ModuleManager.class, Infrastructure.class));
 		try {
 			
 			moduleManager.close();

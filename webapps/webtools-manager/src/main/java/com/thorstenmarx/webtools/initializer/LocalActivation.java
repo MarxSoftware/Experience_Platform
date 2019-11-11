@@ -25,6 +25,8 @@ import com.google.common.eventbus.EventBus;
 import com.google.inject.Guice;
 import com.google.inject.Injector;
 import com.google.inject.Key;
+import com.google.inject.Module;
+import com.google.inject.util.Modules;
 import com.thorstenmarx.modules.api.ModuleManager;
 import com.thorstenmarx.webtools.ContextListener;
 import com.thorstenmarx.webtools.Fields;
@@ -39,7 +41,11 @@ import com.thorstenmarx.webtools.manager.model.User;
 import com.thorstenmarx.webtools.manager.services.UserService;
 import com.thorstenmarx.webtools.manager.utils.Helper;
 import com.thorstenmarx.webtools.api.location.LocationProvider;
+import com.thorstenmarx.webtools.initializer.annotations.Common;
+import com.thorstenmarx.webtools.initializer.annotations.Infrastructure;
 import com.thorstenmarx.webtools.initializer.guice.BaseGuiceModule;
+import com.thorstenmarx.webtools.initializer.guice.CommonGuiceModule;
+import com.thorstenmarx.webtools.initializer.guice.SystemGuiceModule;
 import java.util.Optional;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -55,13 +61,16 @@ public class LocalActivation implements Activation {
 	
 	@Override
 	public void initialize () {
-		Injector injector = Guice.createInjector(new LocalGuiceModule(), new BaseGuiceModule());
+		Module configModule = Modules.override(new BaseGuiceModule()).with(new LocalGuiceModule());
+		Injector injector = Guice.createInjector(configModule, new SystemGuiceModule(), new CommonGuiceModule());
+		
 		ContextListener.INJECTOR_PROVIDER.injector(injector);
 
 		EventBus eventBus = new EventBus();
 		Lookup.getDefault().register(EventBus.class, eventBus);
 		Lookup.getDefault().register(AnalyticsDB.class, injector.getInstance(AnalyticsDB.class));
 		
+		injector.getInstance(Key.get(ModuleManager.class, Common.class));
 
 		UserService users = injector.getInstance(UserService.class);
 		// no users
@@ -102,7 +111,14 @@ public class LocalActivation implements Activation {
 		} catch (Exception ex) {
 			LOGGER.error("", ex);
 		}
-		moduleManager = ContextListener.INJECTOR_PROVIDER.injector().getInstance(Key.get(ModuleManager.class, CoreModuleManager.class));
+		moduleManager = ContextListener.INJECTOR_PROVIDER.injector().getInstance(Key.get(ModuleManager.class, Common.class));
+		try {
+			
+			moduleManager.close();
+		} catch (Exception ex) {
+			LOGGER.error("", ex);
+		}
+		moduleManager = ContextListener.INJECTOR_PROVIDER.injector().getInstance(Key.get(ModuleManager.class, Infrastructure.class));
 		try {
 			
 			moduleManager.close();

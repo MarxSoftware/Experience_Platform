@@ -14,11 +14,11 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package com.thorstenmarx.webtools.api.cluster;
+package com.thorstenmarx.webtools.api.extensions.system;
 
 /*-
  * #%L
- * webtools-cluster
+ * webtools-api
  * %%
  * Copyright (C) 2016 - 2019 Thorsten Marx
  * %%
@@ -38,57 +38,18 @@ package com.thorstenmarx.webtools.api.cluster;
  * #L%
  */
 
-import java.io.Serializable;
-
+import com.thorstenmarx.modules.api.BaseExtension;
+import com.thorstenmarx.webtools.api.CoreModuleContext;
+import com.thorstenmarx.webtools.api.cluster.Cluster;
+import java.io.File;
 
 /**
  *
  * @author marx
- * @param <T>
  */
-public class Message<T> implements Serializable {
+public abstract class SystemClusterExtension extends BaseExtension<CoreModuleContext> {
 	
+	public abstract String getName ();
 	
-	transient private T sender;
-	
-	private String type;
-	private String payload;
-	
-	public Message() {
-		
-	}
-
-	public T getSender() {
-		return sender;
-	}
-
-	public Message setSender(T sender) {
-		this.sender = sender;
-		return this;
-	}
-
-	public String getType() {
-		return type;
-	}
-
-	public Message setType(String type) {
-		this.type = type;
-		return this;
-	}
-
-	public String getPayload() {
-		return payload;
-	}
-
-	public Message setPayload(String payload) {
-		this.payload = payload;
-		return this;
-	}
-
-	@Override
-	public String toString() {
-		return "Message{" + "type=" + type + ", payload=" + payload + '}';
-	}
-	
-	
+	public abstract Cluster getCluster ();
 }

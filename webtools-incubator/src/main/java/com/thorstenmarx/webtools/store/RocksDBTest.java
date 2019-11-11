@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2019 Thorsten Marx
+ * Copyright (C) 2019 WP DigitalExperience
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -14,13 +14,13 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package com.thorstenmarx.webtools.api.cluster;
+package com.thorstenmarx.webtools.store;
 
 /*-
  * #%L
- * webtools-cluster
+ * webtools-incubator
  * %%
- * Copyright (C) 2016 - 2019 Thorsten Marx
+ * Copyright (C) 2016 - 2019 WP DigitalExperience
  * %%
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as
@@ -38,57 +38,36 @@ package com.thorstenmarx.webtools.api.cluster;
  * #L%
  */
 
-import java.io.Serializable;
-
+import org.iq80.leveldb.impl.Iq80DBFactory;
+import org.rocksdb.Options;
+import org.rocksdb.RocksDB;
+import org.rocksdb.RocksDBException;
 
 /**
  *
  * @author marx
- * @param <T>
  */
-public class Message<T> implements Serializable {
-	
-	
-	transient private T sender;
-	
-	private String type;
-	private String payload;
-	
-	public Message() {
-		
-	}
+public class RocksDBTest {
 
-	public T getSender() {
-		return sender;
-	}
+	public static void main(String... args) {
+		RocksDB.loadLibrary();
 
-	public Message setSender(T sender) {
-		this.sender = sender;
-		return this;
-	}
+		// the Options class contains a set of configurable DB options
+		// that determines the behaviour of the database.
+		try (final Options options = new Options().setCreateIfMissing(true)) {
 
-	public String getType() {
-		return type;
+			// a factory method that returns a RocksDB instance
+			try (final RocksDB db = RocksDB.open(options, "target/rocksdb-" + System.currentTimeMillis())) {
+				long before = System.currentTimeMillis();
+				for (int i = 0; i < 100000; i++) {
+					db.put(Iq80DBFactory.bytes("name"), Iq80DBFactory.bytes("thorsten " + 1));
+				}
+				long after = System.currentTimeMillis();
+				System.out.format("took: %dms", (after - before));
+			}
+			
+		} catch (RocksDBException e) {
+			e.printStackTrace();
+		}
 	}
-
-	public Message setType(String type) {
-		this.type = type;
-		return this;
-	}
-
-	public String getPayload() {
-		return payload;
-	}
-
-	public Message setPayload(String payload) {
-		this.payload = payload;
-		return this;
-	}
-
-	@Override
-	public String toString() {
-		return "Message{" + "type=" + type + ", payload=" + payload + '}';
-	}
-	
-	
 }

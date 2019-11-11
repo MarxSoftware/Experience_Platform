@@ -38,10 +38,13 @@ package com.thorstenmarx.webtools.api.cluster;
  * #L%
  */
 import com.thorstenmarx.webtools.api.annotations.API;
-import com.thorstenmarx.webtools.api.datalayer.DataLayer;
 import com.thorstenmarx.webtools.api.cluster.services.LockService;
+import com.thorstenmarx.webtools.api.cluster.services.MessageReplicator;
 import com.thorstenmarx.webtools.api.cluster.services.MessageService;
-import java.util.concurrent.ExecutorService;
+import com.thorstenmarx.webtools.api.cluster.services.Topic;
+import com.thorstenmarx.webtools.api.execution.Executor;
+import java.io.Serializable;
+import java.util.List;
 
 /**
  *
@@ -49,13 +52,32 @@ import java.util.concurrent.ExecutorService;
  */
 @API(since = "3.1.0", status = API.Status.Experimental)
 public interface Cluster {
+	
+	void connect () throws Exception;
+	
+	void close () throws Exception;
 
-	DataLayer getDataLayer();
+	List<Node<?>> getNodes();
 
 	LockService getLockService();
 
+	/**
+	 * The MessageService published Messages to all cluster members.
+	 * The member that sends the meswsage will not call the local message listener.
+	 * 
+	 * @return 
+	 */
 	MessageService getMessageService();
-	
-	ExecutorService getExecutorService ();
-	
+
+	MessageService getRAFTMessageService();
+
+	<T extends Serializable> Topic<T> createTopic(final String name, final Topic.Receiver<T> listener, final Class<T> type);
+
+	<T extends Serializable> MessageReplicator<T> createReplicator(final String topicName, final Executor executor, final MessageReplicator.Handler<T> handler, final Class<T> type);
+
+	void registerRoleChangeListener(final NodeRoleChangeListener roleChangeListener);
+
+	void unregisterRoleChangeListener(final NodeRoleChangeListener roleChangeListener);
+
+	NodeRole getRole();
 }

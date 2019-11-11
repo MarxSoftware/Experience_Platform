@@ -26,6 +26,8 @@ import com.thorstenmarx.modules.api.Context;
 import com.thorstenmarx.webtools.api.cluster.Cluster;
 import com.thorstenmarx.webtools.api.execution.Executor;
 import java.io.File;
+import java.util.HashMap;
+import java.util.Map;
 import net.engio.mbassy.bus.MBassador;
 
 /**
@@ -41,6 +43,8 @@ public class CoreModuleContext extends Context {
 	
 	private final Cluster cluster;
 	
+	protected final Map<String, Object> parameters = new HashMap<>();
+	
 	
 	public CoreModuleContext (final File dataPath, final MBassador eventBus, final Executor executor) {
 		this(dataPath, eventBus, executor, null);
@@ -50,6 +54,21 @@ public class CoreModuleContext extends Context {
 		this.eventBus = eventBus;
 		this.executor = executor;
 		this.cluster = cluster;
+	}
+	
+	public void put (final String name, final Object value) {
+		this.parameters.put(name, value);
+	}
+	public <T> T get(final String name, final Class<T> type, final T defaultValue) {
+		if (!parameters.containsKey(name)) {
+			return defaultValue;
+		} 
+		Object value = parameters.get(name);
+		if (!type.isInstance(value)){
+			return defaultValue;
+		}
+		
+		return type.cast(value);
 	}
 	
 	

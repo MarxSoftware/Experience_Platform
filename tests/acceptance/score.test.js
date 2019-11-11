@@ -1,7 +1,9 @@
 const puppeteer = require('puppeteer');
 const unirest = require('unirest');
 
-const API_KEY = "ebrqrvppfmqlrsd7ceusgr8p79"
+//const API_KEY = "aullc00kvuh16heludqmj9hcou"
+const API_KEY = "hs4tlev46l5ua5lh02jr207iqs"
+const WEBTOOLS_URL = "http://dev.local:8082"
 const SEGMENT = {
   name: "demo_score",
   externalId: 2,
@@ -12,7 +14,7 @@ const SEGMENT = {
 jest.setTimeout(30000);
 
 beforeAll(() => {
-  unirest.post('http://dev.local:8080/rest/audience')
+  unirest.post(WEBTOOLS_URL + '/rest/audience')
     .headers({ 'Accept': 'application/json', 'Content-Type': 'application/json', 'apikey': API_KEY })
     .send(SEGMENT)
     .end(function (response) {
@@ -44,11 +46,11 @@ describe('PageView Rule', () => {
     expect(uid).not.toBe('');
 
     setTimeout(() => {
-      unirest.get('http://dev.local:8080/rest/userinformation/user?user=' + uid)
+      unirest.get(WEBTOOLS_URL + '/rest/userinformation/user?user=' + uid)
         .headers({ 'Accept': 'application/json', 'Content-Type': 'text/plain', 'apikey': API_KEY })
         .send()
         .end(function (response) {
-          expect(response.body.user.segments.length).toBe(0);
+          expect(response.body.user.actionsSystem).toBe(undefined);
           done()
         });
     }, 5000);
@@ -66,12 +68,12 @@ describe('PageView Rule', () => {
     expect(uid).not.toBe('');
 
     setTimeout(() => {
-      unirest.get('http://dev.local:8080/rest/userinformation/user?user=' + uid)
+      unirest.get(WEBTOOLS_URL + '/rest/userinformation/user?user=' + uid)
         .headers({ 'Accept': 'application/json', 'Content-Type': 'text/plain', 'apikey': API_KEY })
         .send()
         .end(function (response) {
           console.log(response.body);
-          expect(response.body.user.segments[0].wpid).toBe(2);
+          expect(response.body.user.actionsSystem.segments[0].wpid).toBe(2);
           done()
         });
     }, 5000);
