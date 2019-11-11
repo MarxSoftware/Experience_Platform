@@ -21,16 +21,12 @@ package com.thorstenmarx.webtools.web.rest.resources.secured;
  * <http://www.gnu.org/licenses/gpl-3.0.html>.
  * #L%
  */
-import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.thorstenmarx.webtools.api.extensions.RestUserInformationExtension;
 import com.thorstenmarx.webtools.ContextListener;
 import com.thorstenmarx.webtools.api.datalayer.DataLayer;
-import com.thorstenmarx.webtools.api.datalayer.SegmentData;
 import com.thorstenmarx.webtools.initializer.MultiModuleManager;
 import java.util.List;
-import java.util.Optional;
-import java.util.Set;
 
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;

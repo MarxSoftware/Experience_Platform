@@ -89,7 +89,7 @@ public class SystemGuiceModule extends AbstractModule {
 		apiPackages.add("jdk.internal.reflect");
 		apiPackages.add("com.google.gson");
 		ModuleAPIClassLoader apiClassLoader = new ModuleAPIClassLoader((URLClassLoader) getClass().getClassLoader(), apiPackages);
-		ModuleManager coreModuleManager = ModuleManagerImpl.create(new File("modules/system"), context, apiClassLoader, injector::injectMembers);		
+		ModuleManager coreModuleManager = ModuleManagerImpl.create(new File("webtools_modules/system"), context, apiClassLoader, injector::injectMembers);		
 		
 		// autoactivate core modules
 		coreModuleManager.configuration().getModules().keySet().forEach((module) -> {

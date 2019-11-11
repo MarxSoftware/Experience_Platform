@@ -18,7 +18,7 @@ nb-configuration.xml
 .factorypath
 nbactions.xml
 tests/acceptance/www/caddy.exe
-distribution/core_modules/modules/*/
-webapps/webtools-manager/modules/
-webapps/webtools-manager/modules/system/core-*/
-webapps/webtools-manager/modules/common/core-*/
+distribution/core_modules/webtools_modules/*/
+webapps/webtools-manager/webtools_modules/
+webapps/webtools-manager/webtools_modules/system/core-*/
+webapps/webtools-manager/webtools_modules/common/core-*/

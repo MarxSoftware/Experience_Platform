@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project name="distribution" default="distribution" basedir=".">
-	<property name="jetty.version">9.4.21.v20190926</property>
-	<property name="webtools.version">3.2.0-SNAPSHOT</property>
+	<property name="jetty.version">9.4.22.v20191022</property>
+	<property name="webtools.version">3.3.0-SNAPSHOT</property>
 	<property name="target.folder">build/experience-platform-${webtools.version}</property>
 	<property name="jetty.source">build/jetty-distribution-${jetty.version}.zip</property>
 	
@@ -38,8 +38,8 @@
 			<fileset dir="distribution/webtools_data"/>
 		</copy>
 		<echo>add modules directory</echo>
-		<copy todir="${target.folder}/modules">
-			<fileset dir="distribution/modules"/>
+		<copy todir="${target.folder}/webtools_modules">
+			<fileset dir="distribution/webtools_modules"/>
 		</copy>
 		<echo>add manager application</echo>
 		<unwar src="webapps/webtools-manager/target/webtools-manager-${webtools.version}.war" dest="${target.folder}/webapps/root" />

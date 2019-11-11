@@ -123,7 +123,7 @@ public class BaseGuiceModule extends AbstractModule {
 		apiPackages.add("java.internal.reflect");
 		apiPackages.add("jdk.internal.reflect");
 		ModuleAPIClassLoader apiClassLoader = new ModuleAPIClassLoader((URLClassLoader) getClass().getClassLoader(), apiPackages);
-		return ModuleManagerImpl.create(new File("modules/extensions"), new ModuleContext(analyticsDB, segmentService, mBassador, entities, registry), apiClassLoader, injector::injectMembers);
+		return ModuleManagerImpl.create(new File("webtools_modules/extensions"), new ModuleContext(analyticsDB, segmentService, mBassador, entities, registry), apiClassLoader, injector::injectMembers);
 	}
 	
 	@Provides
