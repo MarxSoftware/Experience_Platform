@@ -34,7 +34,12 @@ public class TimeWindow implements Serializable {
 
 	
 	public enum UNIT {
-		MINUTE(1000 * 60), HOUR(MINUTE.millis * 60l), DAY( (long)HOUR.millis * 24l  ), WEEK( (long)DAY.millis * 7l ), MONTH(DAY.millis * 30l), YEAR((long)DAY.millis * 365l);
+		MINUTE(1000 * 60), 
+		HOUR(MINUTE.millis * 60l), 
+		DAY( (long)HOUR.millis * 24l  ), 
+		WEEK( (long)DAY.millis * 7l ), 
+		MONTH(DAY.millis * 30l), 
+		YEAR((long)DAY.millis * 365l);
 		// YEARE = 31536000000l ; WEEK = 604800000l : DAY = 86400000l
 
 		long millis;

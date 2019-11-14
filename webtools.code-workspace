@@ -8,12 +8,6 @@
 		},
 		{
 			"path": "mock"
-		},
-		{
-			"path": "distribution"
-		},
-		{
-			"path": "tests"
 		}
 	],
 	"settings": {
