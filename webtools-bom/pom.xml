@@ -255,21 +255,6 @@
 				<version>7.5.11</version>
 			</dependency>
 			<dependency>
-				<groupId>com.coveo</groupId>
-				<artifactId>nashorn-commonjs-modules</artifactId>
-				<version>1.0.9</version>
-			</dependency>
-			<dependency>
-				<groupId>net.arnx</groupId>
-				<artifactId>nashorn-promise</artifactId>
-				<version>0.1.1</version>
-			</dependency>
-			<dependency>
-				<groupId>org.javadelight</groupId>
-				<artifactId>delight-nashorn-sandbox</artifactId>
-				<version>0.1.16</version>
-			</dependency>
-			<dependency>
 				<groupId>eu.bitwalker</groupId>
 				<artifactId>UserAgentUtils</artifactId>
 				<version>1.21</version>

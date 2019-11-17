@@ -22,6 +22,8 @@ package com.thorstenmarx.webtools.scripting;
  * #L%
  */
 import com.thorstenmarx.webtools.scripting.graal.require.RequireFunction;
+import delight.graaljssandbox.GraalSandbox;
+import delight.graaljssandbox.GraalSandboxes;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.net.URISyntaxException;
@@ -29,14 +31,12 @@ import java.net.URL;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.function.Consumer;
-import java.util.function.Supplier;
 import javax.script.Bindings;
 import javax.script.ScriptContext;
 import javax.script.ScriptEngine;
 import javax.script.ScriptEngineManager;
 import javax.script.ScriptException;
 import javax.script.SimpleScriptContext;
-import org.graalvm.polyglot.Context;
 
 /**
  *
@@ -47,10 +47,16 @@ public class GraalScripting implements Scripting<ScriptContext> {
 	private ScriptEngine scriptEngine;
 
 	private final String modulePackage;
+	
+	GraalSandbox sandbox = null;
 
 	public GraalScripting(final String modulePackage) {
 		this.scriptEngine = new ScriptEngineManager().getEngineByName("graal.js");
 		this.modulePackage = modulePackage;
+		
+		sandbox = GraalSandboxes.create();
+		sandbox.allowPrintFunctions(true);
+		sandbox.allow(System.class);
 	}
 
 	private void initContext(final ScriptContext context) throws ScriptException {
@@ -64,9 +70,9 @@ public class GraalScripting implements Scripting<ScriptContext> {
 
 					final String script = new String(Files.readAllBytes(Paths.get(moduleUrl.toURI())));
 
-					scriptEngine.eval("var exports = {}", context);
+					sandbox.eval("var exports = {}", context);
 					final Object exports = context.getBindings(ScriptContext.ENGINE_SCOPE).get("exports");
-					scriptEngine.eval(script, context);
+					sandbox.eval(script, context);
 
 					return exports;
 				} catch (URISyntaxException | FileNotFoundException ex) {
@@ -89,11 +95,13 @@ public class GraalScripting implements Scripting<ScriptContext> {
 		try {
 
 			ScriptContext context = new SimpleScriptContext();
-			final Bindings engineBindings = scriptEngine.createBindings();
-			engineBindings.put("polyglot.js.allowAllAccess", true);
+//			final Bindings engineBindings = scriptEngine.createBindings();
+			final Bindings engineBindings = sandbox.createNewBindings();
+//			engineBindings.put("polyglot.js.allowAllAccess", true);
 			context.setBindings(engineBindings, ScriptContext.ENGINE_SCOPE);
-			final Bindings globalBindings = scriptEngine.createBindings();
-			globalBindings.put("polyglot.js.allowAllAccess", true);
+//			final Bindings globalBindings = scriptEngine.createBindings();
+			final Bindings globalBindings = sandbox.createNewBindings();
+//			globalBindings.put("polyglot.js.allowAllAccess", true);
 			context.setBindings(globalBindings, ScriptContext.GLOBAL_SCOPE);
 			
 
@@ -101,7 +109,8 @@ public class GraalScripting implements Scripting<ScriptContext> {
 
 			initContext(context);
 
-			scriptEngine.eval(script, context);
+//			scriptEngine.eval(script, context);
+			sandbox.eval(script, context);
 		} catch (ScriptException ex) {
 			ex.printStackTrace();
 			throw new RuntimeException(ex);
