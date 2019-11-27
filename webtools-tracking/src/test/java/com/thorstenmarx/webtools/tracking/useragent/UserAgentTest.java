@@ -16,6 +16,7 @@
  */
 package com.thorstenmarx.webtools.tracking.useragent;
 
+import com.blueconic.browscap.BrowsCapField;
 import com.blueconic.browscap.Capabilities;
 import com.blueconic.browscap.UserAgentParser;
 import com.blueconic.browscap.UserAgentService;
@@ -35,5 +36,8 @@ public class UserAgentTest {
 		System.out.println(capabilities.getBrowser());
 		System.out.println(capabilities.getBrowserType());
 		System.out.println(capabilities.getDeviceType());
+		System.out.println(capabilities.getPlatform());
+		System.out.println(capabilities.getPlatformVersion());
+		System.out.println(capabilities.getValue(BrowsCapField.DEVICE_BRAND_NAME));
 	}
 }
