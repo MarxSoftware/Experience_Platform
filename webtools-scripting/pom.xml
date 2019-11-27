@@ -78,6 +78,11 @@
 			<artifactId>js-scriptengine</artifactId>
 			<version>${graalvm.version}</version>
 		</dependency>
+		<dependency>
+			<groupId>org.graalvm.truffle</groupId>
+			<artifactId>truffle-api</artifactId>
+			<version>${graalvm.version}</version>
+		</dependency>
 		<!--dependency>
 			<groupId>org.testng</groupId>
 			<artifactId>testng</artifactId>
@@ -119,7 +124,7 @@
 		<url>git@bitbucket.org:thmarx/webtools.git</url>
 		<tag>v2.2.0</tag>
 	</scm>
-<!--	<distributionManagement>
+	<!--	<distributionManagement>
 		<repository>
 			<id>bintray-wpdigitalexperience-ExperiencePlatform</id>
 			<name>wpdigitalexperience-ExperiencePlatform</name>
