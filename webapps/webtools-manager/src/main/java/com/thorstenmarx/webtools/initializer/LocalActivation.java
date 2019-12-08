@@ -62,7 +62,7 @@ public class LocalActivation implements Activation {
 	@Override
 	public void initialize () {
 		Module configModule = Modules.override(new BaseGuiceModule()).with(new LocalGuiceModule());
-		Injector injector = Guice.createInjector(configModule, new SystemGuiceModule(), new CommonGuiceModule());
+		Injector injector = Guice.createInjector(new SystemGuiceModule(), new CommonGuiceModule(), configModule);
 		
 		ContextListener.INJECTOR_PROVIDER.injector(injector);
 
