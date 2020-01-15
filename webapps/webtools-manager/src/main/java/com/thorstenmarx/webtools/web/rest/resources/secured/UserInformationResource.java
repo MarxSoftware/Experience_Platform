@@ -54,11 +54,11 @@ public class UserInformationResource {
 	@Path("/user")
 	@Produces(MediaType.APPLICATION_JSON)
 	@Consumes(MediaType.TEXT_PLAIN)
-	public String segments(final @QueryParam("user") String user) {
+	public String segments(final @QueryParam("user") String user, final @QueryParam("site") String site) {
 
 		JSONObject result = new JSONObject();
 		try {
-			JSONObject userObj = userInformation(user);
+			JSONObject userObj = userInformation(user, site);
 
 			result.put("user", userObj);
 			result.put("status", "ok");
@@ -70,17 +70,9 @@ public class UserInformationResource {
 		return result.toJSONString();
 	}
 
-	private JSONObject userInformation(final String userid) {
+	private JSONObject userInformation(final String userid, final String site) {
 		JSONObject userObj = new JSONObject();
 
-//		JSONArray segments = new JSONArray();
-//		Optional<List<SegmentData>> segmentListOptional = datalayer.list(userid, SegmentData.KEY, SegmentData.class);
-//		if (segmentListOptional.isPresent()) {
-//			segmentListOptional.get().forEach(sd -> {
-//				segments.addAll(sd.segments);
-//			});
-//		}
-//		userObj.put("segments", segments);
 
 		List<RestUserInformationExtension> extensions = moduleManager.extensions(RestUserInformationExtension.class);
 		extensions.forEach((ruie) -> {

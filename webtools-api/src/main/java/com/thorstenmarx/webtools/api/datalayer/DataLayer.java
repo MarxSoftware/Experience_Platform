@@ -34,11 +34,12 @@ import java.util.function.BiConsumer;
 @API(since = "2.0.0", status = API.Status.Stable)
 public interface DataLayer {
 	
-	@Deprecated
-	@API(since = "3.1.0", status=API.Status.Deprecated, toRemove = "4.0.0")
+	
+	@API(since = "3.1.0", status=API.Status.Stable)
 	public <T extends Data> Optional<T> get(final String uid, final String key, Class<T> clazz);
 	
-	@API(since = "3.1.0", status=API.Status.Experimental)
+	@Deprecated
+	@API(since = "3.1.0", status=API.Status.Deprecated, toRemove = "4.1.0")
 	public <T extends Data> Optional<List<T>> list (final String uid, final String key, Class<T> clazz);
 	
 	boolean add(final String uid, final String key, final Data value);

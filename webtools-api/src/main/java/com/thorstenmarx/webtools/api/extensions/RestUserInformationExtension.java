@@ -40,7 +40,7 @@ public abstract class RestUserInformationExtension extends BaseExtension<ModuleC
      * @param userid THe useid.
      * @return A REST Resource
      */
-    public abstract JSONObject getUserInformation(final String userid);
+    public abstract JSONObject getUserInformation(final String userid, final String site);
 
     /**
      * Get the Key for the user information.
