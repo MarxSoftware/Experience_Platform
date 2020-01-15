@@ -38,6 +38,7 @@ public abstract class RestUserInformationExtension extends BaseExtension<ModuleC
      * Returns the user information.
      *
      * @param userid THe useid.
+	 * @param site The site to get user information for
      * @return A REST Resource
      */
     public abstract JSONObject getUserInformation(final String userid, final String site);
@@ -53,7 +54,8 @@ public abstract class RestUserInformationExtension extends BaseExtension<ModuleC
      * Check if there are user information available.
      *
      * @param userid the user id.
+	 * @param site the site id
      * @return Returns true if the extension has information about the user.
      */
-    public abstract boolean hasUserInformation(final String userid);
+    public abstract boolean hasUserInformation(final String userid, final String site);
 }

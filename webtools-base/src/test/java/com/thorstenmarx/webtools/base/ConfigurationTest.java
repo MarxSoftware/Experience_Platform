@@ -70,4 +70,11 @@ public class ConfigurationTest {
 		Assertions.assertThat(elastic.get("url")).isInstanceOf(List.class);
 		
 	}	
+	@Test
+	public void testNode()  {
+		Map<String, Object> elastic = (Map<String, Object>) load.get("node");
+		
+		Assertions.assertThat(elastic.get("members")).isInstanceOf(List.class);
+		
+	}
 }

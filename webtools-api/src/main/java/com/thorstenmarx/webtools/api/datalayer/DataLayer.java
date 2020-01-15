@@ -48,9 +48,12 @@ public interface DataLayer {
 	
 	public void remove(final String uid, final String key);
 	
-	@API(since = "3.1.0", status=API.Status.Experimental)
+	@Deprecated
+	@API(since = "3.1.0", status=API.Status.Deprecated, toRemove = "4.1.0")
 	public void clear (final String key);
 	
+	@Deprecated
+	@API(since = "3.1.0", status=API.Status.Deprecated, toRemove = "4.1.0")
 	<T extends Data> void each (BiConsumer<String, T> consumer, String key, Class<T> clazz);
 	
 }

@@ -21,7 +21,9 @@ websocket :
     allowedhosts : localhost,server1.local
 db:
     dir : webtools/data
-
+node : 
+    name : node1
+    members: ['node1', 'node2']
 analytics:
     index:
         shards:

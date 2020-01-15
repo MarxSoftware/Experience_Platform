@@ -76,8 +76,8 @@ public class UserInformationResource {
 
 		List<RestUserInformationExtension> extensions = moduleManager.extensions(RestUserInformationExtension.class);
 		extensions.forEach((ruie) -> {
-			if (ruie.hasUserInformation(userid)) {
-				userObj.put(ruie.getName(), ruie.getUserInformation(userid));
+			if (ruie.hasUserInformation(userid, site)) {
+				userObj.put(ruie.getName(), ruie.getUserInformation(userid, site));
 			}
 		});
 

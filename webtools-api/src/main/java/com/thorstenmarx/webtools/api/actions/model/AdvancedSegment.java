@@ -38,6 +38,9 @@ public class AdvancedSegment extends Segment implements Serializable {
 	@Field(name = "externalId")
 	private long externalId;
 	
+	@Field(name = "site")
+	private String site;
+	
 	public AdvancedSegment () {
 		super();
 	}
@@ -57,6 +60,16 @@ public class AdvancedSegment extends Segment implements Serializable {
 		this.externalId = externalId;
 	}
 
+	public String getSite() {
+		return site;
+	}
+
+	public void setSite(String site) {
+		this.site = site;
+	}
+
+	
+	
 	public String getDsl() {
 		return dsl;
 	}
@@ -86,6 +99,7 @@ public class AdvancedSegment extends Segment implements Serializable {
 	public int hashCode() {
 		int hash = 7;
 		hash = 97 * hash + Objects.hashCode(this.dsl);
+		hash = 97 * hash + Objects.hashCode(this.site);
 		return hash;
 	}
 
@@ -102,6 +116,9 @@ public class AdvancedSegment extends Segment implements Serializable {
 		}
 		final AdvancedSegment other = (AdvancedSegment) obj;
 		if (!Objects.equals(this.getId(), other.getId())) {
+			return false;
+		}
+		if (!Objects.equals(this.getSite(), other.getSite())) {
 			return false;
 		}
 		return true;

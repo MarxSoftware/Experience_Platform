@@ -24,7 +24,6 @@ package com.thorstenmarx.webtools.web.rest.resources.secured.targetaudience;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.google.common.base.Strings;
-import com.thorstenmarx.modules.api.ModuleManager;
 import com.thorstenmarx.webtools.ContextListener;
 import com.thorstenmarx.webtools.api.actions.ActionSystem;
 import com.thorstenmarx.webtools.api.actions.SegmentService;
@@ -32,6 +31,7 @@ import com.thorstenmarx.webtools.api.actions.model.AdvancedSegment;
 import com.thorstenmarx.webtools.api.actions.model.Segment;
 import com.thorstenmarx.webtools.api.entities.criteria.Restrictions;
 import java.util.List;
+import java.util.stream.Collectors;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
@@ -41,7 +41,6 @@ import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
-import net.engio.mbassy.bus.MBassador;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -73,6 +72,7 @@ public class AudienceResource {
 			segmentObj.put("name", segment.getName());
 			segmentObj.put("content", segment.getContent());
 			segmentObj.put("active", segment.isActive());
+			segmentObj.put("site", segment.getSite());
 			segmentObj.put("time.count", segment.getTimeWindow().getCount());
 			segmentObj.put("time.unit", segment.getTimeWindow().getUnit());
 			
@@ -121,6 +121,7 @@ public class AudienceResource {
 		segment.setActive(audience.isActive());
 		segment.setContent(audience.getDsl());
 		segment.setExternalId(audience.getExternalId());
+		segment.setSite(audience.getSite());
 		if (audience.getPeriod() != null) {
 			segment.setTimeWindow(audience.getPeriod().toTimeWindow());
 		}
@@ -138,7 +139,10 @@ public class AudienceResource {
 	@Consumes(MediaType.APPLICATION_JSON)
 	public String update (final Audience audience) {
 		// check existens
-		List<AdvancedSegment> queryResult = segmentService.criteria().add(Restrictions.EQ.eq("externalId", audience.getExternalId())).query();
+		List<AdvancedSegment> queryResult = segmentService.criteria()
+				.add(Restrictions.EQ.eq("externalId", audience.getExternalId()))
+				.add(Restrictions.EQ.eq("site", audience.getSite()))
+				.query().stream().map(AdvancedSegment.class::cast).collect(Collectors.toList());
 		if (queryResult.isEmpty()) {
 			JSONObject result = new JSONObject();
 			result.put("status", "error");
@@ -164,6 +168,7 @@ public class AudienceResource {
 		segment.setActive(audience.isActive());
 		segment.setContent(audience.getDsl());
 		segment.setExternalId(audience.getExternalId());
+		segment.setSite(audience.getSite());
 		if (audience.getPeriod() != null) {
 			segment.setTimeWindow(audience.getPeriod().toTimeWindow());
 		}
