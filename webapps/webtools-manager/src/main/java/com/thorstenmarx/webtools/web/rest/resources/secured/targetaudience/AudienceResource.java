@@ -84,8 +84,11 @@ public class AudienceResource {
 	}
 	
 	@DELETE
-	public String delete (@QueryParam("wpid") final long wpid) {
-		List<Segment> queryResult = segmentService.criteria().add(Restrictions.EQ.eq("externalId", wpid)).query();
+	public String delete (@QueryParam("wpid") final long wpid, @QueryParam("site") final String site) {
+		List<Segment> queryResult = segmentService.criteria()
+				.add(Restrictions.EQ.eq("externalId", wpid))
+				.add(Restrictions.EQ.eq("site", site))
+		.query();
 		
 		LOGGER.info("found: " + queryResult.size() + " audiences to delete");
 		queryResult.stream().map(segment -> segment.getId()).forEach(segmentService::remove);
@@ -100,7 +103,10 @@ public class AudienceResource {
 	@Consumes(MediaType.APPLICATION_JSON)
 	public String create (final Audience audience) {
 		// check existens
-		List<?> queryResult = segmentService.criteria().add(Restrictions.EQ.eq("externalId", audience.getExternalId())).query();
+		List<?> queryResult = segmentService.criteria()
+				.add(Restrictions.EQ.eq("externalId", audience.getExternalId()))
+				.add(Restrictions.EQ.eq("site", audience.getSite()))
+		.query();
 		if (!queryResult.isEmpty()) {
 			JSONObject result = new JSONObject();
 			result.put("status", "error");
