@@ -50,22 +50,26 @@ import org.apache.logging.log4j.Logger;
  */
 @Path("audience")
 public class AudienceResource {
-	
+
 	private static final Logger LOGGER = LogManager.getLogger(AudienceResource.class);
-	
+
 	private final SegmentService segmentService;
 	private final ActionSystem actionSystem;
-	public AudienceResource () {
+
+	public AudienceResource() {
 		this.segmentService = ContextListener.INJECTOR_PROVIDER.injector().getInstance(SegmentService.class);
 		this.actionSystem = ContextListener.INJECTOR_PROVIDER.injector().getInstance(ActionSystem.class);
 	}
-	
+
 	@GET
-	public String get () {
-		
+	public String get(@QueryParam("site") final String site) {
+
 		JSONObject result = new JSONObject();
 		JSONArray segments = new JSONArray();
-		segmentService.all().stream().filter(AdvancedSegment.class::isInstance).map(AdvancedSegment.class::cast).forEach((segment) -> {
+
+		segmentService.criteria()
+				.add(Restrictions.EQ.eq("site", site))
+				.query().stream().filter(AdvancedSegment.class::isInstance).map(AdvancedSegment.class::cast).forEach((segment) -> {
 			JSONObject segmentObj = new JSONObject();
 			segmentObj.put("id", segment.getId());
 			segmentObj.put("external_id", segment.getExternalId());
@@ -75,38 +79,39 @@ public class AudienceResource {
 			segmentObj.put("site", segment.getSite());
 			segmentObj.put("time.count", segment.getTimeWindow().getCount());
 			segmentObj.put("time.unit", segment.getTimeWindow().getUnit());
-			
+
 			segments.add(segmentObj);
 		});
+
 		result.put("segments", segments);
-		
+
 		return result.toJSONString();
 	}
-	
+
 	@DELETE
-	public String delete (@QueryParam("wpid") final long wpid, @QueryParam("site") final String site) {
+	public String delete(@QueryParam("wpid") final long wpid, @QueryParam("site") final String site) {
 		List<Segment> queryResult = segmentService.criteria()
 				.add(Restrictions.EQ.eq("externalId", wpid))
 				.add(Restrictions.EQ.eq("site", site))
-		.query();
-		
+				.query();
+
 		LOGGER.info("found: " + queryResult.size() + " audiences to delete");
 		queryResult.stream().map(segment -> segment.getId()).forEach(segmentService::remove);
-		
+
 		JSONObject result = new JSONObject();
 		result.put("status", "ok");
 		return result.toJSONString();
 	}
-	
+
 	@POST
 	@Produces(MediaType.APPLICATION_JSON)
 	@Consumes(MediaType.APPLICATION_JSON)
-	public String create (final Audience audience) {
+	public String create(final Audience audience) {
 		// check existens
 		List<?> queryResult = segmentService.criteria()
 				.add(Restrictions.EQ.eq("externalId", audience.getExternalId()))
 				.add(Restrictions.EQ.eq("site", audience.getSite()))
-		.query();
+				.query();
 		if (!queryResult.isEmpty()) {
 			JSONObject result = new JSONObject();
 			result.put("status", "error");
@@ -118,10 +123,10 @@ public class AudienceResource {
 			JSONObject result = new JSONObject();
 			result.put("status", "error");
 			result.put("message", validation.message);
-			
+
 			return result.toJSONString();
 		}
-		
+
 		AdvancedSegment segment = new AdvancedSegment();
 		segment.setName(audience.getName());
 		segment.setActive(audience.isActive());
@@ -131,19 +136,19 @@ public class AudienceResource {
 		if (audience.getPeriod() != null) {
 			segment.setTimeWindow(audience.getPeriod().toTimeWindow());
 		}
-		
+
 		segmentService.add(segment);
-		
+
 		JSONObject result = new JSONObject();
 		result.put("status", "ok");
 		result.put("audience_id", segment.getId());
 		return result.toJSONString();
 	}
-	
+
 	@PUT
 	@Produces(MediaType.APPLICATION_JSON)
 	@Consumes(MediaType.APPLICATION_JSON)
-	public String update (final Audience audience) {
+	public String update(final Audience audience) {
 		// check existens
 		List<AdvancedSegment> queryResult = segmentService.criteria()
 				.add(Restrictions.EQ.eq("externalId", audience.getExternalId()))
@@ -186,15 +191,15 @@ public class AudienceResource {
 		result.put("audience_id", segment.getId());
 		return result.toJSONString();
 	}
-	
+
 	@POST
 	@Path("/validate")
-	public String validate (final String content) {
-		
+	public String validate(final String content) {
+
 		JSONObject result = new JSONObject();
-		
+
 		JSONObject validation = new JSONObject();
-		
+
 		ValidationResult validationResult = internal_validate(content);
 		if (validationResult.valid) {
 			validation.put("valid", true);
@@ -202,14 +207,14 @@ public class AudienceResource {
 			validation.put("valid", false);
 			validation.put("message", validationResult.message);
 		}
-		
+
 		result.put("validation", validation);
 		result.put("status", "ok");
-		
+
 		return result.toJSONString();
 	}
-	
-	private ValidationResult internal_validate (final String dsl) {
+
+	private ValidationResult internal_validate(final String dsl) {
 		if (Strings.isNullOrEmpty(dsl)) {
 			return new ValidationResult(false, "Content should not be null!");
 		}
@@ -220,4 +225,3 @@ public class AudienceResource {
 		}
 	}
 }
-	

@@ -53,6 +53,7 @@ import org.apache.logging.log4j.Logger;
  * @author marx
  */
 @Path("segments")
+@Deprecated
 public class SegmentResource {
 
 	private static final Logger LOGGER = LogManager.getLogger(SegmentResource.class);
