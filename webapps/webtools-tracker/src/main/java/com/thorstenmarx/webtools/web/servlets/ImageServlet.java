@@ -23,14 +23,12 @@ package com.thorstenmarx.webtools.web.servlets;
  */
 import com.alibaba.fastjson.JSONObject;
 import com.google.common.base.Charsets;
-import com.google.common.base.Strings;
 import com.google.common.collect.ArrayListMultimap;
 import com.google.common.collect.Multimap;
 import com.google.common.io.CharStreams;
 import com.thorstenmarx.webtools.ContextListener;
 import com.thorstenmarx.webtools.base.Configuration;
 import com.thorstenmarx.webtools.tracking.CrawlerUtil;
-import com.thorstenmarx.webtools.tracking.EventUtil;
 import com.thorstenmarx.webtools.tracking.EventUtil2;
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayOutputStream;
@@ -39,11 +37,7 @@ import java.net.URL;
 import java.util.AbstractMap.SimpleImmutableEntry;
 import java.util.Arrays;
 import java.util.Collections;
-import java.util.LinkedHashMap;
-import java.util.List;
 import java.util.Map;
-import java.util.logging.Level;
-import java.util.stream.Collectors;
 
 import javax.imageio.ImageIO;
 import javax.servlet.AsyncContext;
@@ -92,11 +86,14 @@ public class ImageServlet extends HttpServlet {
 	}
 
 	@Override
-	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+	protected void doPost(final HttpServletRequest request, final HttpServletResponse response) throws ServletException, IOException {
 		response.setHeader("Content-Type", "text/plain");
 		response.setHeader("Content-Length", String.valueOf(RESPONSE_BYTES.length));
 
 		response.getOutputStream().write(RESPONSE_BYTES);
+		if (isCrawler(request)) {
+			return;
+		}
 
 		final AsyncContext asyncContext = request.startAsync(request, response);
 
@@ -124,13 +121,17 @@ public class ImageServlet extends HttpServlet {
 	}
 
 	@Override
-	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+	protected void doGet(final HttpServletRequest request, final HttpServletResponse response) throws ServletException, IOException {
 
 		response.setHeader("Content-Type", "image/gif");
 		response.setHeader("Content-Length", String.valueOf(image.length));
 		response.setHeader("Content-Disposition", "inline; filename=\"1x1.gif\"");
 
 		response.getOutputStream().write(image);
+		
+		if (isCrawler(request)) {
+			return;
+		}
 
 		final AsyncContext asyncContext = request.startAsync(request, response);
 
@@ -145,11 +146,14 @@ public class ImageServlet extends HttpServlet {
 				jsonEvent.put("meta", event.get("meta"));
 
 				HttpResponse httpResponse = Unirest.post((String) configuration.getMap("tracking", Collections.EMPTY_MAP).getOrDefault("url", "http://localhost:8082/track")).body(jsonEvent.toJSONString()).asEmpty();
-				System.out.println("success: " + httpResponse.isSuccess());
 			} finally {
 				asyncContext.complete();
 			}
 		});
+	}
+	
+	private boolean isCrawler (final HttpServletRequest request) {
+		return eventUtil.isCrawler(request);
 	}
 
 	private BufferedImage getImage() throws IOException {
