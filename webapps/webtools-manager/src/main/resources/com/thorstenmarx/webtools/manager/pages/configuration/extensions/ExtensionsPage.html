@@ -53,10 +53,10 @@
 					<fieldset>
 						<legend><wicket:message key="form.title"/></legend>
 						<p>
-							<label for="simpleUpload" class="btn btn-default btn-file">
-								<wicket:message key="form.extension.label"/>
-								<input wicket:id="fileInput" type="file" id="simpleUpload" style="display:none;"/>
-							</label>
+							<!--label for="simpleUpload" class="btn btn-default btn-file">
+								<wicket:message key="form.extension.label"/-->
+								<input wicket:id="fileInput" type="file" id="simpleUpload"/>
+							<!--/label-->
 						</p>
 						<input class="btn btn-success btn-lg btn-block" type="submit" value="Upload" wicket:message="value:form.submit"/>
 					</fieldset>
@@ -78,7 +78,7 @@
 							<td><span wicket:id="version"></span></td>
 							<td><span wicket:id="active"></span></td>
 							<td align="center">
-								<a href wicket:id="actionLink"><wicket:container wicket:id="label" /></a>
+								<a wicket:id="actionLink"><wicket:container wicket:id="label" /></a>
 							</td>
 						</tr>
 					</span>
