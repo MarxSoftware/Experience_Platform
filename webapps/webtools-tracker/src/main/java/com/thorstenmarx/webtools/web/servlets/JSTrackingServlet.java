@@ -64,7 +64,8 @@ public class JSTrackingServlet extends HttpServlet {
 
 		ClasspathResolver resolver = new ClasspathResolver("/com/thorstenmarx/webtools/web/templates/");
 		JSTrackingServlet.mustacheFactory = new DefaultMustacheFactory(resolver);
-		JSTrackingServlet.mustache = mustacheFactory.compile("webtools.mustache");
+//		JSTrackingServlet.mustache = mustacheFactory.compile("webtools.mustache");
+		JSTrackingServlet.mustache = mustacheFactory.compile("webtools-tracking-min.js");
 
 	}
 
