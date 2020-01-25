@@ -34,6 +34,7 @@ public class Audience {
 	
 	private String name;
 	private long externalId;
+	private String site;
 	private String dsl = "";
 	private boolean active = false;
 	
@@ -42,6 +43,15 @@ public class Audience {
 	public Audience() {
 	}
 
+	public String getSite() {
+		return site;
+	}
+
+	public void setSite(String site) {
+		this.site = site;
+	}
+
+	
 	public String getName() {
 		return name;
 	}

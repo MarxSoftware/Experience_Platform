@@ -30,6 +30,8 @@ import java.net.URISyntaxException;
 import java.net.URL;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.util.Collections;
+import java.util.Set;
 import java.util.function.Consumer;
 import javax.script.Bindings;
 import javax.script.ScriptContext;
@@ -48,15 +50,20 @@ public class GraalScripting implements Scripting<ScriptContext> {
 
 	private final String modulePackage;
 	
-	GraalSandbox sandbox = null;
+	public GraalSandbox sandbox = null;
 
 	public GraalScripting(final String modulePackage) {
+		this(modulePackage, Collections.EMPTY_SET);
+	}
+	
+	public GraalScripting(final String modulePackage, final Set<Class> allowedClasses) {
 		this.scriptEngine = new ScriptEngineManager().getEngineByName("graal.js");
 		this.modulePackage = modulePackage;
 		
 		sandbox = GraalSandboxes.create();
 		sandbox.allowPrintFunctions(true);
 		sandbox.allow(System.class);
+		allowedClasses.forEach(sandbox::allow);
 	}
 
 	private void initContext(final ScriptContext context) throws ScriptException {

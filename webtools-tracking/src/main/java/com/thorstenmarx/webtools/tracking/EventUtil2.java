@@ -144,9 +144,17 @@ public class EventUtil2 extends EventUtil {
 		event.put(Fields.UserAgent.value(), request.getHeader(HEADER_USERAGENT));
 		event.put(Fields.Referrer.combine("header"), request.getHeader(HEADER_REFERER));
 		event.put(Fields.Event.value(), eventType.value());
-		event.put(Fields.IsCrawler.value(), crawlerUtil.isCrawler(request.getHeader(HEADER_USERAGENT), ip));
+		event.put(Fields.IsCrawler.value(), isCrawler(request, ip));
 
 		return event;
+	}
+	
+	public boolean isCrawler (final HttpServletRequest request, final String ip) {
+		return crawlerUtil.isCrawler(request.getHeader(HEADER_USERAGENT), ip);
+	}
+	public boolean isCrawler (final HttpServletRequest request) {
+		final String ip = getClientIpAddr(request);
+		return isCrawler(request, ip);
 	}
 	
 	private Map<String, Object> getEventMetaInternal(final HttpServletRequest request) {

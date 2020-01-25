@@ -215,7 +215,7 @@ public class EventUtil {
 		return request.getParameter(Constants.Param.VISIT_ID.value());
 	}
 
-	protected String getClientIpAddr(HttpServletRequest request) {
+	public String getClientIpAddr(HttpServletRequest request) {
 		for (String header : HEADERS_TO_TRY) {
 			String ip = request.getHeader(header);
 			if (ip != null && ip.length() != 0 && !"unknown".equalsIgnoreCase(ip)) {

@@ -99,6 +99,9 @@ public class SecureModuleResource {
 			MultiModuleManager modules = ContextListener.INJECTOR_PROVIDER.injector().getInstance(MultiModuleManager.class);
 			for (ManagerConfiguration.ModuleConfig mc : modules.configuration().getModules().values()) {
 				ModuleDescription modDesc = modules.description(mc.getId());
+				if (modDesc == null) {
+					continue;
+				}
 				JSONObject module = new JSONObject();
 				module.put("id", mc.getId());
 				module.put("active", mc.isActive());
@@ -110,7 +113,7 @@ public class SecureModuleResource {
 		} catch (Exception e) {
 			LOGGER.error(e);
 			error = true;
-			errorMessage = "error collecting module informations";
+			errorMessage = "error collecting module information";
 		}
 
 		JSONObject jsonRepsonse = new JSONObject();

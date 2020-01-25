@@ -69,15 +69,7 @@ public interface Cluster {
 	 */
 	MessageService getMessageService();
 
-	MessageService getRAFTMessageService();
-
 	<T extends Serializable> Topic<T> createTopic(final String name, final Topic.Receiver<T> listener, final Class<T> type);
 
 	<T extends Serializable> MessageReplicator<T> createReplicator(final String topicName, final Executor executor, final MessageReplicator.Handler<T> handler, final Class<T> type);
-
-	void registerRoleChangeListener(final NodeRoleChangeListener roleChangeListener);
-
-	void unregisterRoleChangeListener(final NodeRoleChangeListener roleChangeListener);
-
-	NodeRole getRole();
 }

@@ -30,7 +30,7 @@ import java.util.List;
  */
 public interface Criteria<T> {
 	
-	public Criteria add (Restriction restriction);
+	public Criteria<T> add (Restriction restriction);
 	
 	public List<T> query ();
 }
