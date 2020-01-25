@@ -5,7 +5,7 @@ mvn release:perform
 set manager web.xml configuration to deployment
 
 == update version == 
-mvn versions:set -DnewVersion=4.0.0 -DprocessAllModules
+mvn versions:set -DnewVersion=4.1.0-SNAPSHOT -DprocessAllModules
 mvn versions:commit -DprocessAllModules
 
 == development ==
