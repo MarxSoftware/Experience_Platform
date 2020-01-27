@@ -24,6 +24,8 @@ package com.thorstenmarx.webtools.api.actions.model;
 import com.thorstenmarx.webtools.api.entities.annotations.Entity;
 import com.thorstenmarx.webtools.api.entities.annotations.Field;
 import java.io.Serializable;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Objects;
 
 /**
@@ -41,16 +43,29 @@ public class AdvancedSegment extends Segment implements Serializable {
 	@Field(name = "site")
 	private String site;
 	
+	private Map<String, Object> attributes;
+	
 	public AdvancedSegment () {
 		super();
+		attributes = new HashMap<>();
 	}
 	public AdvancedSegment (final Segment segment) {
 		super();
 		start(segment.startTimeWindow());
 		setId(segment.getId());
 		setName(segment.getName());
+		setAttributes(new HashMap<>());
 	}
 
+	public Map<String, Object> getAttributes() {
+		return attributes;
+	}
+
+	public void setAttributes(Map<String, Object> attributes) {
+		this.attributes = attributes;
+	}
+
+	
 
 	public long getExternalId() {
 		return externalId;

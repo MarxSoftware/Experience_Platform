@@ -1,6 +1,8 @@
 package com.thorstenmarx.webtools.web.rest.resources.secured.targetaudience;
 
 import com.thorstenmarx.webtools.api.TimeWindow;
+import java.util.HashMap;
+import java.util.Map;
 
 /*-
  * #%L
@@ -37,12 +39,23 @@ public class Audience {
 	private String site;
 	private String dsl = "";
 	private boolean active = false;
+	private Map<String, Object> attributes = new HashMap<>();
 	
 	private Period period = DEFAULT_PERIOD;
 
 	public Audience() {
 	}
 
+	public Map<String, Object> getAttributes() {
+		return attributes;
+	}
+
+	public void setAttributes(Map<String, Object> attributes) {
+		this.attributes = attributes;
+	}
+
+	
+	
 	public String getSite() {
 		return site;
 	}
