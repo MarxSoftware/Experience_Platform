@@ -62,30 +62,55 @@ public class AudienceResource {
 	}
 
 	@GET
-	public String get(@QueryParam("site") final String site) {
+	public String get(@QueryParam("wpid") final long wpid, @QueryParam("site") final String site) {
+		List<Segment> queryResult = segmentService.criteria()
+				.add(Restrictions.EQ.eq("externalId", wpid))
+				.add(Restrictions.EQ.eq("site", site))
+				.query();
+
+		JSONObject result = new JSONObject();
+
+		segmentService.criteria()
+				.add(Restrictions.EQ.eq("site", site))
+				.add(Restrictions.EQ.eq("externalId", wpid))
+				.query().stream().filter(AdvancedSegment.class::isInstance).map(AdvancedSegment.class::cast).forEach((segment) -> {
+			JSONObject segmentObj = toJson(segment);
+
+			result.put("segment", segmentObj);
+		});
+
+		return result.toJSONString();
+	}
+
+	@GET
+	@Path("/list")
+	public String list(@QueryParam("site") final String site) {
 
 		JSONObject result = new JSONObject();
 		JSONArray segments = new JSONArray();
 
 		segmentService.criteria()
 				.add(Restrictions.EQ.eq("site", site))
-				.query().stream().filter(AdvancedSegment.class::isInstance).map(AdvancedSegment.class::cast).forEach((segment) -> {
-			JSONObject segmentObj = new JSONObject();
-			segmentObj.put("id", segment.getId());
-			segmentObj.put("external_id", segment.getExternalId());
-			segmentObj.put("name", segment.getName());
-			segmentObj.put("content", segment.getContent());
-			segmentObj.put("active", segment.isActive());
-			segmentObj.put("site", segment.getSite());
-			segmentObj.put("time.count", segment.getTimeWindow().getCount());
-			segmentObj.put("time.unit", segment.getTimeWindow().getUnit());
-
-			segments.add(segmentObj);
-		});
+				.query().stream().filter(AdvancedSegment.class::isInstance).map(AdvancedSegment.class::cast).map(this::toJson).forEach(segments::add);
 
 		result.put("segments", segments);
 
 		return result.toJSONString();
+	}
+
+	private JSONObject toJson(final AdvancedSegment segment) {
+		JSONObject segmentObj = new JSONObject();
+		segmentObj.put("id", segment.getId());
+		segmentObj.put("external_id", segment.getExternalId());
+		segmentObj.put("name", segment.getName());
+		segmentObj.put("content", segment.getContent());
+		segmentObj.put("active", segment.isActive());
+		segmentObj.put("site", segment.getSite());
+		segmentObj.put("attributes", segment.getAttributes());
+		segmentObj.put("time.count", segment.getTimeWindow().getCount());
+		segmentObj.put("time.unit", segment.getTimeWindow().getUnit());
+
+		return segmentObj;
 	}
 
 	@DELETE
@@ -128,14 +153,7 @@ public class AudienceResource {
 		}
 
 		AdvancedSegment segment = new AdvancedSegment();
-		segment.setName(audience.getName());
-		segment.setActive(audience.isActive());
-		segment.setContent(audience.getDsl());
-		segment.setExternalId(audience.getExternalId());
-		segment.setSite(audience.getSite());
-		if (audience.getPeriod() != null) {
-			segment.setTimeWindow(audience.getPeriod().toTimeWindow());
-		}
+		addAttributes(segment, audience);
 
 		segmentService.add(segment);
 
@@ -143,6 +161,18 @@ public class AudienceResource {
 		result.put("status", "ok");
 		result.put("audience_id", segment.getId());
 		return result.toJSONString();
+	}
+
+	private void addAttributes(AdvancedSegment segment, final Audience audience) {
+		segment.setName(audience.getName());
+		segment.setActive(audience.isActive());
+		segment.setContent(audience.getDsl());
+		segment.setExternalId(audience.getExternalId());
+		segment.setSite(audience.getSite());
+		segment.setAttributes(audience.getAttributes());
+		if (audience.getPeriod() != null) {
+			segment.setTimeWindow(audience.getPeriod().toTimeWindow());
+		}
 	}
 
 	@PUT
@@ -175,14 +205,7 @@ public class AudienceResource {
 		}
 
 		AdvancedSegment segment = queryResult.get(0);
-		segment.setName(audience.getName());
-		segment.setActive(audience.isActive());
-		segment.setContent(audience.getDsl());
-		segment.setExternalId(audience.getExternalId());
-		segment.setSite(audience.getSite());
-		if (audience.getPeriod() != null) {
-			segment.setTimeWindow(audience.getPeriod().toTimeWindow());
-		}
+		addAttributes(segment, audience);
 
 		segmentService.add(segment);
 
