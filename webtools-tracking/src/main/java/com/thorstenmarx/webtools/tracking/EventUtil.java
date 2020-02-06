@@ -157,6 +157,7 @@ public class EventUtil {
 		event.put(Fields.IP.value(), ip.hashCode());
 		event.put(Fields.Site.value(), getParameter(request, Constants.Param.SITE.value()));
 		event.put(Fields.Page.value(), getParameter(request, Constants.Param.PAGE.value()));
+		event.put(Fields.Type.value(), getParameter(request, Constants.Param.TYPE.value()));
 		event.put(Fields.Referrer.value(), getParameter(request, Constants.Param.REFERRER.value()));
 		
 		

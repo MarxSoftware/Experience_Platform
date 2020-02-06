@@ -130,6 +130,7 @@ public class EventUtil2 extends EventUtil {
 		event.put(Fields.IP.value(), ip.hashCode());
 		event.put(Fields.Site.value(), getStringParameter(parameters, Constants.Param.SITE.value(), ""));
 		event.put(Fields.Page.value(), getStringParameter(parameters, Constants.Param.PAGE.value(), ""));
+		event.put(Fields.Type.value(), getStringParameter(parameters, Constants.Param.TYPE.value(), ""));
 		event.put(Fields.Referrer.value(), getStringParameter(parameters, Constants.Param.REFERRER.value(), ""));
 		
 		

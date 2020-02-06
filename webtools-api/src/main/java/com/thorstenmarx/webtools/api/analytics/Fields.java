@@ -43,6 +43,7 @@ public enum Fields {
 	Score("score"),
 	Site("site"),
 	Page("page"),
+	Type("type"),
 	Utm("utm"),
 	VISIBLE("visible"),
 	
