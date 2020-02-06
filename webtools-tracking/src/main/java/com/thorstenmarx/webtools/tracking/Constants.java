@@ -49,6 +49,7 @@ public class Constants {
 		SCORE("score"),
 		SITE("site"),
 		PAGE("page"),
+		TYPE("type"),
 		REFERRER("referrer"),
 //		SOURCE("_source"),
 		;
