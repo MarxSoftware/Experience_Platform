@@ -84,6 +84,7 @@ public class AudienceResource {
 
 	@GET
 	@Path("/list")
+	@Produces(MediaType.APPLICATION_JSON)
 	public String list(@QueryParam("site") final String site) {
 
 		JSONObject result = new JSONObject();
