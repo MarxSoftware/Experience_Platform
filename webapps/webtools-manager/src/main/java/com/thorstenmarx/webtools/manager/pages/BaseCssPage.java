@@ -36,10 +36,6 @@ import org.apache.wicket.request.resource.JavaScriptResourceReference;
  */
 public class BaseCssPage extends WebPage {
 
-	private static final JavaScriptResourceReference BOOTSTRAP_JS = new JavaScriptResourceReference(BasePage.class,
-			"libs/bootstrap-4.0.0/js/bootstrap.min.js");
-	private static final CssResourceReference BOOTSTRAP_CSS = new CssResourceReference(BasePage.class,
-			"libs/bootstrap-4.0.0/css/bootstrap.min.css");
 	private static final JavaScriptResourceReference BOOTSTRAP_MATERIAL_JS = new JavaScriptResourceReference(BasePage.class,
 			"libs/bootstrap-material-design-4.1.1/js/bootstrap-material-design.min.js");
 	private static final CssResourceReference BOOTSTRAP_MATERIAL_CSS = new CssResourceReference(BasePage.class,
