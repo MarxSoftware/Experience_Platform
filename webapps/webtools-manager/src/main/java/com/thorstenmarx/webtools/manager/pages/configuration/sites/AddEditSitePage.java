@@ -25,6 +25,11 @@ import com.google.inject.Inject;
 import com.thorstenmarx.webtools.api.model.Site;
 import com.thorstenmarx.webtools.manager.pages.BasePage;
 import com.thorstenmarx.webtools.manager.services.SiteService;
+import com.thorstenmarx.webtools.manager.utils.Helper;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+import org.apache.wicket.ajax.AjaxRequestTarget;
+import org.apache.wicket.ajax.markup.html.AjaxLink;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.Button;
 import org.apache.wicket.markup.html.form.Form;
@@ -37,28 +42,29 @@ import org.apache.wicket.model.StringResourceModel;
 
 public class AddEditSitePage extends BasePage {
 
+	private static final Logger LOGGER = LogManager.getLogger(AddEditSitePage.class);
+
 	@Inject
 	transient private SiteService sites;
 
 	private boolean edit = false;
-	
+
 	public AddEditSitePage() {
 		super();
 		this.edit = false;
 		setDefaultModel(new Model<>(new Site()));
 		initGui();
 	}
-	
+
 	public AddEditSitePage(final String siteid) {
 		super();
 		this.edit = true;
-		
+
 		Site site = sites.get(siteid);
 		setDefaultModel(new Model<>(site));
 		initGui();
 	}
-	
-	
+
 	private void initGui() {
 
 		Form<Site> addLocationForm = new Form<>("addSiteForm",
@@ -67,15 +73,41 @@ public class AddEditSitePage extends BasePage {
 
 		Label nameLabel = new Label("nameLabel", new StringResourceModel("siteName", this, null));
 		addLocationForm.add(nameLabel);
-		Label keyLabel = new Label("idLabel", new StringResourceModel("siteId", this, null));
+		Label idLabel =  new Label("idLabel", new StringResourceModel("siteId", this, null));
+		addLocationForm.add(idLabel);
+		Label keyLabel = new Label("apikeyLabel", new StringResourceModel("siteApiKey", this, null));
 		addLocationForm.add(keyLabel);
 
 		addLocationForm.add(createLabelFieldWithValidation("name", "siteName"));
-		
+
 		TextField<String> idField = createLabelField("id", "siteId");
 		idField.setEnabled(false);
 		addLocationForm.add(idField);
-		
+
+		TextField<String> apikeyField = createLabelField("apikey", "siteApiKey");
+		apikeyField.setOutputMarkupId(true);
+		addLocationForm.add(apikeyField);
+
+		AjaxLink generateLink = new AjaxLink("generate") {
+			private static final long serialVersionUID = -7978723352517770644L;
+
+			@Override
+			public void onClick(AjaxRequestTarget target) {
+
+				try {
+					final String apikey = Helper.randomString();
+					
+					Site site = getSiteFromPageModel();
+					site.setApikey(apikey);
+
+					target.add(apikeyField);
+				} catch (Exception ex) {
+					LOGGER.error(ex);
+					error(getString("generate.error"));
+				}
+			}
+		};
+		addLocationForm.add(generateLink);
 
 		Button submitButton = new Button("submitButton") {
 			@Override
@@ -97,7 +129,8 @@ public class AddEditSitePage extends BasePage {
 
 		return nameField;
 	}
-	private TextField<String> createLabelField(String id, String property) {
+
+	private TextField<String> createLabelField(final String id, final String property) {
 		TextField<String> nameField = new TextField<>(id);
 		nameField.setLabel(new StringResourceModel(property, this, null));
 

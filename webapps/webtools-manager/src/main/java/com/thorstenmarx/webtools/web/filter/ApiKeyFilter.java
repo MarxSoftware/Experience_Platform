@@ -25,6 +25,8 @@ import com.google.common.base.Strings;
 import com.thorstenmarx.webtools.ContextListener;
 import com.thorstenmarx.webtools.Fields;
 import com.thorstenmarx.webtools.api.configuration.Configuration;
+import com.thorstenmarx.webtools.api.model.Site;
+import com.thorstenmarx.webtools.manager.services.SiteService;
 
 import javax.servlet.*;
 import javax.servlet.http.HttpServletRequest;
@@ -35,6 +37,7 @@ import java.util.Optional;
 public class ApiKeyFilter implements Filter {
 
 	private final static String PARAMETER_APIKEY = "apikey";
+	private final static String PARAMETER_SITE = "site";
 
 	@Override
 	public void destroy() {
@@ -47,12 +50,40 @@ public class ApiKeyFilter implements Filter {
 
 	@Override
 	public void doFilter(ServletRequest req, ServletResponse res, FilterChain chain) throws IOException, ServletException {
-		
-		Optional<String> apikeyOptional = ContextListener.INJECTOR_PROVIDER.injector().getInstance(Configuration.class).getString(Fields.ApiKey.value());
 
-		
 		HttpServletRequest request = (HttpServletRequest) req;
 		HttpServletResponse response = (HttpServletResponse) res;
+
+		if (isValidMasterKeyAccess(request) || isValidSiteKeyAccess(request)) {
+			chain.doFilter(req, res);
+		} else {
+			response.sendError(HttpServletResponse.SC_UNAUTHORIZED);
+		}
+	}
+
+	private boolean isValidSiteKeyAccess (final HttpServletRequest request) {
+		SiteService siteService = ContextListener.INJECTOR_PROVIDER.injector().getInstance(SiteService.class);
+		
+		String apikeyParameterValue;
+		// try getting apikey from header
+		apikeyParameterValue = request.getHeader(PARAMETER_APIKEY);
+		// fallback to query parameter
+		if (Strings.isNullOrEmpty(apikeyParameterValue)) {
+			apikeyParameterValue = request.getParameter(PARAMETER_APIKEY);
+		}
+		
+		final String site = request.getParameter(PARAMETER_SITE);
+		if (!Strings.isNullOrEmpty(apikeyParameterValue) && !Strings.isNullOrEmpty(site)){
+			final Site theSite = siteService.get(site);
+			
+			return theSite != null ? apikeyParameterValue.equals(theSite.getApikey()) : false;
+		}
+		
+		return false;
+	}
+	
+	private boolean isValidMasterKeyAccess(final HttpServletRequest request) {
+		Optional<String> apikeyOptional = ContextListener.INJECTOR_PROVIDER.injector().getInstance(Configuration.class).getString(Fields.ApiKey.value());
 
 		String apikeyParameterValue;
 		// try getting apikey from header
@@ -62,10 +93,7 @@ public class ApiKeyFilter implements Filter {
 			apikeyParameterValue = request.getParameter(PARAMETER_APIKEY);
 		}
 
-		if (!Strings.isNullOrEmpty(apikeyParameterValue) && apikeyOptional.isPresent() && apikeyOptional.get().equals(apikeyParameterValue)) {
-			chain.doFilter(req, res);
-		} else {
-			response.sendError(HttpServletResponse.SC_UNAUTHORIZED);
-		}
+		return !Strings.isNullOrEmpty(apikeyParameterValue) && apikeyOptional.isPresent() && apikeyOptional.get().equals(apikeyParameterValue);
+
 	}
 }
