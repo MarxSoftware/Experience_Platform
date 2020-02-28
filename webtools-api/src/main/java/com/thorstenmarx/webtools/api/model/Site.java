@@ -39,6 +39,8 @@ public class Site implements Serializable	{
 	@Field(name = "id", key = true)
 	private String id;
 	private String name;
+	@Field(name = "apikey")
+	private String apikey;
 	
 	public Site () {
 		
@@ -48,6 +50,15 @@ public class Site implements Serializable	{
 		this.name = name;
 	}
 
+	public String getApikey() {
+		return apikey;
+	}
+
+	public void setApikey(String apikey) {
+		this.apikey = apikey;
+	}
+
+		
 	public String getId() {
 		return id;
 	}

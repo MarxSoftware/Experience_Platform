@@ -86,9 +86,9 @@ public class FilterResource {
 				queryBuilder.term(Fields.Page.value(), filter.page());
 			}
 			
-			for (Map.Entry<String, Object> entry : filter.filterParameters().entries()) {
+			filter.filterParameters().entries().forEach((entry) -> {
 				queryBuilder.term(entry.getKey(), String.valueOf(entry.getValue()));
-			}
+			});
 			
 			Query query = queryBuilder.build();
 			
@@ -97,6 +97,7 @@ public class FilterResource {
 				@Override
 				public JSONObject call() throws Exception {
 					JSONObject jsonResult = new JSONObject();
+					jsonResult.put("documents", documents);
 					return jsonResult;
 				}
 			});
@@ -124,6 +125,9 @@ public class FilterResource {
 		
 		@QueryParam("event")
 		private String event;
+		
+		@QueryParam("user")
+		private String user;
 		
 		@QueryParam("start")
 		private Long start = System.currentTimeMillis() - new TimeWindow(TimeWindow.UNIT.MINUTE, 5).millis();
@@ -156,6 +160,10 @@ public class FilterResource {
 
 		public String page() {
 			return page;
+		}
+		
+		public String user () {
+			return user;
 		}
 
 		public String event() {

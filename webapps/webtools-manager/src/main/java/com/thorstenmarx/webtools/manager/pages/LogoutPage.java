@@ -22,6 +22,7 @@ package com.thorstenmarx.webtools.manager.pages;
  * #L%
  */
 import com.thorstenmarx.webtools.manager.wicket.session.MMAuthenticationSession;
+import org.apache.wicket.Application;
 import org.apache.wicket.markup.html.WebPage;
 
 public class LogoutPage extends WebPage {
@@ -32,6 +33,7 @@ public class LogoutPage extends WebPage {
 		getSession().invalidateNow();
 		getSession().getPageManager().clear();
 		getSession().clear();
-		redirectToInterceptPage(new LoginPage());		
+//		redirectToInterceptPage(getApplication().getHomePage());	
+		setResponsePage(Application.get().getHomePage());
 	}
 }
