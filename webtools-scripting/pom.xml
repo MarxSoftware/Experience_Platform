@@ -5,13 +5,13 @@
 	<parent>
 		<groupId>com.thorstenmarx.webtools</groupId>
 		<artifactId>webtools-parent</artifactId>
-		<version>4.3.0</version>
+		<version>4.4.0-SNAPSHOT</version>
 		<relativePath>../webtools-parent</relativePath>
 	</parent>
 	
 	<groupId>com.thorstenmarx.webtools</groupId>
 	<artifactId>webtools-scripting</artifactId>
-	<version>4.3.0</version>
+	<version>4.4.0-SNAPSHOT</version>
 	
 	<name>webtools-scripting</name>
 	<description>Scripting</description>
@@ -34,7 +34,7 @@
 			<dependency>
 				<groupId>com.thorstenmarx.webtools</groupId>
 				<artifactId>webtools-bom</artifactId>
-				<version>4.3.0</version>
+				<version>4.4.0-SNAPSHOT</version>
 				<scope>import</scope>
 				<type>pom</type>
 			</dependency>   
