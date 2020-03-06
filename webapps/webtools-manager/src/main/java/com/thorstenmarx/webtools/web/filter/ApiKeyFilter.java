@@ -54,7 +54,9 @@ public class ApiKeyFilter implements Filter {
 		HttpServletRequest request = (HttpServletRequest) req;
 		HttpServletResponse response = (HttpServletResponse) res;
 
-		if (isValidMasterKeyAccess(request) || isValidSiteKeyAccess(request)) {
+		if (isValidMasterKeyAccess(request) || 
+				(isValidSiteKeyAccess(request) && isValidSiteRequest(request) ) 
+				) {
 			chain.doFilter(req, res);
 		} else {
 			response.sendError(HttpServletResponse.SC_UNAUTHORIZED);
@@ -64,22 +66,38 @@ public class ApiKeyFilter implements Filter {
 	private boolean isValidSiteKeyAccess (final HttpServletRequest request) {
 		SiteService siteService = ContextListener.INJECTOR_PROVIDER.injector().getInstance(SiteService.class);
 		
-		String apikeyParameterValue;
-		// try getting apikey from header
-		apikeyParameterValue = request.getHeader(PARAMETER_APIKEY);
-		// fallback to query parameter
-		if (Strings.isNullOrEmpty(apikeyParameterValue)) {
-			apikeyParameterValue = request.getParameter(PARAMETER_APIKEY);
-		}
-		
-		final String site = request.getParameter(PARAMETER_SITE);
-		if (!Strings.isNullOrEmpty(apikeyParameterValue) && !Strings.isNullOrEmpty(site)){
+		final String apikeyParameterValue = getParameter(PARAMETER_APIKEY, request);
+		final String site = getParameter(PARAMETER_SITE, request);
+				
+		if (!Strings.isNullOrEmpty(apikeyParameterValue) 
+				&& !Strings.isNullOrEmpty(site)){
 			final Site theSite = siteService.get(site);
 			
 			return theSite != null ? apikeyParameterValue.equals(theSite.getApikey()) : false;
 		}
 		
 		return false;
+	}
+	
+	private String getParameter (final String name, final HttpServletRequest request) {
+		String value;
+		value = request.getHeader(name);
+		if (Strings.isNullOrEmpty(value)) {
+			value = request.getParameter(name);
+		}
+		
+		return value;
+	}
+	
+	private boolean isValidSiteRequest (final HttpServletRequest request) {
+		final String site_parameter = request.getParameter(PARAMETER_SITE);
+		final String site_header = request.getHeader(PARAMETER_SITE);
+		
+		if (!Strings.isNullOrEmpty(site_header) && !Strings.isNullOrEmpty(site_parameter)){
+			return site_header.equals(site_parameter);
+		}
+		
+		return true;
 	}
 	
 	private boolean isValidMasterKeyAccess(final HttpServletRequest request) {
