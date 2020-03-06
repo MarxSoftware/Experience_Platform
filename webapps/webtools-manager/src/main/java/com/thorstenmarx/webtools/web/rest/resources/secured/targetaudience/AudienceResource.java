@@ -62,12 +62,9 @@ public class AudienceResource {
 	}
 
 	@GET
+	@Produces(MediaType.APPLICATION_JSON)
+	@Consumes(MediaType.TEXT_PLAIN)
 	public String get(@QueryParam("wpid") final long wpid, @QueryParam("site") final String site) {
-		List<Segment> queryResult = segmentService.criteria()
-				.add(Restrictions.EQ.eq("externalId", wpid))
-				.add(Restrictions.EQ.eq("site", site))
-				.query();
-
 		JSONObject result = new JSONObject();
 
 		segmentService.criteria()
