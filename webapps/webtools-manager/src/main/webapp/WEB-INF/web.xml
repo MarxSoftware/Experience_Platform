@@ -207,6 +207,35 @@
 	</filter-mapping>
 	<!-- END -->
 	
+	<!-- START: Hosting filters -->
+	<filter>
+		<filter-name>TrackingCounterFilter</filter-name>
+		<filter-class>com.thorstenmarx.webtools.web.hosting.HostingCountingServletFilter</filter-class>
+		<async-supported>true</async-supported>
+		<init-param>
+			<param-name>counter_name</param-name>
+			<param-value>tracking_request</param-value>
+		</init-param>
+	</filter>
+	<filter>
+		<filter-name>APIRequestCounterFilter</filter-name>
+		<filter-class>com.thorstenmarx.webtools.web.hosting.HostingCountingServletFilter</filter-class>
+		<async-supported>true</async-supported>
+		<init-param>
+			<param-name>counter_name</param-name>
+			<param-value>api_request</param-value>
+		</init-param>
+	</filter>
+	<filter-mapping>
+		<filter-name>TrackingCounterFilter</filter-name>
+		<url-pattern>/track</url-pattern>
+	</filter-mapping>
+	<filter-mapping>
+		<filter-name>APIRequestCounterFilter</filter-name>
+		<url-pattern>/rest/*</url-pattern>
+	</filter-mapping>
+	<!-- END: Hosting filters -->
+	
 	<mime-mapping>
 		<extension>svg</extension>
 		<mime-type>image/svg+xml</mime-type>
