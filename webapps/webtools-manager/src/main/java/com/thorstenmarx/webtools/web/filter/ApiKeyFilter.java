@@ -36,8 +36,8 @@ import java.util.Optional;
 
 public class ApiKeyFilter implements Filter {
 
-	private final static String PARAMETER_APIKEY = "apikey";
-	private final static String PARAMETER_SITE = "site";
+	public final static String PARAMETER_APIKEY = "apikey";
+	public final static String PARAMETER_SITE = "site";
 
 	@Override
 	public void destroy() {
@@ -79,7 +79,7 @@ public class ApiKeyFilter implements Filter {
 		return false;
 	}
 	
-	private String getParameter (final String name, final HttpServletRequest request) {
+	public static String getParameter (final String name, final HttpServletRequest request) {
 		String value;
 		value = request.getHeader(name);
 		if (Strings.isNullOrEmpty(value)) {
