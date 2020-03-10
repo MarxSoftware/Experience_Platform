@@ -37,51 +37,35 @@ package com.thorstenmarx.webtools.web.hosting;
  * <http://www.gnu.org/licenses/gpl-3.0.html>.
  * #L%
  */
-import com.thorstenmarx.modules.api.Module;
+
+import com.alibaba.fastjson.JSONObject;
 import com.thorstenmarx.modules.api.ModuleManager;
-import com.thorstenmarx.webtools.ContextListener;
 import com.thorstenmarx.webtools.hosting.extensions.HostingPackageValidatorExtension;
-import com.thorstenmarx.webtools.web.filter.ApiKeyFilter;
-import java.io.IOException;
 import java.util.List;
-import java.util.Optional;
-import javax.ws.rs.container.ContainerRequestContext;
-import javax.ws.rs.container.ContainerRequestFilter;
-import javax.ws.rs.core.Response;
-import javax.ws.rs.ext.Provider;
 
 /**
  *
  * @author marx
  */
-@Provider
-public class HostingPackageJerseyFilter implements ContainerRequestFilter {
+public class HostingPackageEvaluator {
 
-	@Override
-	public void filter(final ContainerRequestContext ctx) throws IOException {
-		ModuleManager moduleManager = ContextListener.INJECTOR_PROVIDER.injector().getInstance(ModuleManager.class);
+	private final ModuleManager moduleManager;
 
-		Module hostingModule = moduleManager.module("module-hosting");
-		final Optional<String> site = getSite(ctx);
-		if (hostingModule != null && site.isPresent()) {
+	public HostingPackageEvaluator(final ModuleManager moduleManager) {
+		this.moduleManager = moduleManager;
+	}
+
+	public boolean is_action_allowed(final String site, HostingPackageValidatorExtension.Action action) {
+		com.thorstenmarx.modules.api.Module hostingModule = moduleManager.module("module-hosting");
+		if (hostingModule != null) {
 			List<HostingPackageValidatorExtension> extensions = hostingModule.extensions(HostingPackageValidatorExtension.class);
 
 			for (final HostingPackageValidatorExtension validator : extensions) {
-				if (!validator.validate(site.get(), ctx.getUriInfo().getPath())) {
-					ctx.abortWith(Response.status(Response.Status.FORBIDDEN)
-							.entity("Cannot access")
-							.build());
+				if (!validator.is_action_allowed(site, action)) {
+					return false;
 				}
 			}
 		}
-
-		System.out.println(ctx.getUriInfo().getPath());
-	}
-
-	private Optional<String> getSite(final ContainerRequestContext context) {
-		if (context.getUriInfo().getQueryParameters().containsKey(ApiKeyFilter.PARAMETER_SITE)) {
-			return Optional.of(context.getUriInfo().getQueryParameters().getFirst(ApiKeyFilter.PARAMETER_SITE));
-		}
-		return Optional.empty();
+		return true;
 	}
 }

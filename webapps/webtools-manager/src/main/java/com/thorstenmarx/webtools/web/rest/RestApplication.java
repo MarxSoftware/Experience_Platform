@@ -21,7 +21,6 @@ package com.thorstenmarx.webtools.web.rest;
  * <http://www.gnu.org/licenses/gpl-3.0.html>.
  * #L%
  */
-import com.thorstenmarx.webtools.web.hosting.HostingPackageJerseyFilter;
 import com.thorstenmarx.webtools.web.rest.resources.ModuleResource;
 import javax.ws.rs.ApplicationPath;
 import org.glassfish.jersey.server.ResourceConfig;
@@ -33,7 +32,6 @@ public class RestApplication extends ResourceConfig {
 	
 	public RestApplication () {
 		register(ModuleResource.class);
-		register(HostingPackageJerseyFilter.class);
 	}
 	
 	

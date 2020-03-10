@@ -24,12 +24,15 @@ package com.thorstenmarx.webtools.web.rest.resources.secured.targetaudience;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.google.common.base.Strings;
+import com.thorstenmarx.modules.api.ModuleManager;
 import com.thorstenmarx.webtools.ContextListener;
 import com.thorstenmarx.webtools.api.actions.ActionSystem;
 import com.thorstenmarx.webtools.api.actions.SegmentService;
 import com.thorstenmarx.webtools.api.actions.model.AdvancedSegment;
 import com.thorstenmarx.webtools.api.actions.model.Segment;
 import com.thorstenmarx.webtools.api.entities.criteria.Restrictions;
+import com.thorstenmarx.webtools.hosting.extensions.HostingPackageValidatorExtension;
+import com.thorstenmarx.webtools.web.hosting.HostingPackageEvaluator;
 import java.util.List;
 import java.util.stream.Collectors;
 import javax.ws.rs.Consumes;
@@ -55,10 +58,16 @@ public class AudienceResource {
 
 	private final SegmentService segmentService;
 	private final ActionSystem actionSystem;
+	private final ModuleManager moduleManager;
+
+	private final HostingPackageEvaluator hostingPackageEvaluator;
 
 	public AudienceResource() {
 		this.segmentService = ContextListener.INJECTOR_PROVIDER.injector().getInstance(SegmentService.class);
 		this.actionSystem = ContextListener.INJECTOR_PROVIDER.injector().getInstance(ActionSystem.class);
+		this.moduleManager = ContextListener.INJECTOR_PROVIDER.injector().getInstance(ModuleManager.class);
+
+		this.hostingPackageEvaluator = new HostingPackageEvaluator(moduleManager);
 	}
 
 	@GET
@@ -147,6 +156,15 @@ public class AudienceResource {
 			result.put("status", "error");
 			result.put("message", validation.message);
 
+			return result.toJSONString();
+		}
+
+		// validate the allowed amount of segmentes allowed for this
+		final String site = audience.getSite();
+		if (!hostingPackageEvaluator.is_action_allowed(site, HostingPackageValidatorExtension.Action.CREATE_SEGMENTE)) {
+			JSONObject result = new JSONObject();
+			result.put("status", "error");
+			result.put("message", "Your maximum number of segments is reached.");
 			return result.toJSONString();
 		}
 

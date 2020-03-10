@@ -40,6 +40,7 @@ package com.thorstenmarx.webtools.hosting.extensions;
 
 import com.thorstenmarx.modules.api.BaseExtension;
 import com.thorstenmarx.webtools.api.ModuleContext;
+import java.time.LocalDate;
 
 /**
  *
@@ -47,9 +48,5 @@ import com.thorstenmarx.webtools.api.ModuleContext;
  */
 public abstract class HostingReportExtension extends BaseExtension<ModuleContext>{
 	
-	public abstract void incrementCounter (final String site, final String counter, final int increment);
-	
-	public abstract long getCount (final String site, final String counter);
-	
-	
+	public abstract void incrementCounter (final String site, final String counter, final LocalDate date, final int increment);	
 }

@@ -72,6 +72,7 @@ public class CommonGuiceModule extends AbstractModule {
 	protected ModuleManager coreModuleManager(final Injector injector, final CoreModuleContext context) {
 		List<String> apiPackages = new ArrayList<>();
 		apiPackages.add("com.thorstenmarx.webtools.api");
+		apiPackages.add("com.thorstenmarx.webtools.hosting");
 		apiPackages.add("com.thorstenmarx.webtools.collection");
 		apiPackages.add("com.thorstenmarx.webtools.streams");
 		apiPackages.add("com.thorstenmarx.webtools.scripting");

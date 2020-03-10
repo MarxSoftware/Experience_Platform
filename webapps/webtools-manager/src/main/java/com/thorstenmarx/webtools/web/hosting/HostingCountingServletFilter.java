@@ -23,6 +23,7 @@ import com.thorstenmarx.webtools.ContextListener;
 import com.thorstenmarx.webtools.hosting.extensions.HostingReportExtension;
 import com.thorstenmarx.webtools.web.filter.ApiKeyFilter;
 import java.io.IOException;
+import java.time.LocalDate;
 import java.util.List;
 import javax.servlet.Filter;
 import javax.servlet.FilterChain;
@@ -65,8 +66,6 @@ public class HostingCountingServletFilter implements Filter {
 	
 	@Override
 	public void init(FilterConfig filterConfig) throws ServletException {
-		Filter.super.init(filterConfig); //To change body of generated methods, choose Tools | Templates.
-		
 		counterName = filterConfig.getInitParameter("counter_name");
 		
 		moduleManager = ContextListener.INJECTOR_PROVIDER.injector().getInstance(ModuleManager.class);
@@ -88,7 +87,7 @@ public class HostingCountingServletFilter implements Filter {
 		if (hostingModule != null && !Strings.isNullOrEmpty(site)) {
 			List<HostingReportExtension> extensions = hostingModule.extensions(HostingReportExtension.class);
 			if (!extensions.isEmpty()) {
-				extensions.get(0).incrementCounter(site, counterName, 1);
+				extensions.get(0).incrementCounter(site, counterName, LocalDate.now(), 1);
 			}
 		}
 		

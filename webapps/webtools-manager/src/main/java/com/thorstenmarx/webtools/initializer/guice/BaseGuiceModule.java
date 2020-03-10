@@ -110,6 +110,7 @@ public class BaseGuiceModule extends AbstractModule {
 	protected ModuleManager moduleManager(final AnalyticsDB analyticsDB, final SegmentService segmentService, final MBassador mBassador, final Entities entities, final Registry registry, final Injector injector) {
 		List<String> apiPackages = new ArrayList<>();
 		apiPackages.add("com.thorstenmarx.webtools.api");
+		apiPackages.add("com.thorstenmarx.webtools.hosting");
 		apiPackages.add("com.thorstenmarx.webtools.collection");
 		apiPackages.add("com.thorstenmarx.webtools.streams");
 		apiPackages.add("net.engio.mbassy");

@@ -47,7 +47,10 @@ import com.thorstenmarx.webtools.api.ModuleContext;
  */
 public abstract class HostingPackageValidatorExtension extends BaseExtension<ModuleContext>{
 	
-	public abstract boolean validate (final String site, final String path);
+	public abstract boolean is_action_allowed (final String site, final Action action);
 	
 	
+	public enum Action {
+		CREATE_SEGMENTE
+	}
 }
