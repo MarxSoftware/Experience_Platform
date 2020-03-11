@@ -32,6 +32,7 @@ import javax.servlet.http.HttpServletRequest;
  *
  * @author marx
  */
+@Deprecated(since = "4.4.0")
 public abstract class TrackingJsonPExtension extends BaseExtension<ModuleContext> {
 
 	public abstract String getCommand ();

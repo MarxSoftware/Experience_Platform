@@ -54,7 +54,6 @@ import javax.servlet.http.HttpServletRequest;
  * <http://www.gnu.org/licenses/gpl-3.0.html>.
  * #L%
  */
-
 /**
  *
  * @author marx
@@ -63,36 +62,29 @@ public class HostingCountingServletFilter implements Filter {
 
 	private String counterName;
 	private ModuleManager moduleManager;
-	
+
 	@Override
 	public void init(FilterConfig filterConfig) throws ServletException {
 		counterName = filterConfig.getInitParameter("counter_name");
-		
 		moduleManager = ContextListener.INJECTOR_PROVIDER.injector().getInstance(ModuleManager.class);
 	}
 
-	
-	
 	@Override
 	public void doFilter(ServletRequest req, ServletResponse res, FilterChain chain) throws IOException, ServletException {
-		track(req);
+		track((HttpServletRequest) req);
 		chain.doFilter(req, res);
 	}
-	
-	private void track (final ServletRequest req) {
-		
-		final HttpServletRequest request = (HttpServletRequest) req;
-		final String site = ApiKeyFilter.getParameter(ApiKeyFilter.PARAMETER_SITE, request);
-		Module hostingModule = moduleManager.module("module-hosting");
-		if (hostingModule != null && !Strings.isNullOrEmpty(site)) {
-			List<HostingReportExtension> extensions = hostingModule.extensions(HostingReportExtension.class);
-			if (!extensions.isEmpty()) {
-				extensions.get(0).incrementCounter(site, counterName, LocalDate.now(), 1);
+
+	private void track(final HttpServletRequest request) {
+		if (!ApiKeyFilter.HOSTING.get().isApiKeyAccess) {
+			final String site = ApiKeyFilter.getParameter(ApiKeyFilter.PARAMETER_SITE, request);
+			Module hostingModule = moduleManager.module("module-hosting");
+			if (hostingModule != null && !Strings.isNullOrEmpty(site)) {
+				List<HostingReportExtension> extensions = hostingModule.extensions(HostingReportExtension.class);
+				if (!extensions.isEmpty()) {
+					extensions.get(0).incrementCounter(site, counterName, LocalDate.now(), 1);
+				}
 			}
 		}
-		
-		
 	}
-	
-	
 }

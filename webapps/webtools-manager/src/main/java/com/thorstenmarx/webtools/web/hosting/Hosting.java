@@ -38,38 +38,17 @@ package com.thorstenmarx.webtools.web.hosting;
  * #L%
  */
 
-import com.thorstenmarx.modules.api.ModuleManager;
-import com.thorstenmarx.webtools.hosting.extensions.HostingPackageValidatorExtension;
-import com.thorstenmarx.webtools.web.filter.ApiKeyFilter;
-import java.util.List;
-
 /**
  *
  * @author marx
  */
-public class HostingPackageEvaluator {
+public class Hosting {
+	
+	public final boolean isApiKeyAccess;
 
-	private final ModuleManager moduleManager;
-
-	public HostingPackageEvaluator(final ModuleManager moduleManager) {
-		this.moduleManager = moduleManager;
+	public Hosting(boolean isApiKeyAccess) {
+		this.isApiKeyAccess = isApiKeyAccess;
 	}
-
-	public boolean is_action_allowed(final String site, HostingPackageValidatorExtension.Action action) {
-		return ApiKeyFilter.HOSTING.get().isApiKeyAccess ||checkHostingModuleforAccess(site, action);
-	}
-
-	private boolean checkHostingModuleforAccess(final String site, HostingPackageValidatorExtension.Action action) {
-		com.thorstenmarx.modules.api.Module hostingModule = moduleManager.module("module-hosting");
-		if (hostingModule != null) {
-			List<HostingPackageValidatorExtension> extensions = hostingModule.extensions(HostingPackageValidatorExtension.class);
-
-			for (final HostingPackageValidatorExtension validator : extensions) {
-				if (!validator.is_action_allowed(site, action)) {
-					return false;
-				}
-			}
-		}
-		return true;
-	}
+	
+	
 }

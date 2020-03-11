@@ -32,6 +32,7 @@ import javax.servlet.http.HttpServletResponse;
  *
  * @author marx
  */
+@Deprecated(since = "4.4.0")
 public abstract class ServletCommandProcessorExtension extends BaseExtension<ModuleContext> {
 	/**
 	 * 

@@ -27,7 +27,7 @@ import com.thorstenmarx.webtools.Fields;
 import com.thorstenmarx.webtools.api.configuration.Configuration;
 import com.thorstenmarx.webtools.api.model.Site;
 import com.thorstenmarx.webtools.manager.services.SiteService;
-
+import com.thorstenmarx.webtools.web.hosting.Hosting;
 import javax.servlet.*;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -39,6 +39,8 @@ public class ApiKeyFilter implements Filter {
 	public final static String PARAMETER_APIKEY = "apikey";
 	public final static String PARAMETER_SITE = "site";
 
+	public static final ThreadLocal<Hosting> HOSTING = new ThreadLocal<>();
+	
 	@Override
 	public void destroy() {
 
@@ -51,15 +53,22 @@ public class ApiKeyFilter implements Filter {
 	@Override
 	public void doFilter(ServletRequest req, ServletResponse res, FilterChain chain) throws IOException, ServletException {
 
-		HttpServletRequest request = (HttpServletRequest) req;
-		HttpServletResponse response = (HttpServletResponse) res;
+		final  HttpServletRequest request = (HttpServletRequest) req;
+		final HttpServletResponse response = (HttpServletResponse) res;
 
-		if (isValidMasterKeyAccess(request) || 
-				(isValidSiteKeyAccess(request) && isValidSiteRequest(request) ) 
-				) {
-			chain.doFilter(req, res);
-		} else {
-			response.sendError(HttpServletResponse.SC_UNAUTHORIZED);
+		final Hosting hosing = new Hosting(isValidMasterKeyAccess(request));
+
+		ApiKeyFilter.HOSTING.set(hosing);
+		try {
+			if (isValidMasterKeyAccess(request)
+					|| (isValidSiteKeyAccess(request) && isValidSiteRequest(request))) {
+				
+				chain.doFilter(req, res);
+			} else {
+				response.sendError(HttpServletResponse.SC_UNAUTHORIZED);
+			}
+		} finally {
+			ApiKeyFilter.HOSTING.remove();
 		}
 	}
 

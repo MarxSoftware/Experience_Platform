@@ -41,13 +41,6 @@
 		<listener-class>com.thorstenmarx.webtools.ContextListener</listener-class>
 	</listener>
 
-	<filter>
-		<filter-name>CORSFilter</filter-name>
-		<filter-class>com.thorstenmarx.webtools.web.filter.CORSRequestFilter</filter-class>
-		<async-supported>true</async-supported>
-	</filter>
-	
-	
 	<!-- START MANAGER -->
 	<display-name>webTools</display-name>
 	<filter>
@@ -80,10 +73,6 @@
 		<servlet-name>ManagerRestApplication</servlet-name>
 		<url-pattern>/manager-rest/*</url-pattern>
 	</servlet-mapping>
-	<filter-mapping>
-		<filter-name>CORSFilter</filter-name>
-		<url-pattern>/manager-rest/*</url-pattern>
-	</filter-mapping>
 	<filter>
 		<filter-name>SessionFilter</filter-name>
 		<filter-class>org.apache.wicket.protocol.http.servlet.WicketSessionFilter</filter-class>
@@ -119,10 +108,6 @@
 		</init-param>
 		<load-on-startup>1</load-on-startup>
 	</servlet>
-	<filter-mapping>
-		<filter-name>CORSFilter</filter-name>
-		<url-pattern>/api/*</url-pattern>
-	</filter-mapping>
 	<servlet-mapping>
 		<servlet-name>RestApplication</servlet-name>
 		<url-pattern>/api/*</url-pattern>
@@ -148,11 +133,13 @@
 	</servlet>
 	
 	<servlet>
+		<!-- deprecated -->
 		<servlet-name>JsonPServlet</servlet-name>
 		<servlet-class>com.thorstenmarx.webtools.web.servlets.JsonPServlet</servlet-class>
 		<async-supported>true</async-supported>
 	</servlet>
 	<servlet>
+		<!-- deprecated -->
 		<servlet-name>ExtensionServlet</servlet-name>
 		<servlet-class>com.thorstenmarx.webtools.web.servlets.ExtensionServlet</servlet-class>
 		<async-supported>true</async-supported>
@@ -199,10 +186,6 @@
 	</filter>
 	<filter-mapping>
 		<filter-name>ApiKeyFilter</filter-name>
-		<url-pattern>/rest/*</url-pattern>
-	</filter-mapping>
-	<filter-mapping>
-		<filter-name>CORSFilter</filter-name>
 		<url-pattern>/rest/*</url-pattern>
 	</filter-mapping>
 	<!-- END -->
