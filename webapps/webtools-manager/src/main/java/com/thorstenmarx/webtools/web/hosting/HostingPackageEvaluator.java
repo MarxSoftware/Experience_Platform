@@ -56,7 +56,7 @@ public class HostingPackageEvaluator {
 	}
 
 	public boolean is_action_allowed(final String site, HostingPackageValidatorExtension.Action action) {
-		return ApiKeyFilter.HOSTING.get().isApiKeyAccess ||checkHostingModuleforAccess(site, action);
+		return ApiKeyFilter.HOSTING.get().isApiKeyAccess || checkHostingModuleforAccess(site, action);
 	}
 
 	private boolean checkHostingModuleforAccess(final String site, HostingPackageValidatorExtension.Action action) {

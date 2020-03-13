@@ -76,7 +76,7 @@ public class HostingCountingServletFilter implements Filter {
 	}
 
 	private void track(final HttpServletRequest request) {
-		if (!ApiKeyFilter.HOSTING.get().isApiKeyAccess) {
+		if (ApiKeyFilter.HOSTING != null && ApiKeyFilter.HOSTING.get() != null && !ApiKeyFilter.HOSTING.get().isApiKeyAccess) {
 			final String site = ApiKeyFilter.getParameter(ApiKeyFilter.PARAMETER_SITE, request);
 			Module hostingModule = moduleManager.module("module-hosting");
 			if (hostingModule != null && !Strings.isNullOrEmpty(site)) {
