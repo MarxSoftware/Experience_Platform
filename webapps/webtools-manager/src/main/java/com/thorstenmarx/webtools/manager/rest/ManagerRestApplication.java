@@ -23,7 +23,6 @@ package com.thorstenmarx.webtools.manager.rest;
  */
 
 import com.thorstenmarx.webtools.web.rest.resources.secured.ExtensionResource;
-import com.thorstenmarx.webtools.web.rest.resources.secured.SegmentResource;
 import javax.ws.rs.ApplicationPath;
 import org.glassfish.jersey.server.ResourceConfig;
 
@@ -36,7 +35,6 @@ public class ManagerRestApplication extends ResourceConfig {
 		packages("com.thorstenmarx.webtools.manager.rest.endpoints");
 		
 		register(ExtensionResource.class);
-		register(SegmentResource.class);
 	}
 	
 	

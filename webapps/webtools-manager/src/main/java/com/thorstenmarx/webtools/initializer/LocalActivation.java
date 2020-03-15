@@ -31,7 +31,6 @@ import com.thorstenmarx.modules.api.ModuleManager;
 import com.thorstenmarx.webtools.ContextListener;
 import com.thorstenmarx.webtools.Fields;
 import com.thorstenmarx.webtools.api.Lookup;
-import com.thorstenmarx.webtools.api.actions.ActionSystem;
 import com.thorstenmarx.webtools.api.analytics.AnalyticsDB;
 import com.thorstenmarx.webtools.api.configuration.Configuration;
 import com.thorstenmarx.webtools.api.execution.Executor;
@@ -97,7 +96,6 @@ public class LocalActivation implements Activation {
 		
 		// init module manager by getting the instance from guice
 		ContextListener.INJECTOR_PROVIDER.injector().getInstance(ModuleManager.class);
-		ContextListener.INJECTOR_PROVIDER.injector().getInstance(ActionSystem.class);
 	}
 	
 	@Override

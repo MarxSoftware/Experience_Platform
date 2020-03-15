@@ -32,7 +32,6 @@ import com.thorstenmarx.modules.api.ModuleManager;
 import com.thorstenmarx.webtools.ContextListener;
 import com.thorstenmarx.webtools.Fields;
 import com.thorstenmarx.webtools.api.Lookup;
-import com.thorstenmarx.webtools.api.actions.ActionSystem;
 import com.thorstenmarx.webtools.api.analytics.AnalyticsDB;
 import com.thorstenmarx.webtools.api.cluster.Cluster;
 import com.thorstenmarx.webtools.api.configuration.Configuration;
@@ -78,7 +77,6 @@ public class ClusterActivation implements Activation {
 		Lookup.getDefault().register(EventBus.class, eventBus);
 
 		Lookup.getDefault().register(AnalyticsDB.class, injector.getInstance(AnalyticsDB.class));
-		Lookup.getDefault().register(ActionSystem.class, injector.getInstance(ActionSystem.class));
 		
 
 		UserService users = injector.getInstance(UserService.class);

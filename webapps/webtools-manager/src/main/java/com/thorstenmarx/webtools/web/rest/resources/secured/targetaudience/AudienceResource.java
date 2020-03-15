@@ -26,7 +26,7 @@ import com.alibaba.fastjson.JSONObject;
 import com.google.common.base.Strings;
 import com.thorstenmarx.modules.api.ModuleManager;
 import com.thorstenmarx.webtools.ContextListener;
-import com.thorstenmarx.webtools.api.actions.ActionSystem;
+import com.thorstenmarx.webtools.api.actions.InvalidSegmentException;
 import com.thorstenmarx.webtools.api.actions.SegmentService;
 import com.thorstenmarx.webtools.api.actions.model.AdvancedSegment;
 import com.thorstenmarx.webtools.api.actions.model.Segment;
@@ -34,6 +34,7 @@ import com.thorstenmarx.webtools.api.entities.criteria.Restrictions;
 import com.thorstenmarx.webtools.hosting.extensions.HostingPackageValidatorExtension;
 import com.thorstenmarx.webtools.web.hosting.HostingPackageEvaluator;
 import java.util.List;
+import java.util.logging.Level;
 import java.util.stream.Collectors;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
@@ -57,14 +58,12 @@ public class AudienceResource {
 	private static final Logger LOGGER = LogManager.getLogger(AudienceResource.class);
 
 	private final SegmentService segmentService;
-	private final ActionSystem actionSystem;
 	private final ModuleManager moduleManager;
 
 	private final HostingPackageEvaluator hostingPackageEvaluator;
 
 	public AudienceResource() {
 		this.segmentService = ContextListener.INJECTOR_PROVIDER.injector().getInstance(SegmentService.class);
-		this.actionSystem = ContextListener.INJECTOR_PROVIDER.injector().getInstance(ActionSystem.class);
 		this.moduleManager = ContextListener.INJECTOR_PROVIDER.injector().getInstance(ModuleManager.class);
 
 		this.hostingPackageEvaluator = new HostingPackageEvaluator(moduleManager);
@@ -150,14 +149,6 @@ public class AudienceResource {
 			result.put("message", "Audience already exists.");
 			return update(audience);
 		}
-		ValidationResult validation = internal_validate(audience.getDsl());
-		if (!validation.valid) {
-			JSONObject result = new JSONObject();
-			result.put("status", "error");
-			result.put("message", validation.message);
-
-			return result.toJSONString();
-		}
 
 		// validate the allowed amount of segmentes allowed for this
 		final String site = audience.getSite();
@@ -171,12 +162,20 @@ public class AudienceResource {
 		AdvancedSegment segment = new AdvancedSegment();
 		addAttributes(segment, audience);
 
-		segmentService.add(segment);
+		try {
+			segmentService.add(segment);
 
-		JSONObject result = new JSONObject();
-		result.put("status", "ok");
-		result.put("audience_id", segment.getId());
-		return result.toJSONString();
+			JSONObject result = new JSONObject();
+			result.put("status", "ok");
+			result.put("audience_id", segment.getId());
+			return result.toJSONString();
+		} catch (InvalidSegmentException ex) {
+			JSONObject result = new JSONObject();
+			result.put("status", "error");
+			result.put("message", ex.getMessage());
+			return result.toJSONString();
+		}
+
 	}
 
 	private void addAttributes(AdvancedSegment segment, final Audience audience) {
@@ -211,56 +210,24 @@ public class AudienceResource {
 			result.put("message", "Multiple audiences found.");
 			return result.toJSONString();
 		}
-		ValidationResult validation = internal_validate(audience.getDsl());
-		if (!validation.valid) {
-			JSONObject result = new JSONObject();
-			result.put("status", "error");
-			result.put("message", validation.message);
-
-			return result.toJSONString();
-		}
 
 		AdvancedSegment segment = queryResult.get(0);
 		addAttributes(segment, audience);
 
-		segmentService.add(segment);
-
-		JSONObject result = new JSONObject();
-		result.put("status", "ok");
-		result.put("audience_id", segment.getId());
-		return result.toJSONString();
-	}
-
-	@POST
-	@Path("/validate")
-	public String validate(final String content) {
-
-		JSONObject result = new JSONObject();
-
-		JSONObject validation = new JSONObject();
-
-		ValidationResult validationResult = internal_validate(content);
-		if (validationResult.valid) {
-			validation.put("valid", true);
-		} else {
-			validation.put("valid", false);
-			validation.put("message", validationResult.message);
-		}
-
-		result.put("validation", validation);
-		result.put("status", "ok");
-
-		return result.toJSONString();
-	}
-
-	private ValidationResult internal_validate(final String dsl) {
-		if (Strings.isNullOrEmpty(dsl)) {
-			return new ValidationResult(false, "Content should not be null!");
-		}
 		try {
-			return new ValidationResult(actionSystem.validate(dsl));
-		} catch (Exception ex) {
-			return new ValidationResult(false, ex.getMessage());
+			segmentService.add(segment);
+			
+			JSONObject result = new JSONObject();
+			result.put("status", "ok");
+			result.put("audience_id", segment.getId());
+			return result.toJSONString();
+		} catch (InvalidSegmentException ex) {
+			JSONObject result = new JSONObject();
+			result.put("status", "error");
+			result.put("message", ex.getMessage());
+			return result.toJSONString();
 		}
 	}
+
+	
 }

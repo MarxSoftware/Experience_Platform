@@ -1,10 +1,10 @@
-package com.thorstenmarx.webtools.manager.wicket.dashboard.widgets;
+package com.thorstenmarx.webtools.api.extensions.core;
 
 /*-
  * #%L
- * webtools-manager
+ * webtools-api
  * %%
- * Copyright (C) 2016 - 2018 Thorsten Marx
+ * Copyright (C) 2016 - 2019 Thorsten Marx
  * %%
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as
@@ -21,18 +21,18 @@ package com.thorstenmarx.webtools.manager.wicket.dashboard.widgets;
  * <http://www.gnu.org/licenses/gpl-3.0.html>.
  * #L%
  */
-import org.apache.wicket.markup.html.panel.Panel;
+
+import com.thorstenmarx.modules.api.BaseExtension;
+import com.thorstenmarx.webtools.api.CoreModuleContext;
+import com.thorstenmarx.webtools.api.actions.SegmentService;
 
 /**
  *
  * @author marx
  */
-public class SegmentsPanel extends Panel {
+public abstract class CoreSegmentationExtension extends BaseExtension<CoreModuleContext> {
 	
-	private static final long serialVersionUID = -6998383442763966672L;
-
-	public SegmentsPanel(String id) {
-		super(id);
-	}
+	public abstract String getName ();
 	
+	public abstract SegmentService getSegmentService ();
 }

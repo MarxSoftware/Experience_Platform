@@ -30,7 +30,6 @@ import com.thorstenmarx.webtools.manager.services.SiteService;
 import com.thorstenmarx.webtools.manager.wicket.MessagePanel;
 import com.thorstenmarx.webtools.manager.wicket.dashboard.Dashboard;
 import com.thorstenmarx.webtools.manager.wicket.dashboard.widgets.DefaultWidget;
-import com.thorstenmarx.webtools.manager.wicket.dashboard.widgets.SegmentsWidget;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -81,7 +80,6 @@ public class DashboardPage extends BasePage {
         this.dashboard = new Dashboard("dashboard");
 //		dashboard.addWidget(new OverviewWidget("topChart", "Requests", 12));
         dashboard.addWidget(new DefaultWidget("dw1", "Default Widget", 4));
-        dashboard.addWidget(new SegmentsWidget("segmentsWidget", "Segments", 4));
 
         add(dashboard);
 

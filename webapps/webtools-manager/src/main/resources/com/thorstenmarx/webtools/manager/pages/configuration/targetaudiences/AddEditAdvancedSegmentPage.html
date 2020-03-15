@@ -132,7 +132,7 @@
 									$(document).ready(function () {
 										var editor = ace.edit("editor");
 										editor.setTheme("ace/theme/eclipse");
-										editor.getSession().setMode("ace/mode/javascript");
+										editor.getSession().setMode("ace/mode/json");
 
 										var textarea = $('textarea[name="dsltextarea"]').hide();
 										editor.getSession().setValue(textarea.val());
