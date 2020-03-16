@@ -45,6 +45,7 @@ import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -137,7 +138,7 @@ public class AudienceResource {
 	@POST
 	@Produces(MediaType.APPLICATION_JSON)
 	@Consumes(MediaType.APPLICATION_JSON)
-	public String create(final Audience audience) {
+	public Response create(final Audience audience) {
 		// check existens
 		List<?> queryResult = segmentService.criteria()
 				.add(Restrictions.EQ.eq("externalId", audience.getExternalId()))
@@ -156,7 +157,8 @@ public class AudienceResource {
 			JSONObject result = new JSONObject();
 			result.put("status", "error");
 			result.put("message", "Your maximum number of segments is reached.");
-			return result.toJSONString();
+			return Response.status(Response.Status.FORBIDDEN.getStatusCode(), "Your maximum number of segments is reached.")
+					.entity(result.toJSONString()).build();
 		}
 
 		Segment segment = new Segment();
@@ -168,12 +170,12 @@ public class AudienceResource {
 			JSONObject result = new JSONObject();
 			result.put("status", "ok");
 			result.put("audience_id", segment.getId());
-			return result.toJSONString();
+			return Response.status(Response.Status.OK).entity(result.toJSONString()).build();
 		} catch (InvalidSegmentException ex) {
 			JSONObject result = new JSONObject();
 			result.put("status", "error");
 			result.put("message", ex.getMessage());
-			return result.toJSONString();
+			return Response.status(Response.Status.INTERNAL_SERVER_ERROR.getStatusCode(), "Erro saving the segment.").build();
 		}
 
 	}
@@ -193,7 +195,7 @@ public class AudienceResource {
 	@PUT
 	@Produces(MediaType.APPLICATION_JSON)
 	@Consumes(MediaType.APPLICATION_JSON)
-	public String update(final Audience audience) {
+	public Response update(final Audience audience) {
 		// check existens
 		List<Segment> queryResult = segmentService.criteria()
 				.add(Restrictions.EQ.eq("externalId", audience.getExternalId()))
@@ -203,12 +205,13 @@ public class AudienceResource {
 			JSONObject result = new JSONObject();
 			result.put("status", "error");
 			result.put("message", "Audience not exists.");
-			return result.toJSONString();
+			return Response.status(Response.Status.INTERNAL_SERVER_ERROR.getStatusCode(), "Audience not exists.").build();
 		} else if (queryResult.size() > 1) {
 			JSONObject result = new JSONObject();
 			result.put("status", "error");
 			result.put("message", "Multiple audiences found.");
-			return result.toJSONString();
+//			return result.toJSONString();
+			return Response.status(Response.Status.INTERNAL_SERVER_ERROR.getStatusCode(), "Multiple audiences found.").build();
 		}
 
 		Segment segment = queryResult.get(0);
@@ -220,12 +223,12 @@ public class AudienceResource {
 			JSONObject result = new JSONObject();
 			result.put("status", "ok");
 			result.put("audience_id", segment.getId());
-			return result.toJSONString();
+			return Response.status(Response.Status.OK).entity(result.toJSONString()).build();
 		} catch (InvalidSegmentException ex) {
 			JSONObject result = new JSONObject();
 			result.put("status", "error");
 			result.put("message", ex.getMessage());
-			return result.toJSONString();
+			return Response.status(Response.Status.INTERNAL_SERVER_ERROR.getStatusCode(), "Erro updating the segment.").build();
 		}
 	}
 
