@@ -39,6 +39,12 @@ public class Segment implements LimitProvider, Serializable {
 	
 	private String content;
 	
+	/**
+	 * Die ID des Segmentes.
+	 */
+	@Field(name = "id", key = true)
+	private String id;
+	
 	@Field(name = "externalId")
 	private long externalId;
 	
@@ -49,11 +55,6 @@ public class Segment implements LimitProvider, Serializable {
 	
 	protected TimeWindow timeWindow;
 	
-	/**
-	 * Die ID des Segmentes.
-	 */
-	@Field(name = "id", key = true)
-	private String id;
 	/**
 	 * Der Name des Segmentes.
 	 */
