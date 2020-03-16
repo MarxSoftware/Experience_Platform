@@ -28,7 +28,7 @@ import com.thorstenmarx.modules.api.ModuleManager;
 import com.thorstenmarx.webtools.ContextListener;
 import com.thorstenmarx.webtools.api.actions.InvalidSegmentException;
 import com.thorstenmarx.webtools.api.actions.SegmentService;
-import com.thorstenmarx.webtools.api.actions.model.AdvancedSegment;
+import com.thorstenmarx.webtools.api.actions.model.Segment;
 import com.thorstenmarx.webtools.api.actions.model.Segment;
 import com.thorstenmarx.webtools.api.entities.criteria.Restrictions;
 import com.thorstenmarx.webtools.hosting.extensions.HostingPackageValidatorExtension;
@@ -78,7 +78,7 @@ public class AudienceResource {
 		segmentService.criteria()
 				.add(Restrictions.EQ.eq("site", site))
 				.add(Restrictions.EQ.eq("externalId", wpid))
-				.query().stream().filter(AdvancedSegment.class::isInstance).map(AdvancedSegment.class::cast).forEach((segment) -> {
+				.query().stream().forEach((segment) -> {
 			JSONObject segmentObj = toJson(segment);
 
 			result.put("segment", segmentObj);
@@ -97,14 +97,14 @@ public class AudienceResource {
 
 		segmentService.criteria()
 				.add(Restrictions.EQ.eq("site", site))
-				.query().stream().filter(AdvancedSegment.class::isInstance).map(AdvancedSegment.class::cast).map(this::toJson).forEach(segments::add);
+				.query().stream().map(this::toJson).forEach(segments::add);
 
 		result.put("segments", segments);
 
 		return result.toJSONString();
 	}
 
-	private JSONObject toJson(final AdvancedSegment segment) {
+	private JSONObject toJson(final Segment segment) {
 		JSONObject segmentObj = new JSONObject();
 		segmentObj.put("id", segment.getId());
 		segmentObj.put("external_id", segment.getExternalId());
@@ -159,7 +159,7 @@ public class AudienceResource {
 			return result.toJSONString();
 		}
 
-		AdvancedSegment segment = new AdvancedSegment();
+		Segment segment = new Segment();
 		addAttributes(segment, audience);
 
 		try {
@@ -178,10 +178,10 @@ public class AudienceResource {
 
 	}
 
-	private void addAttributes(AdvancedSegment segment, final Audience audience) {
+	private void addAttributes(Segment segment, final Audience audience) {
 		segment.setName(audience.getName());
 		segment.setActive(audience.isActive());
-		segment.setContent(audience.getDsl());
+		segment.setContent(audience.getContent());
 		segment.setExternalId(audience.getExternalId());
 		segment.setSite(audience.getSite());
 		segment.setAttributes(audience.getAttributes());
@@ -195,10 +195,10 @@ public class AudienceResource {
 	@Consumes(MediaType.APPLICATION_JSON)
 	public String update(final Audience audience) {
 		// check existens
-		List<AdvancedSegment> queryResult = segmentService.criteria()
+		List<Segment> queryResult = segmentService.criteria()
 				.add(Restrictions.EQ.eq("externalId", audience.getExternalId()))
 				.add(Restrictions.EQ.eq("site", audience.getSite()))
-				.query().stream().map(AdvancedSegment.class::cast).collect(Collectors.toList());
+				.query().stream().collect(Collectors.toList());
 		if (queryResult.isEmpty()) {
 			JSONObject result = new JSONObject();
 			result.put("status", "error");
@@ -211,7 +211,7 @@ public class AudienceResource {
 			return result.toJSONString();
 		}
 
-		AdvancedSegment segment = queryResult.get(0);
+		Segment segment = queryResult.get(0);
 		addAttributes(segment, audience);
 
 		try {

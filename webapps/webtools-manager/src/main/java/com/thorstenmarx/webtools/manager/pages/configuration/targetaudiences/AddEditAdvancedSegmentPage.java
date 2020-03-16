@@ -26,7 +26,7 @@ import com.thorstenmarx.webtools.api.actions.SegmentService;
 import com.thorstenmarx.webtools.api.actions.model.Segment;
 import com.thorstenmarx.webtools.api.TimeWindow;
 import com.thorstenmarx.webtools.api.actions.InvalidSegmentException;
-import com.thorstenmarx.webtools.api.actions.model.AdvancedSegment;
+import com.thorstenmarx.webtools.api.actions.model.Segment;
 import com.thorstenmarx.webtools.manager.pages.BasePage;
 import java.util.Arrays;
 import org.apache.wicket.Session;
@@ -71,7 +71,7 @@ public class AddEditAdvancedSegmentPage extends BasePage {
 	public AddEditAdvancedSegmentPage() {
 		super();
 		this.edit = false;
-		setDefaultModel(new Model<>(new AdvancedSegment()));
+		setDefaultModel(new Model<>(new Segment()));
 		initGui();
 	}
 
@@ -88,14 +88,14 @@ public class AddEditAdvancedSegmentPage extends BasePage {
 
 	private void initGui() {
 
-		Form<AdvancedSegment> addSegmentForm = new Form<>("addSegmentForm",
-				new CompoundPropertyModel<AdvancedSegment>((IModel<AdvancedSegment>) getDefaultModel()));
+		Form<Segment> addSegmentForm = new Form<>("addSegmentForm",
+				new CompoundPropertyModel<Segment>((IModel<Segment>) getDefaultModel()));
 		add(addSegmentForm);
 
 		Label nameLabel = new Label("nameLabel", new StringResourceModel("segmentName", this, null));
 		addSegmentForm.add(nameLabel);
 
-		Label wpidLabel = new Label("externalidLabel", Model.of(((AdvancedSegment) getDefaultModel().getObject()).getExternalId()));
+		Label wpidLabel = new Label("externalidLabel", Model.of(((Segment) getDefaultModel().getObject()).getExternalId()));
 		addSegmentForm.add(wpidLabel);
 
 		addSegmentForm.add(createLabelFieldWithValidation("name", "segmentName"));
@@ -163,8 +163,8 @@ public class AddEditAdvancedSegmentPage extends BasePage {
 	}
 
 	@SuppressWarnings("unchecked")
-	private AdvancedSegment getSegmentFromPageModel() {
-		AdvancedSegment segment = (AdvancedSegment) getDefaultModel().getObject();
+	private Segment getSegmentFromPageModel() {
+		Segment segment = (Segment) getDefaultModel().getObject();
 		segment.start(new TimeWindow(unit, unitCount));
 		segment.setActive(active);
 		return segment;

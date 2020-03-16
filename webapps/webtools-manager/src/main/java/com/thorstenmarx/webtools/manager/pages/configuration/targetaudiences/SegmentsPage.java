@@ -23,7 +23,6 @@ package com.thorstenmarx.webtools.manager.pages.configuration.targetaudiences;
  */
 import com.google.inject.Inject;
 import com.thorstenmarx.webtools.api.actions.SegmentService;
-import com.thorstenmarx.webtools.api.actions.model.AdvancedSegment;
 import com.thorstenmarx.webtools.api.actions.model.Segment;
 import com.thorstenmarx.webtools.manager.pages.BasePage;
 import java.util.ArrayList;
@@ -64,11 +63,7 @@ public class SegmentsPage extends BasePage {
 				item.add(new Label("id", new PropertyModel<>(item.getModel(), "id")));
 				
 				final Segment segment = item.getModelObject();
-				if (segment instanceof AdvancedSegment) {
-					item.add(new Label("externalId", new PropertyModel<>(item.getModel(), "externalId")));
-				} else {
-					item.add(new Label("externalId", Model.of("<none>")));
-				}
+				item.add(new Label("externalId", new PropertyModel<>(item.getModel(), "externalId")));
 				
 				Label active = new Label("active");
 				active.add(new AttributeModifier("data-toggle", "tooltip"));
@@ -89,9 +84,7 @@ public class SegmentsPage extends BasePage {
 					@Override
 					public void onClick() {
 						final Segment segment = item.getModelObject();
-						if (segment instanceof AdvancedSegment) {
-							setResponsePage(new AddEditAdvancedSegmentPage(item.getModel()));							
-						}
+						setResponsePage(new AddEditAdvancedSegmentPage(item.getModel()));
 					}
 				};
 
