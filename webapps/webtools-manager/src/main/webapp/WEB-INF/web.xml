@@ -133,19 +133,6 @@
 	</servlet>
 	
 	<servlet>
-		<!-- deprecated -->
-		<servlet-name>JsonPServlet</servlet-name>
-		<servlet-class>com.thorstenmarx.webtools.web.servlets.JsonPServlet</servlet-class>
-		<async-supported>true</async-supported>
-	</servlet>
-	<servlet>
-		<!-- deprecated -->
-		<servlet-name>ExtensionServlet</servlet-name>
-		<servlet-class>com.thorstenmarx.webtools.web.servlets.ExtensionServlet</servlet-class>
-		<async-supported>true</async-supported>
-	</servlet>
-	
-	<servlet>
 		<servlet-name>ExtensionFileServlet</servlet-name>
 		<servlet-class>com.thorstenmarx.webtools.web.servlets.ExtensionFileServlet</servlet-class>
 		<async-supported>true</async-supported>
@@ -157,14 +144,6 @@
 	<servlet-mapping>
 		<servlet-name>TrackServlet</servlet-name>
 		<url-pattern>/track</url-pattern>
-	</servlet-mapping>
-	<servlet-mapping>
-		<servlet-name>ExtensionServlet</servlet-name>
-		<url-pattern>/extension</url-pattern>
-	</servlet-mapping>
-	<servlet-mapping>
-		<servlet-name>JsonPServlet</servlet-name>
-		<url-pattern>/js/data.js</url-pattern>
 	</servlet-mapping>
 	<servlet-mapping>
 		<servlet-name>ExtensionFileServlet</servlet-name>
