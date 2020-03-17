@@ -145,9 +145,6 @@ public class AudienceResource {
 				.add(Restrictions.EQ.eq("site", audience.getSite()))
 				.query();
 		if (!queryResult.isEmpty()) {
-			JSONObject result = new JSONObject();
-			result.put("status", "error");
-			result.put("message", "Audience already exists.");
 			return update(audience);
 		}
 
@@ -175,7 +172,8 @@ public class AudienceResource {
 			JSONObject result = new JSONObject();
 			result.put("status", "error");
 			result.put("message", ex.getMessage());
-			return Response.status(Response.Status.INTERNAL_SERVER_ERROR.getStatusCode(), "Erro saving the segment.").build();
+			return Response.status(Response.Status.INTERNAL_SERVER_ERROR.getStatusCode(), "Erro saving the segment.")
+					.entity(result.toJSONString()).build();
 		}
 
 	}
@@ -205,13 +203,12 @@ public class AudienceResource {
 			JSONObject result = new JSONObject();
 			result.put("status", "error");
 			result.put("message", "Audience not exists.");
-			return Response.status(Response.Status.INTERNAL_SERVER_ERROR.getStatusCode(), "Audience not exists.").build();
+			return Response.status(Response.Status.INTERNAL_SERVER_ERROR.getStatusCode(), "Audience not exists.").entity(result.toJSONString()).build();
 		} else if (queryResult.size() > 1) {
 			JSONObject result = new JSONObject();
 			result.put("status", "error");
 			result.put("message", "Multiple audiences found.");
-//			return result.toJSONString();
-			return Response.status(Response.Status.INTERNAL_SERVER_ERROR.getStatusCode(), "Multiple audiences found.").build();
+			return Response.status(Response.Status.INTERNAL_SERVER_ERROR.getStatusCode(), "Multiple audiences found.").entity(result.toJSONString()).build();
 		}
 
 		Segment segment = queryResult.get(0);
@@ -228,7 +225,7 @@ public class AudienceResource {
 			JSONObject result = new JSONObject();
 			result.put("status", "error");
 			result.put("message", ex.getMessage());
-			return Response.status(Response.Status.INTERNAL_SERVER_ERROR.getStatusCode(), "Erro updating the segment.").build();
+			return Response.status(Response.Status.INTERNAL_SERVER_ERROR.getStatusCode(), "Erro updating the segment.").entity(result.toJSONString()).build();
 		}
 	}
 

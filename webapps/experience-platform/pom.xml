@@ -87,7 +87,7 @@
 				<version>9.4.27.v20200227</version>
 				<configuration>
 					<httpConnector>
-						<port>9090 </port>
+						<port>9191</port>
 					</httpConnector>
 					<webApp>
 						<contextPath>/test</contextPath>
