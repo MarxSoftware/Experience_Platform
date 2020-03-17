@@ -31,7 +31,7 @@ import com.thorstenmarx.modules.api.ModuleManager;
 import com.thorstenmarx.webtools.api.CoreModuleContext;
 import com.thorstenmarx.webtools.api.execution.Executor;
 import com.thorstenmarx.webtools.base.Configuration;
-import com.thorstenmarx.webtools.initializer.annotations.Infrastructure;
+import com.thorstenmarx.webtools.initializer.annotations.Common;
 import java.io.File;
 import java.io.IOException;
 import java.net.URLClassLoader;
@@ -52,16 +52,14 @@ public class SystemGuiceModule extends AbstractModule {
 
 	@Provides
 	@Singleton
-	@Infrastructure
-	protected CoreModuleContext infrastructureModuleContext (final Configuration configuration, final Executor executor, final MBassador mbassador) {
-		final CoreModuleContext coreModuleContext = new CoreModuleContext(new File("./webtools_data/infrastructure/data"), mbassador, executor);
+	protected CoreModuleContext coreModuleContext (final Configuration configuration, final Executor executor, final MBassador mbassador) {
+		final CoreModuleContext coreModuleContext = new CoreModuleContext(new File("./webtools_data/system_modules_data"), mbassador, executor);
 		
-		// config
-		Map<String, Object> node = configuration.getMap("node", Collections.EMPTY_MAP);
-		if  (node.containsKey("name")) {
-			final File configDir = new File("./webtools_data/conf");
-			coreModuleContext.put("node.name", node.get("name"));
-			coreModuleContext.put("node.config", configDir);
+		Map<String, Object> analytics = configuration.getMap("analytics", Collections.EMPTY_MAP);
+		if  (analytics.containsKey("shards")) {
+			coreModuleContext.put("analyticsdb.shard.count", analytics.get("shards"));
+		} else {
+			coreModuleContext.put("analyticsdb.shard.count", 3);
 		}
 		
 		
@@ -70,8 +68,8 @@ public class SystemGuiceModule extends AbstractModule {
 	
 	@Provides
 	@Singleton
-	@Infrastructure
-	protected ModuleManager infrastructureModuleManager(final Injector injector, @Infrastructure final CoreModuleContext context) {
+	@Common
+	protected ModuleManager coreModuleManager(final Injector injector, final CoreModuleContext context) {
 		List<String> apiPackages = new ArrayList<>();
 		apiPackages.add("com.thorstenmarx.webtools.api");
 		apiPackages.add("com.thorstenmarx.webtools.hosting");
