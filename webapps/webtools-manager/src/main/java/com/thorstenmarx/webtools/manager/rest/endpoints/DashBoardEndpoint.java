@@ -21,11 +21,9 @@ package com.thorstenmarx.webtools.manager.rest.endpoints;
  * <http://www.gnu.org/licenses/gpl-3.0.html>.
  * #L%
  */
-import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.thorstenmarx.webtools.ContextListener;
 import com.thorstenmarx.webtools.api.TimeWindow;
-import com.thorstenmarx.webtools.api.datalayer.SegmentData;
 import com.thorstenmarx.webtools.api.actions.SegmentService;
 import com.thorstenmarx.webtools.api.actions.model.Segment;
 import com.thorstenmarx.webtools.api.analytics.AnalyticsDB;
@@ -37,7 +35,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
 import java.util.concurrent.CompletableFuture;
-import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicLong;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
@@ -61,46 +58,6 @@ public class DashBoardEndpoint {
 		datalayer = ContextListener.INJECTOR_PROVIDER.injector().getInstance(DataLayer.class);
 		analyticsDb = ContextListener.INJECTOR_PROVIDER.injector().getInstance(AnalyticsDB.class);
 		segmentService = ContextListener.INJECTOR_PROVIDER.injector().getInstance(SegmentService.class);
-	}
-
-	@GET
-	@Path("segments")
-	public void segments(@Suspended AsyncResponse asyncResponse, @QueryParam("site") final String site) {
-		CompletableFuture<JSONObject> future = CompletableFuture.supplyAsync(() -> {
-			JSONObject result = new JSONObject();
-
-			Map<String, SegmentCounter> segmentCounters = new ConcurrentHashMap<>();
-			datalayer.each((uid, sd) -> {
-				final String segId = sd.getSegment().id;
-
-				if (!segmentCounters.containsKey(segId)) {
-					Segment segment = segmentService.get(segId);
-					if (segment != null) {
-						segmentCounters.put(segId, new SegmentCounter(segment));
-					}
-				}
-				if (segmentCounters.containsKey(segId)) {
-					segmentCounters.get(segId).count.incrementAndGet();
-				}
-
-			}, SegmentData.KEY, SegmentData.class);
-			
-			JSONArray segments = new JSONArray();
-			for (Map.Entry<String, SegmentCounter> entry : segmentCounters.entrySet()) {
-				JSONObject segment = new JSONObject();
-				segment.put("name", entry.getValue().segment.getName());
-				segment.put("id", entry.getValue().segment.getId());
-				segment.put("count", entry.getValue().count.get());
-				segments.add(segment);
-			}
-			result.put("segments", segments);
-
-			return result;
-		});
-		future.thenApply(
-				result -> asyncResponse.resume(result.toJSONString()))
-				.exceptionally(
-						e -> asyncResponse.resume(Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(e).build()));
 	}
 
 	@GET

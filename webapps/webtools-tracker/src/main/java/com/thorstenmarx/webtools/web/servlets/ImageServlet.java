@@ -23,6 +23,7 @@ package com.thorstenmarx.webtools.web.servlets;
  */
 import com.alibaba.fastjson.JSONObject;
 import com.google.common.base.Charsets;
+import com.google.common.base.Strings;
 import com.google.common.collect.ArrayListMultimap;
 import com.google.common.collect.Multimap;
 import com.google.common.io.CharStreams;
@@ -111,13 +112,25 @@ public class ImageServlet extends HttpServlet {
 				jsonEvent.put("data", event.get("data"));
 				jsonEvent.put("meta", event.get("meta"));
 
-				HttpResponse httpResponse = Unirest.post((String) configuration.getMap("tracking", Collections.EMPTY_MAP).getOrDefault("url", "http://localhost:8082/track")).body(jsonEvent.toJSONString()).asEmpty();
+				HttpResponse httpResponse = Unirest.post((String) configuration.getMap("tracking", Collections.EMPTY_MAP).getOrDefault("url", "http://localhost:8082/track")).body(jsonEvent.toJSONString())
+						.header("site", getParameter("site", request))
+						.asEmpty();
 			} catch (IOException ex) {
 				LOGGER.error("error sending data to storage", ex);
 			} finally {
 				asyncContext.complete();
 			}
 		});
+	}
+	
+	private String getParameter (final String name, final HttpServletRequest request) {
+		String value;
+		value = request.getHeader(name);
+		if (Strings.isNullOrEmpty(value)) {
+			value = request.getParameter(name);
+		}
+		
+		return value;
 	}
 
 	@Override
@@ -145,7 +158,9 @@ public class ImageServlet extends HttpServlet {
 				jsonEvent.put("data", event.get("data"));
 				jsonEvent.put("meta", event.get("meta"));
 
-				HttpResponse httpResponse = Unirest.post((String) configuration.getMap("tracking", Collections.EMPTY_MAP).getOrDefault("url", "http://localhost:8082/track")).body(jsonEvent.toJSONString()).asEmpty();
+				HttpResponse httpResponse = Unirest.post((String) configuration.getMap("tracking", Collections.EMPTY_MAP).getOrDefault("url", "http://localhost:8082/track"))
+						.header("site", getParameter("site", request))
+						.body(jsonEvent.toJSONString()).asEmpty();
 			} finally {
 				asyncContext.complete();
 			}

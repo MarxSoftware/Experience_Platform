@@ -31,7 +31,6 @@ import com.thorstenmarx.modules.api.ModuleManager;
 import com.thorstenmarx.webtools.ContextListener;
 import com.thorstenmarx.webtools.Fields;
 import com.thorstenmarx.webtools.api.Lookup;
-import com.thorstenmarx.webtools.api.actions.ActionSystem;
 import com.thorstenmarx.webtools.api.analytics.AnalyticsDB;
 import com.thorstenmarx.webtools.api.configuration.Configuration;
 import com.thorstenmarx.webtools.api.execution.Executor;
@@ -44,7 +43,6 @@ import com.thorstenmarx.webtools.api.location.LocationProvider;
 import com.thorstenmarx.webtools.initializer.annotations.Common;
 import com.thorstenmarx.webtools.initializer.annotations.Infrastructure;
 import com.thorstenmarx.webtools.initializer.guice.BaseGuiceModule;
-import com.thorstenmarx.webtools.initializer.guice.CommonGuiceModule;
 import com.thorstenmarx.webtools.initializer.guice.SystemGuiceModule;
 import java.util.Optional;
 import org.apache.logging.log4j.LogManager;
@@ -62,7 +60,7 @@ public class LocalActivation implements Activation {
 	@Override
 	public void initialize () {
 		Module configModule = Modules.override(new BaseGuiceModule()).with(new LocalGuiceModule());
-		Injector injector = Guice.createInjector(new SystemGuiceModule(), new CommonGuiceModule(), configModule);
+		Injector injector = Guice.createInjector(new SystemGuiceModule(), configModule);
 		
 		ContextListener.INJECTOR_PROVIDER.injector(injector);
 
@@ -97,7 +95,6 @@ public class LocalActivation implements Activation {
 		
 		// init module manager by getting the instance from guice
 		ContextListener.INJECTOR_PROVIDER.injector().getInstance(ModuleManager.class);
-		ContextListener.INJECTOR_PROVIDER.injector().getInstance(ActionSystem.class);
 	}
 	
 	@Override

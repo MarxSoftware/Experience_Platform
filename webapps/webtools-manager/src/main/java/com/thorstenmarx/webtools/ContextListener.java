@@ -21,6 +21,7 @@ package com.thorstenmarx.webtools;
  * <http://www.gnu.org/licenses/gpl-3.0.html>.
  * #L%
  */
+import com.google.common.base.Charsets;
 import com.google.inject.Injector;
 import com.thorstenmarx.webtools.base.Configuration;
 import com.thorstenmarx.webtools.initializer.Activation;
@@ -29,8 +30,11 @@ import com.thorstenmarx.webtools.initializer.LocalActivation;
 import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;
 import java.io.File;
-import java.util.Map;
-import java.util.Optional;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.util.logging.Level;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -42,35 +46,41 @@ public class ContextListener implements ServletContextListener {
 
 	private static final Logger LOGGER = LogManager.getLogger(ContextListener.class);
 
-	
 	public final static InjectorProvider INJECTOR_PROVIDER = new InjectorProvider();
 
 	public final static StateProvider STATE = new StateProvider();
-	
+
 	private Activation activation;
 
 	@Override
 	public void contextInitialized(ServletContextEvent sce) {
 		Configuration config = Configuration.getInstance(new File("webtools_data"));
-		
-		
+
 		Configuration.Config<String> modeConfig = config.getConfig("mode", String.class);
 		final String mode = modeConfig.get("local");
-			
-		
-		if ("cluster".equals(mode)){
+
+		if ("cluster".equals(mode)) {
 			activation = new ClusterActivation();
 		} else {
 			activation = new LocalActivation();
 		}
 		activation.initialize();
+
+		
+		try {
+			Path path = Paths.get("experience-platform.pid");
+			byte[] strToBytes = String.valueOf(ProcessHandle.current().pid()).getBytes(Charsets.UTF_8);
+			Files.write(path, strToBytes);
+		} catch (IOException ex) {
+			LOGGER.error("", ex);
+		}
 	}
 
 	@Override
 	public void contextDestroyed(ServletContextEvent sce) {
 		activation.destroy();
 	}
-	
+
 	public static class InjectorProvider {
 
 		Injector injector;

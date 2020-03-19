@@ -1,0 +1,153 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+
+
+	<parent>
+		<groupId>com.thorstenmarx.webtools</groupId>
+		<artifactId>webtools-parent</artifactId>
+		<version>5.0.0</version>
+		<relativePath>../../webtools-parent</relativePath>
+	</parent>
+
+	<groupId>com.thorstenmarx.webtools</groupId>
+	<artifactId>experience-platform</artifactId>
+	<version>5.0.0</version>
+	<name>experience-platform</name>
+	<description>Experience Platform</description>
+	<inceptionYear>2016</inceptionYear>
+	<packaging>war</packaging>
+	<organization>
+		<name>WP DigitalExperience</name>
+		<url>https://wp-digitalexperience.com</url>
+	</organization>
+	<properties>
+		<maven.compiler.source>13</maven.compiler.source>
+		<maven.compiler.target>13</maven.compiler.target>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+	</properties>
+	<dependencyManagement>
+		<dependencies>
+			<dependency>
+				<groupId>com.thorstenmarx.webtools</groupId>
+				<artifactId>webtools-bom</artifactId>
+				<version>5.0.0</version>
+				<scope>import</scope>
+				<type>pom</type>
+			</dependency>   
+		</dependencies>
+	</dependencyManagement>
+	<dependencies>
+		<dependency>
+			<groupId>org.testng</groupId>
+			<artifactId>testng</artifactId>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.assertj</groupId>
+			<artifactId>assertj-core</artifactId>
+			<scope>test</scope>
+		</dependency>
+	</dependencies>
+	<licenses>
+		<license>
+			<name>GNU General Public License, Version 3</name>
+			<url>http://www.gnu.org/licenses/gpl-3.0.html</url>
+			<distribution>repo</distribution>
+		</license>
+	</licenses>
+	<developers>
+		<developer>
+			<id>thmarx</id>
+			<name>Thorsten Marx</name>
+			<email>thorsten.marx.1@gmail.com</email>
+			<url>https://thorstenmarx.com</url>
+		</developer>
+	</developers>
+	<url>https://thorstenmarx.com/projects/webtools/</url>
+	<scm>
+		<url>git@bitbucket.org:thmarx/webtools.git</url>
+		<tag>v2.2.0</tag>
+	</scm>
+	<build>
+		<resources>
+			<resource>
+				<directory>src/main/resources</directory>
+				<filtering>false</filtering>
+			</resource>
+			<resource>
+				<directory>src/main/resources-filtered</directory>
+				<filtering>true</filtering>
+			</resource>
+		</resources>
+		<plugins>
+			<plugin>
+				<groupId>org.eclipse.jetty</groupId>
+				<artifactId>jetty-maven-plugin</artifactId>
+				<version>9.4.27.v20200227</version>
+				<configuration>
+					<httpConnector>
+						<port>9191</port>
+					</httpConnector>
+					<webApp>
+						<contextPath>/test</contextPath>
+					</webApp>
+					<scanIntervalSeconds>0</scanIntervalSeconds>
+					<contextHandlers>
+						<contextHandler implementation="org.eclipse.jetty.maven.plugin.JettyWebAppContext">
+							<war>${basedir}/../webtools-manager/target/webtools-manager-${project.version}.war</war>
+							<contextPath>/</contextPath>
+							<allowNullPathInfo>true</allowNullPathInfo>
+						</contextHandler>
+						<contextHandler implementation="org.eclipse.jetty.maven.plugin.JettyWebAppContext">
+							<war>${basedir}/../webtools-tracker/target/webtools-tracker-${project.version}.war</war>
+							<contextPath>/tracking</contextPath>
+							<allowNullPathInfo>true</allowNullPathInfo>
+						</contextHandler>
+					</contextHandlers>
+				</configuration>
+                                
+				<dependencies>
+					<dependency>
+						<groupId>javax.xml.bind</groupId>
+						<artifactId>jaxb-api</artifactId>
+						<version>2.4.0-b180830.0359</version>
+					</dependency>
+					<!--dependency>
+						<groupId>org.glassfish.jaxb</groupId>
+						<artifactId>jaxb-runtime</artifactId>
+						<version>2.4.0-b180830.0438</version>
+					</dependency-->
+					<dependency>
+						<groupId>javax.activation</groupId>
+						<artifactId>activation</artifactId>
+						<version>1.1.1</version>
+					</dependency>
+		   
+				</dependencies>
+			</plugin>
+			
+		</plugins>
+	</build>
+	<profiles>
+		<profile>
+			<id>failsafe</id>
+			<build>
+				<plugins>
+					<plugin>
+						<artifactId>maven-failsafe-plugin</artifactId>
+						<version>2.22.0</version>
+						<executions>
+							<execution>
+								<goals>
+									<goal>integration-test</goal>
+									<goal>verify</goal>
+								</goals>
+							</execution>
+						</executions>
+					</plugin>
+				</plugins>
+			</build>
+		</profile>
+	</profiles>
+</project>

@@ -38,22 +38,10 @@ public interface DataLayer {
 	@API(since = "3.1.0", status=API.Status.Stable)
 	public <T extends Data> Optional<T> get(final String uid, final String key, Class<T> clazz);
 	
-	@Deprecated
-	@API(since = "3.1.0", status=API.Status.Deprecated, toRemove = "4.1.0")
-	public <T extends Data> Optional<List<T>> list (final String uid, final String key, Class<T> clazz);
-	
 	boolean add(final String uid, final String key, final Data value);
 	
 	public boolean exists(final String uid, final String key);
 	
 	public void remove(final String uid, final String key);
-	
-	@Deprecated
-	@API(since = "3.1.0", status=API.Status.Deprecated, toRemove = "4.1.0")
-	public void clear (final String key);
-	
-	@Deprecated
-	@API(since = "3.1.0", status=API.Status.Deprecated, toRemove = "4.1.0")
-	<T extends Data> void each (BiConsumer<String, T> consumer, String key, Class<T> clazz);
 	
 }

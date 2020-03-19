@@ -3,7 +3,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>com.thorstenmarx.webtools</groupId>
 	<artifactId>webtools-parent</artifactId>
-	<version>4.3.1</version>
+	<version>5.0.0</version>
 	<name>webtools-parent</name>
 	<description>webtools parent project</description>
 	<packaging>pom</packaging>
@@ -19,6 +19,7 @@
 		<module>../webtools-incubator</module>
 		<module>../webapps/webtools-manager</module>        
 		<module>../webapps/webtools-tracker</module>        
+		<module>../webapps/experience-platform</module>        
 	</modules>
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>

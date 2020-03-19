@@ -37,7 +37,7 @@ public class Audience {
 	private String name;
 	private long externalId;
 	private String site;
-	private String dsl = "";
+	private String content = "";
 	private boolean active = false;
 	private Map<String, Object> attributes = new HashMap<>();
 	
@@ -97,12 +97,12 @@ public class Audience {
 		this.externalId = externalId;
 	}
 
-	public String getDsl() {
-		return dsl;
+	public String getContent() {
+		return content;
 	}
 
-	public void setDsl(String dsl) {
-		this.dsl = dsl;
+	public void setContent(String content) {
+		this.content = content;
 	}
 	
 	public static class Period {

@@ -25,7 +25,8 @@ import com.google.inject.Inject;
 import com.thorstenmarx.webtools.api.actions.SegmentService;
 import com.thorstenmarx.webtools.api.actions.model.Segment;
 import com.thorstenmarx.webtools.api.TimeWindow;
-import com.thorstenmarx.webtools.api.actions.model.AdvancedSegment;
+import com.thorstenmarx.webtools.api.actions.InvalidSegmentException;
+import com.thorstenmarx.webtools.api.actions.model.Segment;
 import com.thorstenmarx.webtools.manager.pages.BasePage;
 import java.util.Arrays;
 import org.apache.wicket.Session;
@@ -48,9 +49,13 @@ import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.model.StringResourceModel;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class AddEditAdvancedSegmentPage extends BasePage {
 
+	private static final Logger LOGGER = LoggerFactory.getLogger(AddEditAdvancedSegmentPage.class);
+	
 	@Inject
 	transient private SegmentService service;
 
@@ -60,13 +65,13 @@ public class AddEditAdvancedSegmentPage extends BasePage {
 
 	TimeWindow.UNIT unit;
 	long unitCount;
-	
+
 	boolean active = false;
-	
+
 	public AddEditAdvancedSegmentPage() {
 		super();
 		this.edit = false;
-		setDefaultModel(new Model<>(new AdvancedSegment()));
+		setDefaultModel(new Model<>(new Segment()));
 		initGui();
 	}
 
@@ -81,25 +86,24 @@ public class AddEditAdvancedSegmentPage extends BasePage {
 		initGui();
 	}
 
-
 	private void initGui() {
 
-		Form<AdvancedSegment> addSegmentForm = new Form<>("addSegmentForm",
-				new CompoundPropertyModel<AdvancedSegment>((IModel<AdvancedSegment>) getDefaultModel()));
+		Form<Segment> addSegmentForm = new Form<>("addSegmentForm",
+				new CompoundPropertyModel<Segment>((IModel<Segment>) getDefaultModel()));
 		add(addSegmentForm);
 
 		Label nameLabel = new Label("nameLabel", new StringResourceModel("segmentName", this, null));
 		addSegmentForm.add(nameLabel);
-		
-		Label wpidLabel = new Label("externalidLabel", Model.of(((AdvancedSegment)getDefaultModel().getObject()).getExternalId()));
+
+		Label wpidLabel = new Label("externalidLabel", Model.of(((Segment) getDefaultModel().getObject()).getExternalId()));
 		addSegmentForm.add(wpidLabel);
-		
+
 		addSegmentForm.add(createLabelFieldWithValidation("name", "segmentName"));
-		
+
 		TextField<String> idField = new HiddenField<>("id");
 		idField.setLabel(new StringResourceModel("segmentId", this, null));
 		addSegmentForm.add(idField);
-		
+
 		Label activeLabel = new Label("activeLabel", new StringResourceModel("segmentActive", this, null));
 		addSegmentForm.add(activeLabel);
 		CheckBox activeCheckbox = new CheckBox("segmentActive", new PropertyModel<>(this, "active"));
@@ -120,8 +124,13 @@ public class AddEditAdvancedSegmentPage extends BasePage {
 			public void onSubmit() {
 				Segment segment = getSegmentFromPageModel();
 
-				service.add(segment);
-				getSession().info(new StringResourceModel("segmentUpdated", this, null).getString());
+				try {
+					service.add(segment);
+					getSession().info(new StringResourceModel("segmentUpdated", this, null).getString());
+				} catch (InvalidSegmentException ex) {
+					LOGGER.error("error saving segment", ex);
+					getSession().info(getString("dsltextarea.error"));
+				}
 
 				setResponsePage(new SegmentsPage());
 			}
@@ -138,12 +147,12 @@ public class AddEditAdvancedSegmentPage extends BasePage {
 		addSegmentForm.add(cancelButton);
 
 		final TextArea dslTextArea = new TextArea("dsltextarea", new PropertyModel<>(getDefaultModel(), "content"));
-		dslTextArea.add(new DSLScriptValidator(getString("dsltextarea.error")));
+//		dslTextArea.add(new DSLScriptValidator(getString("dsltextarea.error")));
 		addSegmentForm.add(dslTextArea);
-		
+
 		Session.get().getFeedbackMessages().clear();
 		addSegmentForm.add(new FeedbackPanel("feedback"));
-		
+
 	}
 
 	private RequiredTextField<String> createLabelFieldWithValidation(String id, String property) {
@@ -154,8 +163,8 @@ public class AddEditAdvancedSegmentPage extends BasePage {
 	}
 
 	@SuppressWarnings("unchecked")
-	private AdvancedSegment getSegmentFromPageModel() {
-		AdvancedSegment segment = (AdvancedSegment) getDefaultModel().getObject();
+	private Segment getSegmentFromPageModel() {
+		Segment segment = (Segment) getDefaultModel().getObject();
 		segment.start(new TimeWindow(unit, unitCount));
 		segment.setActive(active);
 		return segment;
@@ -179,8 +188,8 @@ public class AddEditAdvancedSegmentPage extends BasePage {
 
 	@Override
 	public void renderHead(IHeaderResponse response) {
-		super.renderHead(response); 
-        response.render(JavaScriptHeaderItem.forUrl("https://cdnjs.cloudflare.com/ajax/libs/ace/1.4.1/ace.js"));
+		super.renderHead(response);
+		response.render(JavaScriptHeaderItem.forUrl("https://cdnjs.cloudflare.com/ajax/libs/ace/1.4.7/ace.js"));
 	}
 
 	public boolean isActive() {
@@ -190,10 +199,10 @@ public class AddEditAdvancedSegmentPage extends BasePage {
 	public void setActive(boolean active) {
 		this.active = active;
 	}
-	
+
 	@Override
-	public String getTitle () {
+	public String getTitle() {
 		return getString("pages.segment.advanced.edit.title");
 	}
-	
+
 }

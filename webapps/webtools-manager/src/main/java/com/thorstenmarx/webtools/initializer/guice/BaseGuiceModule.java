@@ -37,7 +37,7 @@ import com.thorstenmarx.webtools.api.configuration.Registry;
 import com.thorstenmarx.webtools.api.entities.Entities;
 import com.thorstenmarx.webtools.api.execution.Executor;
 import com.thorstenmarx.webtools.api.extensions.EventSourceProvidingExtension;
-import com.thorstenmarx.webtools.api.extensions.core.CoreActionSystemExtension;
+import com.thorstenmarx.webtools.api.extensions.core.CoreSegmentationExtension;
 import com.thorstenmarx.webtools.api.message.MessageStream;
 import com.thorstenmarx.webtools.base.Configuration;
 import com.thorstenmarx.webtools.impl.eventsource.EventSources;
@@ -110,6 +110,7 @@ public class BaseGuiceModule extends AbstractModule {
 	protected ModuleManager moduleManager(final AnalyticsDB analyticsDB, final SegmentService segmentService, final MBassador mBassador, final Entities entities, final Registry registry, final Injector injector) {
 		List<String> apiPackages = new ArrayList<>();
 		apiPackages.add("com.thorstenmarx.webtools.api");
+		apiPackages.add("com.thorstenmarx.webtools.hosting");
 		apiPackages.add("com.thorstenmarx.webtools.collection");
 		apiPackages.add("com.thorstenmarx.webtools.streams");
 		apiPackages.add("net.engio.mbassy");
@@ -160,7 +161,7 @@ public class BaseGuiceModule extends AbstractModule {
 	@Provides
 	@Singleton
 	protected SegmentService segmentService(final @Common ModuleManager moduleManager) {
-		final List<CoreActionSystemExtension> extensions = moduleManager.extensions(CoreActionSystemExtension.class);
+		final List<CoreSegmentationExtension> extensions = moduleManager.extensions(CoreSegmentationExtension.class);
 		return extensions.get(0).getSegmentService();
 	}
 

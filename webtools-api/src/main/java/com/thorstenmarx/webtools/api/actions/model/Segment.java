@@ -21,56 +21,52 @@ package com.thorstenmarx.webtools.api.actions.model;
  * <http://www.gnu.org/licenses/gpl-3.0.html>.
  * #L%
  */
-import com.alibaba.fastjson.JSONArray;
-import com.alibaba.fastjson.JSONObject;
 import com.thorstenmarx.webtools.api.TimeWindow;
 import com.thorstenmarx.webtools.api.analytics.query.LimitProvider;
-import com.thorstenmarx.webtools.api.actions.model.rules.EventRule;
-import com.thorstenmarx.webtools.api.actions.model.rules.PageViewRule;
-import com.thorstenmarx.webtools.api.actions.model.rules.ScoreRule;
-import com.thorstenmarx.webtools.api.annotations.API;
 import com.thorstenmarx.webtools.api.entities.annotations.Entity;
 import com.thorstenmarx.webtools.api.entities.annotations.Field;
 import java.io.Serializable;
-import java.util.HashSet;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Objects;
-import java.util.Set;
-import java.util.UUID;
 
 /**
- * Ein Segment entspricht in etwa eine Zielgruppe.
- *
- * Ein User wird einem Segment zugeordnet, sobald er alle Regeln eines RuleSets erfüllt.
  *
  * @author thmarx
  */
-
 @Entity(type = "segment")
-@Deprecated(since = "3.1.0")
-@API(status = API.Status.Deprecated, since = "2.0.0", toRemove = "4.0.0")
 public class Segment implements LimitProvider, Serializable {
-
-	protected TimeWindow timeWindow;
+	
+	private String content;
 	
 	/**
 	 * Die ID des Segmentes.
 	 */
 	@Field(name = "id", key = true)
 	private String id;
+	
+	@Field(name = "externalId")
+	private long externalId;
+	
+	@Field(name = "site")
+	private String site;
+	
+	private Map<String, Object> attributes;
+	
+	protected TimeWindow timeWindow;
+	
 	/**
 	 * Der Name des Segmentes.
 	 */
 	private String name;
-
-	private HashSet<Rule> rules = new HashSet<>();
-
-	private String content;
 	
 	private boolean active;
 	
-	public Segment() {
+	public Segment () {
+		attributes = new HashMap<>();
 	}
 
+	
 	public boolean isActive() {
 		return active;
 	}
@@ -78,30 +74,7 @@ public class Segment implements LimitProvider, Serializable {
 	public void setActive(boolean active) {
 		this.active = active;
 	}
-
-	 
 	
-	public Set<Rule> rules() {
-		return rules;
-	}
-
-	public void removeRule(final String id) {
-		for (Rule r : rules) {
-			if (r.id().equals(id)) {
-				rules.remove(r);
-				break;
-			}
-		}
-	}
-
-	public Segment addRule(Rule rule) {
-		if (rule.id() == null) {
-			rule.id(UUID.randomUUID().toString());
-		}
-		rules.add(rule);
-		return this;
-	}
-
 	@Override
 	public long start() {
 		long now = System.currentTimeMillis();
@@ -115,42 +88,12 @@ public class Segment implements LimitProvider, Serializable {
 	public TimeWindow startTimeWindow() {
 		return this.timeWindow;
 	}
-
-	/**
-	 *
-	 * @return
-	 */
 	@Override
 	public long end() {
 		// we use the current date
 		return System.currentTimeMillis();
 	}
-
-	@Override
-	public int hashCode() {
-		int hash = 7;
-		hash = 61 * hash + Objects.hashCode(this.id);
-		return hash;
-	}
-
-	@Override
-	public boolean equals(Object obj) {
-		if (this == obj) {
-			return true;
-		}
-		if (obj == null) {
-			return false;
-		}
-		if (getClass() != obj.getClass()) {
-			return false;
-		}
-		final Segment other = (Segment) obj;
-		if (!Objects.equals(this.id, other.id)) {
-			return false;
-		}
-		return true;
-	}
-
+	
 	public TimeWindow getTimeWindow() {
 		return timeWindow;
 	}
@@ -177,83 +120,72 @@ public class Segment implements LimitProvider, Serializable {
 		this.name = name;
 		return this;
 	}
-
-	public HashSet<Rule> getRules() {
-		return rules;
+	
+	public Map<String, Object> getAttributes() {
+		return attributes;
 	}
 
-	public Segment setRules(HashSet<Rule> rules) {
-		this.rules = rules;
-		return this;
+	public void setAttributes(Map<String, Object> attributes) {
+		this.attributes = attributes;
 	}
 
+	
+
+	public long getExternalId() {
+		return externalId;
+	}
+
+	public void setExternalId(long externalId) {
+		this.externalId = externalId;
+	}
+
+	public String getSite() {
+		return site;
+	}
+
+	public void setSite(String site) {
+		this.site = site;
+	}
+
+	
+	
 	public String getContent() {
 		return content;
 	}
 
-	public Segment setContent(String content) {
+	public void setContent(String content) {
 		this.content = content;
-		return this;
-	}
-	
-	
-	
-	public JSONObject toJson () {
-		JSONObject jsonObject = new JSONObject();
-		
-		jsonObject.put("id", getId());
-		jsonObject.put("name", getName());
-		
-		if (timeWindow != null) {
-			JSONObject timeunit = new JSONObject();
-			timeunit.put("name", timeWindow.getUnit().name());
-			timeunit.put("count", timeWindow.getCount());
-			jsonObject.put("timewindow", timeunit);
-		}
-		
-		JSONArray rulesArray = new JSONArray();
-		rules.forEach((rule) -> {
-			rulesArray.add(rule.toJson());
-		});
-		jsonObject.put("rules", rulesArray);
-		
-		return jsonObject;
-	}
-	
-	public static Segment fromJson (final JSONObject jsonSegment) {
-		Segment segment = new Segment();
-		
-		segment.setId(jsonSegment.getString("id"));
-		segment.setName(jsonSegment.getString("name"));
-		
-		if (jsonSegment.containsKey("timewindow")) {
-			JSONObject jsonTimeUnit = jsonSegment.getJSONObject("timewindow");
-			TimeWindow timeunit = new TimeWindow(TimeWindow.UNIT.valueOf(jsonTimeUnit.getString("name")), jsonTimeUnit.getIntValue("count"));
-			segment.timeWindow = timeunit;
-		}
-		
-		if (jsonSegment.containsKey("rules")) {
-			jsonSegment.getJSONArray("rules").stream().map(JSONObject.class::cast).forEach(jsonRule -> {
-				Rule rule = null;
-				if (jsonRule.getString("type").equals("score")) {
-					rule = ScoreRule.fromJson(jsonRule);
-				} else if (jsonRule.getString("type").equals("event")) {
-					rule = EventRule.fromJson(jsonRule);
-				} else if (jsonRule.getString("type").equals("pageview")) {
-					rule = PageViewRule.fromJson(jsonRule);
-				}
-				if (rule != null) {
-					segment.addRule(rule);
-				}
-			});
-		}
-		
-		return segment;
 	}
 
 	@Override
-	public String toString() {
-		return "[Segment " + name + " / " + id + " ]";
+	public int hashCode() {
+		int hash = 7;
+		hash = 97 * hash + Objects.hashCode(this.id);
+		hash = 97 * hash + Objects.hashCode(this.site);
+		return hash;
 	}
 
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj) {
+			return true;
+		}
+		if (obj == null) {
+			return false;
+		}
+		if (getClass() != obj.getClass()) {
+			return false;
+		}
+		final Segment other = (Segment) obj;
+		if (!Objects.equals(this.getId(), other.getId())) {
+			return false;
+		}
+		if (!Objects.equals(this.getSite(), other.getSite())) {
+			return false;
+		}
+		return true;
+	}
+	
+	
+	
 }

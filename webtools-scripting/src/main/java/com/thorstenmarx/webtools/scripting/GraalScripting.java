@@ -21,6 +21,7 @@ package com.thorstenmarx.webtools.scripting;
  * <http://www.gnu.org/licenses/gpl-3.0.html>.
  * #L%
  */
+import com.oracle.truffle.js.runtime.JSRealm;
 import com.thorstenmarx.webtools.scripting.graal.require.RequireFunction;
 import delight.graaljssandbox.GraalSandbox;
 import delight.graaljssandbox.GraalSandboxes;
@@ -63,6 +64,7 @@ public class GraalScripting implements Scripting<ScriptContext> {
 		sandbox = GraalSandboxes.create();
 		sandbox.allowPrintFunctions(true);
 		sandbox.allow(System.class);
+		sandbox.allow(JSRealm.class);
 		allowedClasses.forEach(sandbox::allow);
 	}
 
@@ -104,11 +106,11 @@ public class GraalScripting implements Scripting<ScriptContext> {
 			ScriptContext context = new SimpleScriptContext();
 //			final Bindings engineBindings = scriptEngine.createBindings();
 			final Bindings engineBindings = sandbox.createNewBindings();
-//			engineBindings.put("polyglot.js.allowAllAccess", true);
+			engineBindings.put("polyglot.js.allowAllAccess", true);
 			context.setBindings(engineBindings, ScriptContext.ENGINE_SCOPE);
 //			final Bindings globalBindings = scriptEngine.createBindings();
 			final Bindings globalBindings = sandbox.createNewBindings();
-//			globalBindings.put("polyglot.js.allowAllAccess", true);
+			globalBindings.put("polyglot.js.allowAllAccess", true);
 			context.setBindings(globalBindings, ScriptContext.GLOBAL_SCOPE);
 			
 

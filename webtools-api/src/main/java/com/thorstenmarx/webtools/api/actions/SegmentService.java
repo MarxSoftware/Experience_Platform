@@ -32,7 +32,7 @@ import java.util.EventObject;
  */
 public interface SegmentService {
 
-	void add(Segment segment);
+	void add(Segment segment) throws InvalidSegmentException;
 
 	void addEventListener(final ChangedEventListener listener);
 

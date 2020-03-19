@@ -22,11 +22,8 @@ package com.thorstenmarx.webtools.api.datalayer;
  * #L%
  */
 
-import com.thorstenmarx.webtools.stream.ImmutableCollectionCollectors;
 import java.io.Serializable;
-import java.util.HashSet;
 import java.util.Objects;
-import java.util.Set;
 
 
 /**

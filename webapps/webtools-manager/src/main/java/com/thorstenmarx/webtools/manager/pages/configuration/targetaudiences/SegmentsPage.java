@@ -23,26 +23,34 @@ package com.thorstenmarx.webtools.manager.pages.configuration.targetaudiences;
  */
 import com.google.inject.Inject;
 import com.thorstenmarx.webtools.api.actions.SegmentService;
-import com.thorstenmarx.webtools.api.actions.model.AdvancedSegment;
 import com.thorstenmarx.webtools.api.actions.model.Segment;
+import com.thorstenmarx.webtools.api.analytics.Fields;
+import com.thorstenmarx.webtools.api.entities.criteria.Criteria;
+import com.thorstenmarx.webtools.api.entities.criteria.Restrictions;
+import com.thorstenmarx.webtools.api.model.Site;
 import com.thorstenmarx.webtools.manager.pages.BasePage;
+import com.thorstenmarx.webtools.manager.wicket.components.sitefilter.SiteFilter;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.function.Consumer;
 import org.apache.wicket.AttributeModifier;
+import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.link.Link;
 import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.model.LoadableDetachableModel;
-import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
 
-public class SegmentsPage extends BasePage {
+public class SegmentsPage extends BasePage implements Consumer<SiteFilter.SelectionChangedEvent> {
 
 	private static final long serialVersionUID = -2053979078406890879L;
 
 	@Inject
 	transient private SegmentService service;
+	
+	private SiteFilter siteFilter;
+	private SegmentsPanel segmentsPanel;
 	
 	public SegmentsPage() {
 		super();
@@ -51,63 +59,23 @@ public class SegmentsPage extends BasePage {
 	}
 
 	private void initGui() {
-		addSegmentsmodule();
+		
+		siteFilter = new SiteFilter("sitefilter", this);
+		segmentsPanel = new SegmentsPanel("segments");
+		segmentsPanel.setOutputMarkupId(true);
+		add(siteFilter);
+		add(segmentsPanel);
+
 		addCreateNewSegmentLink();
 	}
 
-	private void addSegmentsmodule() {
-		ListView<Segment> segmentsView = new ListView<Segment>("segments", createModelForSegments()) {
-			private static final long serialVersionUID = 9101744072914090143L;
-			@Override
-			protected void populateItem(final ListItem<Segment> item) {
-				item.add(new Label("name", new PropertyModel<>(item.getModel(), "name")));
-				item.add(new Label("id", new PropertyModel<>(item.getModel(), "id")));
-				
-				final Segment segment = item.getModelObject();
-				if (segment instanceof AdvancedSegment) {
-					item.add(new Label("externalId", new PropertyModel<>(item.getModel(), "externalId")));
-				} else {
-					item.add(new Label("externalId", Model.of("<none>")));
-				}
-				
-				Label active = new Label("active");
-				active.add(new AttributeModifier("data-toggle", "tooltip"));
-				active.add(new AttributeModifier(" data-placement", "top"));
-				if (item.getModelObject().isActive()) {
-					active.add(new AttributeModifier("class", "fa fa-play"));					
-					active.add(new AttributeModifier("title", getString("tooltip.active")));
-					active.add(new AttributeModifier("style", "color: red;"));
-				} else {
-					active.add(new AttributeModifier("class", "fa fa-pause"));
-					active.add(new AttributeModifier("title", getString("tooltip.inactive")));
-					active.add(new AttributeModifier("style", "color: green;"));
-				}
-				item.add(active);
-
-				Link<BasePage> editSegmentLink = new Link<BasePage>("editSegmentLink") {
-					private static final long serialVersionUID = -4331619903296515985L;
-					@Override
-					public void onClick() {
-						final Segment segment = item.getModelObject();
-						if (segment instanceof AdvancedSegment) {
-							setResponsePage(new AddEditAdvancedSegmentPage(item.getModel()));							
-						}
-					}
-				};
-
-				item.add(editSegmentLink);
-				item.add(new RemoveSegmentLink("removeSegmentLink", item.getModelObject()));
-			}
-		};
-
-		segmentsView.setVisible(!segmentsView.getList().isEmpty());
-		add(segmentsView);
-
-		Label noSegmentsLabel = new Label("noSegmentsLabel", "There are no segments in the database. Maybe you can add one?");
-		noSegmentsLabel.setVisible(!segmentsView.isVisible());
-		add(noSegmentsLabel);
-
+	@Override
+	public void accept(SiteFilter.SelectionChangedEvent event) {
+		
+		segmentsPanel.setSelectedSite(event.site());
+		event.target().add(segmentsPanel);
 	}
+
 
 	private LoadableDetachableModel<List<Segment>> createModelForSegments() {
 
@@ -115,7 +83,12 @@ public class SegmentsPage extends BasePage {
 			private static final long serialVersionUID = 5275935387613157437L;
 			@Override
 			protected List<Segment> load() {
-				return new ArrayList<>(service.all());
+				if (siteFilter.getSelectedSite() != null) {
+					Criteria<Segment> add = service.criteria().add(Restrictions.EQ.eq(Fields.Site.value(), siteFilter.getSelectedSite().getId()));
+					return new ArrayList<>(add.query());
+				} else {
+					return new ArrayList<>(service.all());
+				}
 			}
 
 		};

@@ -24,13 +24,17 @@ package com.thorstenmarx.webtools.web.rest.resources.secured.targetaudience;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.google.common.base.Strings;
+import com.thorstenmarx.modules.api.ModuleManager;
 import com.thorstenmarx.webtools.ContextListener;
-import com.thorstenmarx.webtools.api.actions.ActionSystem;
+import com.thorstenmarx.webtools.api.actions.InvalidSegmentException;
 import com.thorstenmarx.webtools.api.actions.SegmentService;
-import com.thorstenmarx.webtools.api.actions.model.AdvancedSegment;
+import com.thorstenmarx.webtools.api.actions.model.Segment;
 import com.thorstenmarx.webtools.api.actions.model.Segment;
 import com.thorstenmarx.webtools.api.entities.criteria.Restrictions;
+import com.thorstenmarx.webtools.hosting.extensions.HostingPackageValidatorExtension;
+import com.thorstenmarx.webtools.web.hosting.HostingPackageEvaluator;
 import java.util.List;
+import java.util.logging.Level;
 import java.util.stream.Collectors;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
@@ -41,6 +45,7 @@ import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -54,11 +59,15 @@ public class AudienceResource {
 	private static final Logger LOGGER = LogManager.getLogger(AudienceResource.class);
 
 	private final SegmentService segmentService;
-	private final ActionSystem actionSystem;
+	private final ModuleManager moduleManager;
+
+	private final HostingPackageEvaluator hostingPackageEvaluator;
 
 	public AudienceResource() {
 		this.segmentService = ContextListener.INJECTOR_PROVIDER.injector().getInstance(SegmentService.class);
-		this.actionSystem = ContextListener.INJECTOR_PROVIDER.injector().getInstance(ActionSystem.class);
+		this.moduleManager = ContextListener.INJECTOR_PROVIDER.injector().getInstance(ModuleManager.class);
+
+		this.hostingPackageEvaluator = new HostingPackageEvaluator(moduleManager);
 	}
 
 	@GET
@@ -70,7 +79,7 @@ public class AudienceResource {
 		segmentService.criteria()
 				.add(Restrictions.EQ.eq("site", site))
 				.add(Restrictions.EQ.eq("externalId", wpid))
-				.query().stream().filter(AdvancedSegment.class::isInstance).map(AdvancedSegment.class::cast).forEach((segment) -> {
+				.query().stream().forEach((segment) -> {
 			JSONObject segmentObj = toJson(segment);
 
 			result.put("segment", segmentObj);
@@ -89,14 +98,14 @@ public class AudienceResource {
 
 		segmentService.criteria()
 				.add(Restrictions.EQ.eq("site", site))
-				.query().stream().filter(AdvancedSegment.class::isInstance).map(AdvancedSegment.class::cast).map(this::toJson).forEach(segments::add);
+				.query().stream().map(this::toJson).forEach(segments::add);
 
 		result.put("segments", segments);
 
 		return result.toJSONString();
 	}
 
-	private JSONObject toJson(final AdvancedSegment segment) {
+	private JSONObject toJson(final Segment segment) {
 		JSONObject segmentObj = new JSONObject();
 		segmentObj.put("id", segment.getId());
 		segmentObj.put("external_id", segment.getExternalId());
@@ -129,42 +138,57 @@ public class AudienceResource {
 	@POST
 	@Produces(MediaType.APPLICATION_JSON)
 	@Consumes(MediaType.APPLICATION_JSON)
-	public String create(final Audience audience) {
+	public Response create(final Audience audience) {
 		// check existens
 		List<?> queryResult = segmentService.criteria()
 				.add(Restrictions.EQ.eq("externalId", audience.getExternalId()))
 				.add(Restrictions.EQ.eq("site", audience.getSite()))
 				.query();
 		if (!queryResult.isEmpty()) {
-			JSONObject result = new JSONObject();
-			result.put("status", "error");
-			result.put("message", "Audience already exists.");
 			return update(audience);
 		}
-		ValidationResult validation = internal_validate(audience.getDsl());
-		if (!validation.valid) {
+
+		// validate the allowed amount of segmentes allowed for this
+		final String site = audience.getSite();
+		if (Strings.isNullOrEmpty(site)) {
 			JSONObject result = new JSONObject();
 			result.put("status", "error");
-			result.put("message", validation.message);
-
-			return result.toJSONString();
+			result.put("message", "Site parameter is not set.");
+			return Response.status(Response.Status.FORBIDDEN.getStatusCode(), "Site parameter is not set.")
+					.entity(result.toJSONString()).build();
+		}
+		if (!hostingPackageEvaluator.is_action_allowed(site, HostingPackageValidatorExtension.Action.CREATE_SEGMENTE)) {
+			JSONObject result = new JSONObject();
+			result.put("status", "error");
+			result.put("message", "Your maximum number of segments is reached.");
+			return Response.status(Response.Status.FORBIDDEN.getStatusCode(), "Your maximum number of segments is reached.")
+					.entity(result.toJSONString()).build();
 		}
 
-		AdvancedSegment segment = new AdvancedSegment();
+		Segment segment = new Segment();
 		addAttributes(segment, audience);
 
-		segmentService.add(segment);
+		try {
+			segmentService.add(segment);
 
-		JSONObject result = new JSONObject();
-		result.put("status", "ok");
-		result.put("audience_id", segment.getId());
-		return result.toJSONString();
+			JSONObject result = new JSONObject();
+			result.put("status", "ok");
+			result.put("audience_id", segment.getId());
+			return Response.status(Response.Status.OK).entity(result.toJSONString()).build();
+		} catch (InvalidSegmentException ex) {
+			JSONObject result = new JSONObject();
+			result.put("status", "error");
+			result.put("message", ex.getMessage());
+			return Response.status(Response.Status.INTERNAL_SERVER_ERROR.getStatusCode(), "Erro saving the segment.")
+					.entity(result.toJSONString()).build();
+		}
+
 	}
 
-	private void addAttributes(AdvancedSegment segment, final Audience audience) {
+	private void addAttributes(Segment segment, final Audience audience) {
 		segment.setName(audience.getName());
 		segment.setActive(audience.isActive());
-		segment.setContent(audience.getDsl());
+		segment.setContent(audience.getContent());
 		segment.setExternalId(audience.getExternalId());
 		segment.setSite(audience.getSite());
 		segment.setAttributes(audience.getAttributes());
@@ -176,73 +200,41 @@ public class AudienceResource {
 	@PUT
 	@Produces(MediaType.APPLICATION_JSON)
 	@Consumes(MediaType.APPLICATION_JSON)
-	public String update(final Audience audience) {
+	public Response update(final Audience audience) {
 		// check existens
-		List<AdvancedSegment> queryResult = segmentService.criteria()
+		List<Segment> queryResult = segmentService.criteria()
 				.add(Restrictions.EQ.eq("externalId", audience.getExternalId()))
 				.add(Restrictions.EQ.eq("site", audience.getSite()))
-				.query().stream().map(AdvancedSegment.class::cast).collect(Collectors.toList());
+				.query().stream().collect(Collectors.toList());
 		if (queryResult.isEmpty()) {
 			JSONObject result = new JSONObject();
 			result.put("status", "error");
 			result.put("message", "Audience not exists.");
-			return result.toJSONString();
+			return Response.status(Response.Status.INTERNAL_SERVER_ERROR.getStatusCode(), "Audience not exists.").entity(result.toJSONString()).build();
 		} else if (queryResult.size() > 1) {
 			JSONObject result = new JSONObject();
 			result.put("status", "error");
 			result.put("message", "Multiple audiences found.");
-			return result.toJSONString();
-		}
-		ValidationResult validation = internal_validate(audience.getDsl());
-		if (!validation.valid) {
-			JSONObject result = new JSONObject();
-			result.put("status", "error");
-			result.put("message", validation.message);
-
-			return result.toJSONString();
+			return Response.status(Response.Status.INTERNAL_SERVER_ERROR.getStatusCode(), "Multiple audiences found.").entity(result.toJSONString()).build();
 		}
 
-		AdvancedSegment segment = queryResult.get(0);
+		Segment segment = queryResult.get(0);
 		addAttributes(segment, audience);
 
-		segmentService.add(segment);
-
-		JSONObject result = new JSONObject();
-		result.put("status", "ok");
-		result.put("audience_id", segment.getId());
-		return result.toJSONString();
-	}
-
-	@POST
-	@Path("/validate")
-	public String validate(final String content) {
-
-		JSONObject result = new JSONObject();
-
-		JSONObject validation = new JSONObject();
-
-		ValidationResult validationResult = internal_validate(content);
-		if (validationResult.valid) {
-			validation.put("valid", true);
-		} else {
-			validation.put("valid", false);
-			validation.put("message", validationResult.message);
-		}
-
-		result.put("validation", validation);
-		result.put("status", "ok");
-
-		return result.toJSONString();
-	}
-
-	private ValidationResult internal_validate(final String dsl) {
-		if (Strings.isNullOrEmpty(dsl)) {
-			return new ValidationResult(false, "Content should not be null!");
-		}
 		try {
-			return new ValidationResult(actionSystem.validate(dsl));
-		} catch (Exception ex) {
-			return new ValidationResult(false, ex.getMessage());
+			segmentService.add(segment);
+			
+			JSONObject result = new JSONObject();
+			result.put("status", "ok");
+			result.put("audience_id", segment.getId());
+			return Response.status(Response.Status.OK).entity(result.toJSONString()).build();
+		} catch (InvalidSegmentException ex) {
+			JSONObject result = new JSONObject();
+			result.put("status", "error");
+			result.put("message", ex.getMessage());
+			return Response.status(Response.Status.INTERNAL_SERVER_ERROR.getStatusCode(), "Erro updating the segment.").entity(result.toJSONString()).build();
 		}
 	}
+
+	
 }

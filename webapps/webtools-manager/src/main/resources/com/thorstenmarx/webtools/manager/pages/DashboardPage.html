@@ -50,20 +50,7 @@
 			<div class="row" id="dashboardMessageContainer" wicket:id="messages">
 				<div wicket:id="message" class="dashboard-message" />
 			</div>
-			<div class="row" style="margin-bottom: 20px;">
-				<div class="card" style="width: 100%;">
-					<div class="card-body">
-						<form wicket:id="form" class="form-inline">
-							<div class="form-group">
-								<label for="sites" ><wicket:message key="label.select.site"  /></label>
-								<select id="sites" class="form-control" wicket:id="sites"></select>
-							</div>
-
-							<button type="submit" class="btn btn-primary" wicket:id="siteSubmit"><wicket:message key="button.select">Update</wicket:message></button>
-						</form>
-					</div>
-				</div>
-			</div>
+			<div wicket:id="siteFilter" />
 			<div wicket:id="dashboard"></div>
 		</wicket:extend>
 	</body>

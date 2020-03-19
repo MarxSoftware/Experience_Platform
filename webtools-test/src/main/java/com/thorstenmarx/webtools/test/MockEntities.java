@@ -37,7 +37,7 @@ package com.thorstenmarx.webtools.test;
  * <http://www.gnu.org/licenses/gpl-3.0.html>.
  * #L%
  */
-import com.thorstenmarx.webtools.api.actions.model.AdvancedSegment;
+import com.thorstenmarx.webtools.api.actions.model.Segment;
 import com.thorstenmarx.webtools.api.entities.Entities;
 import com.thorstenmarx.webtools.api.entities.Result;
 import com.thorstenmarx.webtools.api.entities.Serializer;
@@ -95,7 +95,7 @@ public class MockEntities implements Entities {
 		@Override
 		public String save(T entity) {
 			String uid = UUID.randomUUID().toString();
-			((AdvancedSegment)entity).setId(uid);
+			((Segment)entity).setId(uid);
 			entities.put(uid, entity);
 			return uid;
 		}

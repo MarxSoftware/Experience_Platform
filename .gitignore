@@ -27,3 +27,5 @@ distribution/core_modules/webtools_modules/*/
 webapps/webtools-manager/webtools_modules/
 webapps/webtools-manager/webtools_modules/system/core-*/
 webapps/webtools-manager/webtools_modules/common/core-*/
+webapps/webtools-manager/experience-manager.pid
+webapps/webtools-manager/experience-platform.pid

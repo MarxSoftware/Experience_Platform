@@ -24,6 +24,7 @@ package com.thorstenmarx.webtools.manager;
 import com.google.inject.Injector;
 import com.thorstenmarx.webtools.manager.pages.DashboardPage;
 import com.thorstenmarx.webtools.manager.pages.LoginPage;
+import com.thorstenmarx.webtools.manager.pages.error.InternalErrorPage;
 import com.thorstenmarx.webtools.manager.wicket.session.MMAuthenticationSession;
 import com.thorstenmarx.webtools.ContextListener;
 import com.thorstenmarx.webtools.manager.pages.HomePage;
@@ -65,6 +66,9 @@ public class ManagerApplication extends AuthenticatedWebApplication {
 		getComponentInstantiationListeners().add(new GuiceComponentInjector(this, injector));
 		getRequestCycleListeners().add(new MMRequestCycleListener());
 
+		getApplicationSettings().setInternalErrorPage(InternalErrorPage.class);
+		getExceptionSettings().setUnexpectedExceptionDisplay(ExceptionSettings.SHOW_INTERNAL_ERROR_PAGE);
+		
 		if (get().getConfigurationType() == RuntimeConfigurationType.DEVELOPMENT) {
 			getExceptionSettings().setUnexpectedExceptionDisplay(ExceptionSettings.SHOW_EXCEPTION_PAGE);
 		}

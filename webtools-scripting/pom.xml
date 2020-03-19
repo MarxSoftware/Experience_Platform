@@ -5,13 +5,13 @@
 	<parent>
 		<groupId>com.thorstenmarx.webtools</groupId>
 		<artifactId>webtools-parent</artifactId>
-		<version>4.3.1</version>
+		<version>5.0.0</version>
 		<relativePath>../webtools-parent</relativePath>
 	</parent>
 	
 	<groupId>com.thorstenmarx.webtools</groupId>
 	<artifactId>webtools-scripting</artifactId>
-	<version>4.3.1</version>
+	<version>5.0.0</version>
 	
 	<name>webtools-scripting</name>
 	<description>Scripting</description>
@@ -27,6 +27,7 @@
 		<maven.compiler.target>12</maven.compiler.target>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		
+		<!--<graalvm.version>19.3.1</graalvm.version>-->
 		<graalvm.version>20.0.0</graalvm.version>
 	</properties>
 	<dependencyManagement>
@@ -34,7 +35,7 @@
 			<dependency>
 				<groupId>com.thorstenmarx.webtools</groupId>
 				<artifactId>webtools-bom</artifactId>
-				<version>4.3.1</version>
+				<version>5.0.0</version>
 				<scope>import</scope>
 				<type>pom</type>
 			</dependency>   
@@ -62,6 +63,7 @@
 			<groupId>org.mozilla</groupId>
 			<artifactId>rhino</artifactId>
 		</dependency>
+		
 		
 		<dependency>
 			<groupId>org.graalvm.sdk</groupId>

@@ -97,30 +97,5 @@ public class MockDataLayer implements DataLayer {
 		
 		return false;
 	}
-
-	@Override
-	public <T extends Data> void each(BiConsumer<String, T> consumer, String key, Class<T> clazz) {
-		if (values.containsKey(key)) {
-			values.get(key).values().forEach((value) -> {
-				consumer.accept(key, (T)value);
-			});
-		}
-	}
-
-	@Override
-	public <T extends Data> Optional<List<T>> list(String uid, String key, Class<T> clazz) {
-		if (values.containsKey(key) && values.get(key).containsKey(uid)) {
-			List<Object> get = values.get(key).get(uid);
-			List<T> result = get.stream().map((o) -> (T)o).collect(Collectors.toList());
-			return Optional.of(result);
-		}
-		
-		return Optional.empty();
-	}
-
-	@Override
-	public void clear(String key) {
-		values.remove(key);
-	}
 	
 }

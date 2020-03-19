@@ -64,7 +64,8 @@ public class UserInformationResource {
 			result.put("status", "ok");
 		} catch (Exception e) {
 			LOGGER.error("", e);
-			result.put("status", "fail");
+			result.put("status", "error");
+			result.put("message", e.getMessage());
 		}
 
 		return result.toJSONString();

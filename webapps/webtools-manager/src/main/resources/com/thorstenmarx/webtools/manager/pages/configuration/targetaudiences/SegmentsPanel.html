@@ -1,0 +1,86 @@
+<!--
+
+    WebTools-Platform
+    Copyright (C) 2016-2018  ThorstenMarx (kontakt@thorstenmarx.com)
+
+    This program is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with this program.  If not, see <http://www.gnu.org/licenses/>.
+
+-->
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<!--
+  #%L
+  webtools-manager
+  %%
+  Copyright (C) 2016 - 2018 Thorsten Marx
+  %%
+  This program is free software: you can redistribute it and/or modify
+  it under the terms of the GNU General Public License as
+  published by the Free Software Foundation, either version 3 of the
+  License, or (at your option) any later version.
+  
+  This program is distributed in the hope that it will be useful,
+  but WITHOUT ANY WARRANTY; without even the implied warranty of
+  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  GNU General Public License for more details.
+  
+  You should have received a copy of the GNU General Public
+  License along with this program.  If not, see
+  <http://www.gnu.org/licenses/gpl-3.0.html>.
+  #L%
+  -->
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en"
+	  xmlns:wicket="http://wicket.apache.org/dtds.data/wicket-xhtml1.4-strict.dtd">
+	<head>
+		<title>test</title>
+	</head>
+	<body>
+		<wicket:panel>
+			<wicket:enclosure child="segments">
+				<table class="table table-striped">
+					<thead>
+						<tr>
+							<th class="center"><wicket:message key="name"/></th>
+							<th class="center" style="width: 5%"><wicket:message key="ExternalID"/></th>
+							<th class="center" style="width: 15%"><wicket:message key="active"/></th>
+							<th class="center" style="width: 15%"><wicket:message key="actions"/></th>
+						</tr>
+					</thead>
+					<span wicket:id="segments">
+						<tr>
+							<td>
+								<span wicket:id="name"></span><br/>
+								<small>Id: <span wicket:id="id"></span></small>
+							</td>
+							<td class="center">
+								<span wicket:id="externalId"></span>
+							</td>
+							<td class="center">
+								<span wicket:id="active"></span>
+							</td>
+							<td class="center">
+								<a href="" class="btn btn-success btn-xs" wicket:id="editSegmentLink"><wicket:message key="edit"/></a>&nbsp;
+								<a href="" class="btn btn-danger btn-xs" wicket:id="removeSegmentLink"><wicket:message key="remove"/></a>
+							</td>
+						</tr>
+					</span>
+				</table>
+			</wicket:enclosure>
+
+			<div wicket:id="noSegmentsLabel"></div>
+			
+
+		</wicket:panel>
+	</body>
+</html>

@@ -27,13 +27,12 @@ import com.google.inject.Singleton;
 import com.thorstenmarx.modules.api.ModuleManager;
 import com.thorstenmarx.webtools.api.analytics.AnalyticsDB;
 import com.thorstenmarx.webtools.ContextListener;
-import com.thorstenmarx.webtools.api.actions.ActionSystem;
 import com.thorstenmarx.webtools.api.cache.CacheLayer;
 import com.thorstenmarx.webtools.api.configuration.Registry;
 import com.thorstenmarx.webtools.api.datalayer.DataLayer;
 import com.thorstenmarx.webtools.api.entities.Entities;
 import com.thorstenmarx.webtools.api.execution.Executor;
-import com.thorstenmarx.webtools.api.extensions.core.CoreActionSystemExtension;
+import com.thorstenmarx.webtools.api.extensions.core.CoreSegmentationExtension;
 import com.thorstenmarx.webtools.api.extensions.core.CoreAnalyticsDbExtension;
 import com.thorstenmarx.webtools.api.extensions.core.CoreCacheLayerExtension;
 import com.thorstenmarx.webtools.api.extensions.core.CoreDataLayerExtension;
@@ -88,14 +87,6 @@ public class LocalGuiceModule extends AbstractModule {
         final List<CoreDataLayerExtension> extensions = moduleManager.extensions(CoreDataLayerExtension.class);
 
 		return extensions.get(0).getDataLayer();
-    }
-
-	@Provides
-    @Singleton
-    private ActionSystem actionSystem(final @Common ModuleManager moduleManager, final DataLayer datalayer, final Executor executor, final AnalyticsDB analyticsDB, final MBassador mBassador) {
-        final List<CoreActionSystemExtension> extensions = moduleManager.extensions(CoreActionSystemExtension.class);
-
-		return extensions.get(0).getActionSystem();
     }
 	
 	@Provides
