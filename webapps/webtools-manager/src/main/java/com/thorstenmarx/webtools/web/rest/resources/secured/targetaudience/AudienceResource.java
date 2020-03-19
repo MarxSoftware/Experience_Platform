@@ -150,6 +150,13 @@ public class AudienceResource {
 
 		// validate the allowed amount of segmentes allowed for this
 		final String site = audience.getSite();
+		if (Strings.isNullOrEmpty(site)) {
+			JSONObject result = new JSONObject();
+			result.put("status", "error");
+			result.put("message", "Site parameter is not set.");
+			return Response.status(Response.Status.FORBIDDEN.getStatusCode(), "Site parameter is not set.")
+					.entity(result.toJSONString()).build();
+		}
 		if (!hostingPackageEvaluator.is_action_allowed(site, HostingPackageValidatorExtension.Action.CREATE_SEGMENTE)) {
 			JSONObject result = new JSONObject();
 			result.put("status", "error");
