@@ -6,13 +6,13 @@
 	<parent>
 		<groupId>com.thorstenmarx.webtools</groupId>
 		<artifactId>webtools-parent</artifactId>
-		<version>5.0.0</version>
+		<version>5.1.0-SNAPSHOT</version>
 		<relativePath>../../webtools-parent</relativePath>
 	</parent>
 
 	<groupId>com.thorstenmarx.webtools</groupId>
 	<artifactId>experience-platform</artifactId>
-	<version>5.0.0</version>
+	<version>5.1.0-SNAPSHOT</version>
 	<name>experience-platform</name>
 	<description>Experience Platform</description>
 	<inceptionYear>2016</inceptionYear>
@@ -31,7 +31,7 @@
 			<dependency>
 				<groupId>com.thorstenmarx.webtools</groupId>
 				<artifactId>webtools-bom</artifactId>
-				<version>5.0.0</version>
+				<version>5.1.0-SNAPSHOT</version>
 				<scope>import</scope>
 				<type>pom</type>
 			</dependency>   

@@ -54,24 +54,25 @@ public class ContextListener implements ServletContextListener {
 
 	@Override
 	public void contextInitialized(ServletContextEvent sce) {
-		Configuration config = Configuration.getInstance(new File("webtools_data"));
 
-		Configuration.Config<String> modeConfig = config.getConfig("mode", String.class);
-		final String mode = modeConfig.get("local");
-
-		if ("cluster".equals(mode)) {
-			activation = new ClusterActivation();
-		} else {
-			activation = new LocalActivation();
-		}
-		activation.initialize();
-
-		
 		try {
+
+			Configuration config = Configuration.getInstance(new File("webtools_data"));
+
+			Configuration.Config<String> modeConfig = config.getConfig("mode", String.class);
+			final String mode = modeConfig.get("local");
+
+			if ("cluster".equals(mode)) {
+				activation = new ClusterActivation();
+			} else {
+				activation = new LocalActivation();
+			}
+			activation.initialize();
+
 			Path path = Paths.get("experience-platform.pid");
 			byte[] strToBytes = String.valueOf(ProcessHandle.current().pid()).getBytes(Charsets.UTF_8);
 			Files.write(path, strToBytes);
-		} catch (IOException ex) {
+		} catch (Exception ex) {
 			LOGGER.error("", ex);
 		}
 	}

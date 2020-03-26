@@ -8,7 +8,7 @@ ifndef::sourcedir[:sourcedir: ../../main/java]
 
 Dies ist das Manual für die webTools Platform in Version {webtools-version}
 
-== Einführung
+== Einführunge
 
 Die webTools Platform ist eine unter der GPLv3 stehende Personalisierungs Engine.
 Sie bietet alle Funktionen um ihren Benuztern eine personalisierte Erfahrung zu schaffen.
