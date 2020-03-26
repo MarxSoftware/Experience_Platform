@@ -6,13 +6,13 @@
 	<parent>
 		<groupId>com.thorstenmarx.webtools</groupId>
 		<artifactId>webtools-parent</artifactId>
-		<version>5.0.0</version>
+		<version>5.1.0</version>
 		<relativePath>../../webtools-parent</relativePath>
 	</parent>
 
 	<groupId>com.thorstenmarx.webtools</groupId>
 	<artifactId>webtools-tracker</artifactId>
-	<version>5.0.0</version>
+	<version>5.1.0</version>
 	<name>webtools-tracker</name>
 	<description>Tracking Application</description>
 	<inceptionYear>2016</inceptionYear>
@@ -22,8 +22,8 @@
 		<url>https://wp-digitalexperience.com</url>
 	</organization>
 	<properties>
-		<maven.compiler.source>12</maven.compiler.source>
-		<maven.compiler.target>12</maven.compiler.target>
+		<maven.compiler.source>11</maven.compiler.source>
+		<maven.compiler.target>11</maven.compiler.target>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 	</properties>
 	<dependencyManagement>
@@ -31,7 +31,7 @@
 			<dependency>
 				<groupId>com.thorstenmarx.webtools</groupId>
 				<artifactId>webtools-bom</artifactId>
-				<version>5.0.0</version>
+				<version>5.1.0</version>
 				<scope>import</scope>
 				<type>pom</type>
 			</dependency>   
