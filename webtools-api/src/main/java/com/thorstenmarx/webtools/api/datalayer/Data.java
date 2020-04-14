@@ -39,9 +39,10 @@ package com.thorstenmarx.webtools.api.datalayer;
  */
 
 /**
- *
+ * 
  * @author marx
  */
+@Deprecated(since = "5.2.0")
 public interface Data {
 	
 	String getKey();

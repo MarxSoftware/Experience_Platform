@@ -32,6 +32,7 @@ import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
+import javax.ws.rs.HeaderParam;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 import org.apache.logging.log4j.LogManager;
@@ -54,11 +55,11 @@ public class UserInformationResource {
 	@Path("/user")
 	@Produces(MediaType.APPLICATION_JSON)
 	@Consumes(MediaType.TEXT_PLAIN)
-	public String segments(final @QueryParam("user") String user, final @QueryParam("site") String site) {
+	public String segments(final @QueryParam("user") String user, final @QueryParam("site") String site, final @HeaderParam("site") String headerSite) {
 
 		JSONObject result = new JSONObject();
 		try {
-			JSONObject userObj = userInformation(user, site);
+			JSONObject userObj = userInformation(user, headerSite != null ? headerSite : site);
 
 			result.put("user", userObj);
 			result.put("status", "ok");

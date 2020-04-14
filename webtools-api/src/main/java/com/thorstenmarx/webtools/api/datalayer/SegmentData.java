@@ -27,9 +27,10 @@ import java.util.Objects;
 
 
 /**
- *
+ * @deprecated use {@link com.thorstenmarx.webtools.api.actions.model.SegmentData} instead
  * @author marx
  */
+@Deprecated(since = "5.2.0")
 public class SegmentData implements Data, Serializable {
 	
 	public static final String KEY = "segments";
@@ -130,10 +131,7 @@ public class SegmentData implements Data, Serializable {
 			if (!Objects.equals(this.name, other.name)) {
 				return false;
 			}
-			if (!Objects.equals(this.id, other.id)) {
-				return false;
-			}
-			return true;
+			return Objects.equals(this.id, other.id);
 		}
 
 		
