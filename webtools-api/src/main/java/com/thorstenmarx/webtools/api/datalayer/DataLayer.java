@@ -22,16 +22,15 @@ package com.thorstenmarx.webtools.api.datalayer;
  * #L%
  */
 import com.thorstenmarx.webtools.api.annotations.API;
-import java.util.List;
 import java.util.Optional;
-import java.util.function.BiConsumer;
 
 /**
  *
  * @author marx
  * @since 1.11.0
  */
-@API(since = "2.0.0", status = API.Status.Stable)
+@API(since = "2.0.0", status = API.Status.Deprecated)
+@Deprecated(since = "5.2.0")
 public interface DataLayer {
 	
 	
