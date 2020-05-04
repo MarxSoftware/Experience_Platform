@@ -56,6 +56,7 @@ public class ContextListener implements ServletContextListener {
 	public void contextInitialized(ServletContextEvent sce) {
 
 		try {
+			LOGGER.info("initialize platform");
 
 			Configuration config = Configuration.getInstance(new File("webtools_data"));
 
@@ -79,6 +80,9 @@ public class ContextListener implements ServletContextListener {
 
 	@Override
 	public void contextDestroyed(ServletContextEvent sce) {
+		
+		LOGGER.info("shutdown platform");
+		
 		activation.destroy();
 	}
 

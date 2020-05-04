@@ -47,8 +47,16 @@
 				<Pattern>%d %p %c{1.} [%t] %m%n</Pattern>
 			</PatternLayout>
 		</File>
+		<File name="PlatformLog" fileName="logs/experience-platform.log">
+			<PatternLayout>
+				<Pattern>%d %p %c{1.} [%t] %m%n</Pattern>
+			</PatternLayout>
+		</File>
 	</Appenders>
 	<Loggers>
+		<Logger name="com.thorstenmarx.webtools" level="debug">
+			<AppenderRef ref="PlatformLog"/>
+		</Logger>
 		<Root level="ERROR">
 			<AppenderRef ref="ErrorFile"/>
 		</Root>
