@@ -23,7 +23,6 @@ package com.thorstenmarx.webtools.api;
  */
 
 import com.thorstenmarx.modules.api.Context;
-import com.thorstenmarx.webtools.api.cluster.Cluster;
 import com.thorstenmarx.webtools.api.execution.Executor;
 import java.io.File;
 import java.util.HashMap;
@@ -41,19 +40,14 @@ public class CoreModuleContext extends Context {
 	private final MBassador eventBus;
 	private final Executor executor;
 	
-	private final Cluster cluster;
 	
 	protected final Map<String, Object> parameters = new HashMap<>();
 	
 	
 	public CoreModuleContext (final File dataPath, final MBassador eventBus, final Executor executor) {
-		this(dataPath, eventBus, executor, null);
-	}
-	public CoreModuleContext (final File dataPath, final MBassador eventBus, final Executor executor, final Cluster cluster) {
 		this.dataPath = dataPath;
 		this.eventBus = eventBus;
 		this.executor = executor;
-		this.cluster = cluster;
 	}
 	
 	public void put (final String name, final Object value) {
@@ -69,15 +63,6 @@ public class CoreModuleContext extends Context {
 		}
 		
 		return type.cast(value);
-	}
-	
-	
-	public boolean isCluster () {
-		return cluster != null;
-	}
-	
-	public Cluster getCluster () {
-		return cluster;
 	}
 
 	public Executor getExecutor() {

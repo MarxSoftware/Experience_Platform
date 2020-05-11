@@ -69,7 +69,7 @@ public class SystemGuiceModule extends AbstractModule {
 	@Provides
 	@Singleton
 	@Common
-	protected ModuleManager coreModuleManager(final Injector injector, final CoreModuleContext context) {
+	protected ModuleManager coreModuleManager(final Injector injector, final CoreModuleContext context) throws IOException {
 		List<String> apiPackages = new ArrayList<>();
 		apiPackages.add("com.thorstenmarx.webtools.api");
 		apiPackages.add("com.thorstenmarx.webtools.hosting");
@@ -90,6 +90,12 @@ public class SystemGuiceModule extends AbstractModule {
 		apiPackages.add("com.google.gson");
 		ModuleAPIClassLoader apiClassLoader = new ModuleAPIClassLoader((URLClassLoader) getClass().getClassLoader(), apiPackages);
 		ModuleManager coreModuleManager = ModuleManagerImpl.create(new File("webtools_modules/system"), context, apiClassLoader, injector::injectMembers);		
+		
+		
+		// if available activate cluster
+		if (coreModuleManager.module("core-module-jgroups-cluster") != null) {
+			coreModuleManager.activateModule("core-module-jgroups-cluster");
+		}
 		
 		// autoactivate core modules
 		coreModuleManager.configuration().getModules().keySet().forEach((module) -> {

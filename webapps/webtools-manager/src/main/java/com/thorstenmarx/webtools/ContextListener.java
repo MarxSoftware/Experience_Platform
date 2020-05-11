@@ -25,7 +25,6 @@ import com.google.common.base.Charsets;
 import com.google.inject.Injector;
 import com.thorstenmarx.webtools.base.Configuration;
 import com.thorstenmarx.webtools.initializer.Activation;
-import com.thorstenmarx.webtools.initializer.ClusterActivation;
 import com.thorstenmarx.webtools.initializer.LocalActivation;
 import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;
@@ -63,11 +62,8 @@ public class ContextListener implements ServletContextListener {
 			Configuration.Config<String> modeConfig = config.getConfig("mode", String.class);
 			final String mode = modeConfig.get("local");
 
-			if ("cluster".equals(mode)) {
-				activation = new ClusterActivation();
-			} else {
-				activation = new LocalActivation();
-			}
+			
+			activation = new LocalActivation();
 			activation.initialize();
 
 			Path path = Paths.get("experience-platform.pid");

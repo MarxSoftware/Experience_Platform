@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2019 WP DigitalExperience
+ * Copyright (C) 2020 WP DigitalExperience
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -14,13 +14,13 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package com.thorstenmarx.webtools.api.cluster.services;
+package com.thorstenmarx.webtools.api.cluster;
 
 /*-
  * #%L
- * webtools-cluster
+ * webtools-api
  * %%
- * Copyright (C) 2016 - 2019 WP DigitalExperience
+ * Copyright (C) 2016 - 2020 WP DigitalExperience
  * %%
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as
@@ -37,22 +37,18 @@ package com.thorstenmarx.webtools.api.cluster.services;
  * <http://www.gnu.org/licenses/gpl-3.0.html>.
  * #L%
  */
-import com.thorstenmarx.webtools.api.annotations.API;
-import java.io.IOException;
-import java.io.Serializable;
 
 /**
  *
  * @author marx
  */
-@API(since = "3.3.0", status = API.Status.Experimental)
-public interface Topic<T extends Serializable> extends AutoCloseable {
+public interface ClusterMessageAdapter<T> {
 
-	void publish(final T message) throws IOException;
+	Class<T> getValueClass();
 	
-	void setListener (final Topic.Receiver<T> listener);
+	String getType();
 	
-	public static interface Receiver<T extends Serializable> {
-		public void receive (T message);
-	}
+	void reset ();
+	
+	void apply (T value);
 }
