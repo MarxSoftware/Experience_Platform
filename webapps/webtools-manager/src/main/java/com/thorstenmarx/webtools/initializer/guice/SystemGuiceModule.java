@@ -40,6 +40,8 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import net.engio.mbassy.bus.MBassador;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 /**
  *
@@ -47,66 +49,74 @@ import net.engio.mbassy.bus.MBassador;
  */
 public class SystemGuiceModule extends AbstractModule {
 
+	private Logger LOGGER = LogManager.getLogger(SystemGuiceModule.class);
+
 	public SystemGuiceModule() {
 	}
 
 	@Provides
 	@Singleton
-	protected CoreModuleContext coreModuleContext (final Configuration configuration, final Executor executor, final MBassador mbassador) {
-		final CoreModuleContext coreModuleContext = new CoreModuleContext(new File("./webtools_data/system_modules_data"), mbassador, executor);
-		
+	protected CoreModuleContext coreModuleContext(final Configuration configuration, final Executor executor, final MBassador mbassador) {
+		final CoreModuleContext coreModuleContext = new CoreModuleContext(new File("./webtools_modules/system/modules_data"), mbassador, executor);
+
 		Map<String, Object> analytics = configuration.getMap("analytics", Collections.EMPTY_MAP);
-		if  (analytics.containsKey("shards")) {
+		if (analytics.containsKey("shards")) {
 			coreModuleContext.put("analyticsdb.shard.count", analytics.get("shards"));
 		} else {
 			coreModuleContext.put("analyticsdb.shard.count", 3);
 		}
-		
-		
+
 		return coreModuleContext;
 	}
-	
+
 	@Provides
 	@Singleton
 	@Common
-	protected ModuleManager coreModuleManager(final Injector injector, final CoreModuleContext context) throws IOException {
-		List<String> apiPackages = new ArrayList<>();
-		apiPackages.add("com.thorstenmarx.webtools.api");
-		apiPackages.add("com.thorstenmarx.webtools.hosting");
-		apiPackages.add("com.thorstenmarx.webtools.collection");
-		apiPackages.add("com.thorstenmarx.webtools.streams");
-		apiPackages.add("com.thorstenmarx.webtools.scripting");
-		apiPackages.add("net.engio.mbassy");
-		apiPackages.add("org.apache.wicket");
-		apiPackages.add("de.agilecoders.wicket");
-		apiPackages.add("com.googlecode.wickedcharts");
-		apiPackages.add("com.alibaba.fastjson");
-		apiPackages.add("org.slf4j");
-		apiPackages.add("org.apache.logging.log4j");
-		apiPackages.add("javax.ws.rs");
-		apiPackages.add("javax.inject");
-		apiPackages.add("java.internal.reflect");
-		apiPackages.add("jdk.internal.reflect");
-		apiPackages.add("com.google.gson");
-		ModuleAPIClassLoader apiClassLoader = new ModuleAPIClassLoader((URLClassLoader) getClass().getClassLoader(), apiPackages);
-		ModuleManager coreModuleManager = ModuleManagerImpl.create(new File("webtools_modules/system"), context, apiClassLoader, injector::injectMembers);		
-		
-		
-		// if available activate cluster
-		if (coreModuleManager.module("core-module-jgroups-cluster") != null) {
-			coreModuleManager.activateModule("core-module-jgroups-cluster");
-		}
-		
-		// autoactivate core modules
-		coreModuleManager.configuration().getModules().keySet().forEach((module) -> {
-			try {
-				coreModuleManager.activateModule(module);
-			} catch (IOException ex) {
-				throw new IllegalStateException(ex);
+	protected ModuleManager coreModuleManager(final Injector injector, final CoreModuleContext context) {
+		try {
+			List<String> apiPackages = new ArrayList<>();
+			apiPackages.add("com.thorstenmarx.webtools.api");
+			apiPackages.add("com.thorstenmarx.webtools.hosting");
+			apiPackages.add("com.thorstenmarx.webtools.collection");
+			apiPackages.add("com.thorstenmarx.webtools.streams");
+			apiPackages.add("com.thorstenmarx.webtools.scripting");
+			apiPackages.add("net.engio.mbassy");
+			apiPackages.add("org.apache.wicket");
+			apiPackages.add("de.agilecoders.wicket");
+			apiPackages.add("com.googlecode.wickedcharts");
+			apiPackages.add("com.alibaba.fastjson");
+			apiPackages.add("org.slf4j");
+			apiPackages.add("org.apache.logging.log4j");
+			apiPackages.add("javax.ws.rs");
+			apiPackages.add("javax.inject");
+			apiPackages.add("java.internal.reflect");
+			apiPackages.add("jdk.internal.reflect");
+			apiPackages.add("com.google.gson");
+			apiPackages.add("org.xml");
+			apiPackages.add("org.w3c");
+			ModuleAPIClassLoader apiClassLoader = new ModuleAPIClassLoader((URLClassLoader) getClass().getClassLoader(), apiPackages);
+			ModuleManager coreModuleManager = ModuleManagerImpl.create(new File("webtools_modules/system"), context, apiClassLoader, injector::injectMembers);
+
+			// if available activate cluster
+			if (coreModuleManager.module("core-module-jgroups-cluster") != null) {
+				coreModuleManager.activateModule("core-module-jgroups-cluster");
 			}
-		});
-		
-		return coreModuleManager;
+
+			// autoactivate core modules
+			coreModuleManager.configuration().getModules().keySet().forEach((module) -> {
+				try {
+					coreModuleManager.activateModule(module);
+				} catch (IOException ex) {
+					throw new IllegalStateException(ex);
+				}
+			});
+
+			return coreModuleManager;
+		} catch (Exception e) {
+			LOGGER.error("error loading core modules", e);
+			System.exit(25);
+		}
+		throw new IllegalStateException("should never be reached");
 	}
 
 	@Override
