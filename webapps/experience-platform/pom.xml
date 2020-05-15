@@ -105,6 +105,12 @@
 							<allowNullPathInfo>true</allowNullPathInfo>
 						</contextHandler>
 					</contextHandlers>
+					<systemProperties>
+						<systemProperty>
+							<name>log4j.configurationFile</name>
+							<value>webtools_data/conf/log4j2.xml</value>
+						</systemProperty>
+					</systemProperties>
 				</configuration>
                                 
 				<dependencies>

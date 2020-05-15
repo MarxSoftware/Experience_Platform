@@ -42,11 +42,6 @@
 -->
 <Configuration status="ERROR">
 	<Appenders>
-		<File name="ErrorFile" fileName="logs/error.log">
-			<PatternLayout>
-				<Pattern>%d %p %c{1.} [%t] %m%n</Pattern>
-			</PatternLayout>
-		</File>
 		<File name="PlatformLog" fileName="logs/experience-platform.log">
 			<PatternLayout>
 				<Pattern>%d %p %c{1.} [%t] %m%n</Pattern>
@@ -54,11 +49,8 @@
 		</File>
 	</Appenders>
 	<Loggers>
-		<Logger name="com.thorstenmarx.webtools" level="debug">
+		<Root name="com.thorstenmarx.webtools" level="INFO">
 			<AppenderRef ref="PlatformLog"/>
-		</Logger>
-		<Root level="ERROR">
-			<AppenderRef ref="ErrorFile"/>
 		</Root>
 	</Loggers>
 </Configuration>
