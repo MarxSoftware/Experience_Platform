@@ -46,7 +46,27 @@ public interface ClusterService {
 	
 	void registerAdpater (final ClusterMessageAdapter<?> adapter);
 	
+	/**
+	 * Payload is replicated via 3PC to all members.
+	 * 
+	 * @param type
+	 * @param payload 
+	 */
 	void replicate (final String type, final Object payload);
 	
+	/**
+	 * Payload is appenden to the commit log and async replicated to all members
+	 * 
+	 * @param type
+	 * @param payload 
+	 */
 	void append (final String type, final Object payload);
+	
+	/**
+	 * Payload is spread directly to all members
+	 * 
+	 * @param type
+	 * @param payload 
+	 */
+	void spread (final String type, final Object payload);
 }
