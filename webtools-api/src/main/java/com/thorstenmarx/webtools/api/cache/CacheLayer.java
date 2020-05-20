@@ -24,7 +24,6 @@ package com.thorstenmarx.webtools.api.cache;
 
 import com.thorstenmarx.webtools.api.annotations.API;
 import java.io.Serializable;
-import java.util.List;
 import java.util.Optional;
 import java.util.concurrent.TimeUnit;
 
