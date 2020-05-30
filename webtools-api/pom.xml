@@ -3,12 +3,12 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>com.thorstenmarx.webtools</groupId>
 	<artifactId>webtools-api</artifactId>
-	<version>5.1.1</version>
+	<version>5</version>
 	
 	<parent>
 		<groupId>com.thorstenmarx.webtools</groupId>
 		<artifactId>webtools-parent</artifactId>
-		<version>5.1.1</version>
+		<version>5</version>
 		<relativePath>../webtools-parent</relativePath>
 	</parent>
   
@@ -32,7 +32,7 @@
 			<dependency>
 				<groupId>com.thorstenmarx.webtools</groupId>
 				<artifactId>webtools-bom</artifactId>
-				<version>5.1.1</version>
+				<version>5</version>
 				<scope>import</scope>
 				<type>pom</type>
 			</dependency>   
@@ -90,6 +90,11 @@
 			<groupId>net.engio</groupId>
 			<artifactId>mbassador</artifactId>
 			<scope>compile</scope>
+		</dependency>
+		
+		<dependency>
+			<groupId>org.apache.logging.log4j</groupId>
+			<artifactId>log4j-slf4j-impl</artifactId>
 		</dependency>
 		
 		<dependency>

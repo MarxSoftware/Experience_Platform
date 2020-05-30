@@ -64,6 +64,10 @@ public class HostingCountingServletFilter implements Filter {
 	private ModuleManager moduleManager;
 
 	@Override
+	public void destroy() {
+	}
+	
+	@Override
 	public void init(FilterConfig filterConfig) throws ServletException {
 		counterName = filterConfig.getInitParameter("counter_name");
 		moduleManager = ContextListener.INJECTOR_PROVIDER.injector().getInstance(ModuleManager.class);

@@ -119,6 +119,7 @@ public class BaseGuiceModule extends AbstractModule {
 		apiPackages.add("com.googlecode.wickedcharts");
 		apiPackages.add("com.alibaba.fastjson");
 		apiPackages.add("org.slf4j");
+		apiPackages.add("org.apache.logging.log4j");
 		apiPackages.add("javax.ws.rs");
 		apiPackages.add("javax.inject");
 		apiPackages.add("java.internal.reflect");
