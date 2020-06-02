@@ -24,7 +24,6 @@ package com.thorstenmarx.webtools.web.rest.resources.secured;
 import com.alibaba.fastjson.JSONObject;
 import com.thorstenmarx.webtools.api.extensions.RestUserInformationExtension;
 import com.thorstenmarx.webtools.ContextListener;
-import com.thorstenmarx.webtools.api.datalayer.DataLayer;
 import com.thorstenmarx.webtools.initializer.MultiModuleManager;
 import java.util.List;
 
@@ -44,11 +43,9 @@ public class UserInformationResource {
 	private static final Logger LOGGER = LogManager.getLogger(UserInformationResource.class);
 
 	final MultiModuleManager moduleManager;
-	final DataLayer datalayer;
 
 	public UserInformationResource() {
 		this.moduleManager = ContextListener.INJECTOR_PROVIDER.injector().getInstance(MultiModuleManager.class);
-		this.datalayer = ContextListener.INJECTOR_PROVIDER.injector().getInstance(DataLayer.class);
 	}
 
 	@GET

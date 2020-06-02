@@ -3,7 +3,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>com.thorstenmarx.webtools</groupId>
 	<artifactId>webtools-bom</artifactId>
-	<version>5.2.0</version>
+	<version>5.2.1</version>
 	<packaging>pom</packaging>
 	
 	<name>webtools-bom</name>
@@ -65,32 +65,32 @@
 			<dependency>
 				<groupId>com.thorstenmarx.webtools</groupId>
 				<artifactId>webtools-scripting</artifactId>
-				<version>5.2.0</version>
+				<version>5.2.1</version>
 			</dependency>
 			<dependency>
 				<groupId>com.thorstenmarx.webtools</groupId>
 				<artifactId>webtools-api</artifactId>
-				<version>5.2.0</version>
+				<version>5.2.1</version>
 			</dependency>
 			<dependency>
 				<groupId>com.thorstenmarx.webtools</groupId>
 				<artifactId>webtools-base</artifactId>
-				<version>5.2.0</version>
+				<version>5.2.1</version>
 			</dependency>
 			<dependency>
 				<groupId>com.thorstenmarx.webtools</groupId>
 				<artifactId>webtools-tracking</artifactId>
-				<version>5.2.0</version>
+				<version>5.2.1</version>
 			</dependency>
 			<dependency>
 				<groupId>com.thorstenmarx.webtools</groupId>
 				<artifactId>webtools-manager</artifactId>
-				<version>5.2.0</version>
+				<version>5.2.1</version>
 			</dependency>
 			<dependency>
 				<groupId>com.thorstenmarx.webtools</groupId>
 				<artifactId>webtools-test</artifactId>
-				<version>5.2.0</version>
+				<version>5.2.1</version>
 			</dependency>
 			<!--			<dependency>
 				<groupId>com.thorstenmarx.webtools</groupId>
