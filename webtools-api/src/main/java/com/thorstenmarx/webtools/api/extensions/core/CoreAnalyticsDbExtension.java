@@ -25,7 +25,6 @@ package com.thorstenmarx.webtools.api.extensions.core;
 import com.thorstenmarx.modules.api.BaseExtension;
 import com.thorstenmarx.webtools.api.CoreModuleContext;
 import com.thorstenmarx.webtools.api.analytics.AnalyticsDB;
-import com.thorstenmarx.webtools.api.datalayer.DataLayer;
 
 /**
  *

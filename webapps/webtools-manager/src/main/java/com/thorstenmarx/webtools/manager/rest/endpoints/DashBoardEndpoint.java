@@ -27,7 +27,6 @@ import com.thorstenmarx.webtools.api.TimeWindow;
 import com.thorstenmarx.webtools.api.actions.SegmentService;
 import com.thorstenmarx.webtools.api.actions.model.Segment;
 import com.thorstenmarx.webtools.api.analytics.AnalyticsDB;
-import com.thorstenmarx.webtools.api.datalayer.DataLayer;
 import com.thorstenmarx.webtools.reports.OverviewReport;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -50,12 +49,10 @@ import javax.ws.rs.core.Response;
 @Path("/dashboard")
 public class DashBoardEndpoint {
 
-	private final DataLayer datalayer;
 	private final AnalyticsDB analyticsDb;
 	transient SegmentService segmentService;
 
 	public DashBoardEndpoint() {
-		datalayer = ContextListener.INJECTOR_PROVIDER.injector().getInstance(DataLayer.class);
 		analyticsDb = ContextListener.INJECTOR_PROVIDER.injector().getInstance(AnalyticsDB.class);
 		segmentService = ContextListener.INJECTOR_PROVIDER.injector().getInstance(SegmentService.class);
 	}
