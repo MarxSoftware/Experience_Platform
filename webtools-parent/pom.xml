@@ -3,7 +3,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>com.thorstenmarx.webtools</groupId>
 	<artifactId>webtools-parent</artifactId>
-	<version>5.2.0</version>
+	<version>5.2.1</version>
 	<name>webtools-parent</name>
 	<description>webtools parent project</description>
 	<packaging>pom</packaging>

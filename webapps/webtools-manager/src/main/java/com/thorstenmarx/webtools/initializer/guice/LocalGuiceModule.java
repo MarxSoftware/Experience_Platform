@@ -29,20 +29,15 @@ import com.thorstenmarx.webtools.api.analytics.AnalyticsDB;
 import com.thorstenmarx.webtools.ContextListener;
 import com.thorstenmarx.webtools.api.cache.CacheLayer;
 import com.thorstenmarx.webtools.api.configuration.Registry;
-import com.thorstenmarx.webtools.api.datalayer.DataLayer;
 import com.thorstenmarx.webtools.api.entities.Entities;
-import com.thorstenmarx.webtools.api.execution.Executor;
-import com.thorstenmarx.webtools.api.extensions.core.CoreSegmentationExtension;
 import com.thorstenmarx.webtools.api.extensions.core.CoreAnalyticsDbExtension;
 import com.thorstenmarx.webtools.api.extensions.core.CoreCacheLayerExtension;
-import com.thorstenmarx.webtools.api.extensions.core.CoreDataLayerExtension;
 import com.thorstenmarx.webtools.api.extensions.core.CoreEntitiesExtension;
 import com.thorstenmarx.webtools.api.extensions.core.CoreRegistryExtension;
 import com.thorstenmarx.webtools.api.location.LocationProvider;
 import com.thorstenmarx.webtools.initializer.annotations.Common;
 import java.io.IOException;
 import java.util.List;
-import net.engio.mbassy.bus.MBassador;
 
 public class LocalGuiceModule extends AbstractModule {
 
@@ -79,14 +74,6 @@ public class LocalGuiceModule extends AbstractModule {
 		final List<CoreRegistryExtension> extensions = moduleManager.extensions(CoreRegistryExtension.class);
 
 		return extensions.get(0).getRegistry();
-    }
-
-    @Provides
-    @Singleton
-    private DataLayer datalayer(@Common ModuleManager moduleManager) {
-        final List<CoreDataLayerExtension> extensions = moduleManager.extensions(CoreDataLayerExtension.class);
-
-		return extensions.get(0).getDataLayer();
     }
 	
 	@Provides
