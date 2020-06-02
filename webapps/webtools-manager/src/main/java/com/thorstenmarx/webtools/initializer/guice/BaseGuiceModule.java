@@ -29,7 +29,6 @@ import com.thorstenmarx.modules.ModuleAPIClassLoader;
 import com.thorstenmarx.modules.ModuleManagerImpl;
 import com.thorstenmarx.modules.api.ModuleManager;
 import com.thorstenmarx.webtools.ContextListener;
-import com.thorstenmarx.webtools.api.CoreModuleContext;
 import com.thorstenmarx.webtools.api.ModuleContext;
 import com.thorstenmarx.webtools.api.actions.SegmentService;
 import com.thorstenmarx.webtools.api.analytics.AnalyticsDB;
@@ -51,7 +50,6 @@ import com.thorstenmarx.webtools.tracking.referrer.ReferrerFilter;
 import com.thorstenmarx.webtools.tracking.useragent.UserAgentFilter;
 import com.thorstenmarx.webtools.tracking.CrawlerUtil;
 import com.thorstenmarx.webtools.api.location.LocationProvider;
-import com.thorstenmarx.webtools.initializer.annotations.Common;
 import com.thorstenmarx.webtools.initializer.MultiModuleManager;
 import com.thorstenmarx.webtools.tracking.location.LocationFilter;
 import com.thorstenmarx.webtools.web.utils.MaxmindLocationProvider;
@@ -60,10 +58,9 @@ import java.io.IOException;
 import java.net.URLClassLoader;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
-import java.util.Map;
 import net.engio.mbassy.bus.MBassador;
+import com.thorstenmarx.webtools.initializer.annotations.Core;
 
 /**
  *
@@ -130,7 +127,7 @@ public class BaseGuiceModule extends AbstractModule {
 	
 	@Provides
     @Singleton
-    private MultiModuleManager multiModuleManager(@Common ModuleManager coreModuleManager, ModuleManager moduleManager) {
+    private MultiModuleManager multiModuleManager(@Core ModuleManager coreModuleManager, ModuleManager moduleManager) {
         return MultiModuleManager.create(coreModuleManager, moduleManager);
     }
 
@@ -161,7 +158,7 @@ public class BaseGuiceModule extends AbstractModule {
 
 	@Provides
 	@Singleton
-	protected SegmentService segmentService(final @Common ModuleManager moduleManager) {
+	protected SegmentService segmentService(final @Core ModuleManager moduleManager) {
 		final List<CoreSegmentationExtension> extensions = moduleManager.extensions(CoreSegmentationExtension.class);
 		return extensions.get(0).getSegmentService();
 	}

@@ -3,12 +3,12 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>com.thorstenmarx.webtools</groupId>
 	<artifactId>webtools-incubator</artifactId>
-	<version>5.2.1</version>
+	<version>5.2.2</version>
 	
 	<parent>
 		<groupId>com.thorstenmarx.webtools</groupId>
 		<artifactId>webtools-parent</artifactId>
-		<version>5.2.1</version>
+		<version>5.2.2</version>
 		<relativePath>../webtools-parent</relativePath>
 	</parent>
 	
@@ -41,7 +41,7 @@
 			<dependency>
 				<groupId>com.thorstenmarx.webtools</groupId>
 				<artifactId>webtools-bom</artifactId>
-				<version>5.2.1</version>
+				<version>5.2.2</version>
 				<scope>import</scope>
 				<type>pom</type>
 			</dependency>   
