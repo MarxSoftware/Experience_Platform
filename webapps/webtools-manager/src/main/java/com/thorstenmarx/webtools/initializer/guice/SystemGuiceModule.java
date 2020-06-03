@@ -31,7 +31,6 @@ import com.thorstenmarx.modules.api.ModuleManager;
 import com.thorstenmarx.webtools.api.CoreModuleContext;
 import com.thorstenmarx.webtools.api.execution.Executor;
 import com.thorstenmarx.webtools.base.Configuration;
-import com.thorstenmarx.webtools.initializer.annotations.Common;
 import java.io.File;
 import java.io.IOException;
 import java.net.URLClassLoader;
@@ -42,6 +41,7 @@ import java.util.Map;
 import net.engio.mbassy.bus.MBassador;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import com.thorstenmarx.webtools.initializer.annotations.Core;
 
 /**
  *
@@ -71,8 +71,8 @@ public class SystemGuiceModule extends AbstractModule {
 
 	@Provides
 	@Singleton
-	@Common
-	protected ModuleManager coreModuleManager(final Injector injector, final CoreModuleContext context) {
+	@Core
+	protected ModuleManager coreModuleManager(final CoreModuleContext context) {
 		try {
 			List<String> apiPackages = new ArrayList<>();
 			apiPackages.add("com.thorstenmarx.webtools.api");
@@ -95,24 +95,23 @@ public class SystemGuiceModule extends AbstractModule {
 			apiPackages.add("org.xml");
 			apiPackages.add("org.w3c");
 			ModuleAPIClassLoader apiClassLoader = new ModuleAPIClassLoader((URLClassLoader) getClass().getClassLoader(), apiPackages);
-			ModuleManager coreModuleManager = ModuleManagerImpl.create(new File("webtools_modules/system"), context, apiClassLoader, injector::injectMembers);
+			ModuleManager coreModuleManager = ModuleManagerImpl.create(new File("webtools_modules/system"), context, apiClassLoader);
 
-			// if available activate cluster
+			// if available activate cluster first
 			if (coreModuleManager.module("core-module-jgroups-cluster") != null) {
 				coreModuleManager.activateModule("core-module-jgroups-cluster");
 			}
 
 			// autoactivate core modules
-			coreModuleManager.configuration().getModules().keySet().forEach((module) -> {
-				try {
-					coreModuleManager.activateModule(module);
-				} catch (IOException ex) {
-					throw new IllegalStateException(ex);
-				}
-			});
+			coreModuleManager.activateModule("core-module-entities");
+			coreModuleManager.activateModule("core-module-analytics-storage-lucene");
+			coreModuleManager.activateModule("core-module-cachelayer");
+			coreModuleManager.activateModule("core-module-configuration");
+			coreModuleManager.activateModule("core-module-actionsystem");
+
 
 			return coreModuleManager;
-		} catch (Exception e) {
+		} catch (Throwable e) {
 			LOGGER.error("error loading core modules", e);
 			System.exit(25);
 		}
