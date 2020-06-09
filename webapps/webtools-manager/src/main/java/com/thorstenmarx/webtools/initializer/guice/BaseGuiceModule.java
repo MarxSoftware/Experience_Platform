@@ -28,6 +28,7 @@ import com.google.inject.Singleton;
 import com.thorstenmarx.modules.ModuleAPIClassLoader;
 import com.thorstenmarx.modules.ModuleManagerImpl;
 import com.thorstenmarx.modules.api.ModuleManager;
+import com.thorstenmarx.modules.api.ServiceRegistry;
 import com.thorstenmarx.webtools.ContextListener;
 import com.thorstenmarx.webtools.api.ModuleContext;
 import com.thorstenmarx.webtools.api.actions.SegmentService;
@@ -104,7 +105,7 @@ public class BaseGuiceModule extends AbstractModule {
 
 	@Provides
 	@Singleton
-	protected ModuleManager moduleManager(final AnalyticsDB analyticsDB, final SegmentService segmentService, final MBassador mBassador, final Entities entities, final Registry registry, final Injector injector) {
+	protected ModuleManager moduleManager(final ServiceRegistry serviceRegistry, final Injector injector) {
 		List<String> apiPackages = new ArrayList<>();
 		apiPackages.add("com.thorstenmarx.webtools.api");
 		apiPackages.add("com.thorstenmarx.webtools.hosting");
@@ -122,7 +123,12 @@ public class BaseGuiceModule extends AbstractModule {
 		apiPackages.add("java.internal.reflect");
 		apiPackages.add("jdk.internal.reflect");
 		ModuleAPIClassLoader apiClassLoader = new ModuleAPIClassLoader((URLClassLoader) getClass().getClassLoader(), apiPackages);
-		return ModuleManagerImpl.create(new File("webtools_modules/extensions"), new ModuleContext(analyticsDB, segmentService, mBassador, entities, registry), apiClassLoader, injector::injectMembers);
+		return ModuleManagerImpl.builder()
+				.setPath(new File("webtools_modules/extensions"))
+				.setContext(new ModuleContext())
+				.setClassLoader(apiClassLoader)
+				.setInjector(injector::injectMembers)
+				.setServiceRegistry(serviceRegistry).build();
 	}
 	
 	@Provides

@@ -37,20 +37,9 @@ import net.engio.mbassy.bus.MBassador;
  */
 public class ModuleContext extends Context {
 	
-	protected final AnalyticsDB analyticsDB;
-	protected final SegmentService segmentService;
-	protected final MBassador messageBus;
-	protected final Entities entities;
-	protected final Registry registry;
-	
 	protected final Map<String, Object> parameters = new HashMap<>();
 	
-	public ModuleContext (final AnalyticsDB analyticsDB, final SegmentService segmentService, final MBassador messageBus, final Entities entities, final Registry registry) {
-		this.analyticsDB = analyticsDB;
-		this.segmentService = segmentService;
-		this.messageBus = messageBus;
-		this.entities = entities;
-		this.registry = registry;
+	public ModuleContext () {
 	}
 	
 	public void put (final String name, final Object value) {
@@ -67,28 +56,4 @@ public class ModuleContext extends Context {
 		
 		return type.cast(value);
 	}
-	
-
-	public AnalyticsDB getAnalyticsDB() {
-		return analyticsDB;
-	}
-
-	public SegmentService getSegmentService() {
-		return segmentService;
-	}
-
-	public MBassador getMessageBus() {
-		return messageBus;
-	}
-
-	public Entities getEntities() {
-		return entities;
-	}
-
-	public Registry getRegistry() {
-		return registry;
-	}
-
-	
-
 }
