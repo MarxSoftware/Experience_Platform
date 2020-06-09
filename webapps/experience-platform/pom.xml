@@ -6,13 +6,13 @@
 	<parent>
 		<groupId>com.thorstenmarx.webtools</groupId>
 		<artifactId>webtools-parent</artifactId>
-		<version>5.2.2</version>
+		<version>5.2.4</version>
 		<relativePath>../../webtools-parent</relativePath>
 	</parent>
 
 	<groupId>com.thorstenmarx.webtools</groupId>
 	<artifactId>experience-platform</artifactId>
-	<version>5.2.2</version>
+	<version>5.2.4</version>
 	<name>experience-platform</name>
 	<description>Experience Platform</description>
 	<inceptionYear>2016</inceptionYear>
@@ -31,7 +31,7 @@
 			<dependency>
 				<groupId>com.thorstenmarx.webtools</groupId>
 				<artifactId>webtools-bom</artifactId>
-				<version>5.2.2</version>
+				<version>5.2.4</version>
 				<scope>import</scope>
 				<type>pom</type>
 			</dependency>   
@@ -41,6 +41,18 @@
 		<dependency>
 			<groupId>org.testng</groupId>
 			<artifactId>testng</artifactId>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>com.squareup.okhttp3</groupId>
+			<artifactId>okhttp</artifactId>
+			<version>4.7.2</version>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>com.alibaba</groupId>
+			<artifactId>fastjson</artifactId>
+			<version>1.2.70</version>
 			<scope>test</scope>
 		</dependency>
 		<dependency>

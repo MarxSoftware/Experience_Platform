@@ -27,7 +27,9 @@ import com.google.inject.Provides;
 import com.google.inject.Singleton;
 import com.thorstenmarx.modules.ModuleAPIClassLoader;
 import com.thorstenmarx.modules.ModuleManagerImpl;
+import com.thorstenmarx.modules.api.DefaultServiceRegistry;
 import com.thorstenmarx.modules.api.ModuleManager;
+import com.thorstenmarx.modules.api.ServiceRegistry;
 import com.thorstenmarx.webtools.api.CoreModuleContext;
 import com.thorstenmarx.webtools.api.execution.Executor;
 import com.thorstenmarx.webtools.base.Configuration;
@@ -53,11 +55,17 @@ public class SystemGuiceModule extends AbstractModule {
 
 	public SystemGuiceModule() {
 	}
+	
+	@Provides
+	@Singleton
+	protected ServiceRegistry serviceRegistry () {
+		return new DefaultServiceRegistry();
+	}
 
 	@Provides
 	@Singleton
 	protected CoreModuleContext coreModuleContext(final Configuration configuration, final Executor executor, final MBassador mbassador) {
-		final CoreModuleContext coreModuleContext = new CoreModuleContext(new File("./webtools_modules/system/modules_data"), mbassador, executor);
+		final CoreModuleContext coreModuleContext = new CoreModuleContext(new File("./webtools_modules/system/modules_data"), executor);
 
 		Map<String, Object> analytics = configuration.getMap("analytics", Collections.EMPTY_MAP);
 		if (analytics.containsKey("shards")) {
@@ -72,7 +80,7 @@ public class SystemGuiceModule extends AbstractModule {
 	@Provides
 	@Singleton
 	@Core
-	protected ModuleManager coreModuleManager(final CoreModuleContext context) {
+	protected ModuleManager coreModuleManager(final CoreModuleContext context, final ServiceRegistry serviceRegistry) {
 		try {
 			List<String> apiPackages = new ArrayList<>();
 			apiPackages.add("com.thorstenmarx.webtools.api");
@@ -95,7 +103,14 @@ public class SystemGuiceModule extends AbstractModule {
 			apiPackages.add("org.xml");
 			apiPackages.add("org.w3c");
 			ModuleAPIClassLoader apiClassLoader = new ModuleAPIClassLoader((URLClassLoader) getClass().getClassLoader(), apiPackages);
-			ModuleManager coreModuleManager = ModuleManagerImpl.create(new File("webtools_modules/system"), context, apiClassLoader);
+			
+			
+			ModuleManager coreModuleManager = ModuleManagerImpl.builder()
+					.setPath(new File("webtools_modules/system"))
+					.setContext(context)
+					.setClassLoader(apiClassLoader)
+					.setServiceRegistry(serviceRegistry)
+					.build();
 
 			// if available activate cluster first
 			if (coreModuleManager.module("core-module-jgroups-cluster") != null) {

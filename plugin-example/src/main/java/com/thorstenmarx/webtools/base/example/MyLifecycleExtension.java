@@ -47,14 +47,14 @@ public class MyLifecycleExtension extends ModuleLifeCycleExtension {
 
 	@Override
 	public void activate() {
-		getModuleContext().getMessageBus().publish(new RegisterEventSourceMessage("example-event"));
+//		getModuleContext().getMessageBus().publish(new RegisterEventSourceMessage("example-event"));
 		
 		messageStream.provideMessage(MessageStream.Destination.DASHBOARD, Messages.info("Example Plugin activated"));
 	}
 
 	@Override
 	public void deactivate() {
-		getModuleContext().getMessageBus().publish(new UnregisterEventSourceMessage("example-event"));	
+//		getModuleContext().getMessageBus().publish(new UnregisterEventSourceMessage("example-event"));	
 	}
 	
 	private ModuleContext getModuleContext () {
