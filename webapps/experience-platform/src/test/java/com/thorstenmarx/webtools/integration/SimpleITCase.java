@@ -42,6 +42,7 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.UUID;
+import okhttp3.HttpUrl;
 import okhttp3.MediaType;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
@@ -99,43 +100,65 @@ public class SimpleITCase {
 	public void track_order() throws IOException {
 
 		OkHttpClient client = new OkHttpClient();
-		
+		/*
+			event=pageview
+			&site=a53c9843-0902-4760-bd06-41cf5e038b60
+			&page=78
+			&type=page
+			&uid=e2be895a-495a-4023-8da1-6d804118337a
+			&reqid=9bf7da9a-3816-4ea0-84f7-dc3a4045cf2b
+			&vid=709ab4c5-e54b-4964-9b8d-63ffb666e6e5
+			&referrer=
+			&offset=-120
+			&_t=1591772571276	
+			&c_home=false
+			&c_front_page=true
+			&c_post_type=page
+			&c_slug=startpage
+			&c_archiv=false
+		 */
 		for (int i = 0; i < 5; i++) {
+
+			HttpUrl.Builder httpBuilder = HttpUrl.parse("http://localhost:9191/tracking/pixel").newBuilder();
+			httpBuilder.addQueryParameter("event", "ecommerce_order");
+			httpBuilder.addQueryParameter("page", "#order");
+			httpBuilder.addQueryParameter("site", SITE);
+			httpBuilder.addQueryParameter("uid", USER_ID + "i");
+			httpBuilder.addQueryParameter("vid", VID_ID + "i");
+			httpBuilder.addQueryParameter("reqid", REQ_ID() + "i");
+			httpBuilder.addQueryParameter("c_order_id", "1");
+			httpBuilder.addQueryParameter("c_cart_id", "1");
+			httpBuilder.addQueryParameter("c_order_items", "1");
+			httpBuilder.addQueryParameter("c_order_total", "10");
+
 			Request request = new Request.Builder()
-				.url("http://localhost:9191/tracking/pixel?"
-						+ "event=ecommerce_order"
-						+ "&page=#order"
-						+ "&uid=" + USER_ID + i
-						+ "&vid=" + VID_ID
-						+ "&reqid=" + REQ_ID()
-						+ "&c_order_id=1"
-						+ "&c_cart_id=1"
-						+ "&c_order_items=1"
-						+ "&c_order_total=10"
-				)
-				.build();
-		try (Response response = client.newCall(request).execute()) {
-			System.out.println(response.body().string());
-		}
+					.url(httpBuilder.build())
+					.build();
+			try (Response response = client.newCall(request).execute()) {
+				System.out.println(response.body().string());
+			}
 		}
 
-		Request request = new Request.Builder()
-				.url("http://localhost:9191/tracking/pixel?"
-						+ "event=ecommerce_order"
-						+ "&page=#order"
-						+ "&uid=" + USER_ID
-						+ "&vid=" + VID_ID
-						+ "&reqid=" + REQ_ID()
-						+ "&c_order_id=1"
-						+ "&c_cart_id=1"
-						+ "&c_order_items=1"
-						+ "&c_order_total=100"
-				)
-				.build();
+		HttpUrl.Builder httpBuilder = HttpUrl.parse("http://localhost:9191/tracking/pixel").newBuilder();
+			httpBuilder.addQueryParameter("event", "ecommerce_order");
+			httpBuilder.addQueryParameter("page", "#order");
+			httpBuilder.addQueryParameter("site", SITE);
+			httpBuilder.addQueryParameter("uid", USER_ID);
+			httpBuilder.addQueryParameter("vid", VID_ID);
+			httpBuilder.addQueryParameter("reqid", REQ_ID());
+			httpBuilder.addQueryParameter("c_order_id", "1");
+			httpBuilder.addQueryParameter("c_cart_id", "1");
+			httpBuilder.addQueryParameter("c_order_items", "1");
+			httpBuilder.addQueryParameter("c_order_total", "10");
+
+			Request request = new Request.Builder()
+					.url(httpBuilder.build())
+					.build();
 		try (Response response = client.newCall(request).execute()) {
 			System.out.println(response.body().string());
 		}
 	}
+
 	@Test(dependsOnMethods = "track_order")
 	public void get_segments() throws IOException {
 
