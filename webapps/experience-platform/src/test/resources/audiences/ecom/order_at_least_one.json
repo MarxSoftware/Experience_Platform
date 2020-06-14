@@ -1,0 +1,7 @@
+{
+	"site" : "5dc5ac7e-b86c-4601-89ed-81596aeb7f56",
+	"conditional": "and",
+	"conditions": [
+		{ "conditional" : "ecommerce_order", "count" : 1}
+	]
+}
