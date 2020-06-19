@@ -15,7 +15,6 @@
 		<module>../webtools-base</module>
 		<module>../webtools-tracking</module>
 		<module>../plugin-example</module>
-		<module>../webtools-scripting</module>
 		<module>../webtools-incubator</module>
 		<module>../webapps/webtools-manager</module>        
 		<module>../webapps/webtools-tracker</module>        

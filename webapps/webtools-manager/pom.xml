@@ -54,14 +54,7 @@
 			<groupId>com.thorstenmarx.webtools</groupId>
 			<artifactId>webtools-base</artifactId>
 		</dependency>
-		<dependency>
-			<groupId>com.thorstenmarx.webtools</groupId>
-			<artifactId>webtools-scripting</artifactId>
-		</dependency>
-		<!--		<dependency>
-			<groupId>com.thorstenmarx.webtools</groupId>
-			<artifactId>webtools-cluster</artifactId>
-		</dependency>-->
+
 			
 		<dependency>
 			<groupId>com.thorstenmarx.modules</groupId>
