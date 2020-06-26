@@ -28,7 +28,7 @@ import okhttp3.MediaType;
 public abstract class AbstractAudiencesTest {
 
 	protected final String API_KEY = "f8f8s8v1ih8lhjotbocaccuo2f";
-	protected final String SITE = "5dc5ac7e-b86c-4601-89ed-81596aeb7f56";
+	protected final String SITE = "2bce5f5e-be17-442d-ada1-a7ed6e849047";
 
 	protected final String USER_ID = UUID.randomUUID().toString();
 	protected final String VID_ID = UUID.randomUUID().toString();
