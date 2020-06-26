@@ -25,6 +25,8 @@ import com.alibaba.fastjson.JSONObject;
 import com.google.common.io.CharStreams;
 import com.thorstenmarx.webtools.api.analytics.AnalyticsDB;
 import com.thorstenmarx.webtools.ContextListener;
+import com.thorstenmarx.webtools.api.analytics.Fields;
+import com.thorstenmarx.webtools.manager.services.SiteService;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
@@ -48,6 +50,8 @@ public class TrackServlet extends HttpServlet {
 
 	private static byte[] image = null;
 
+	private SiteService siteService;
+
 	public TrackServlet() {
 	}
 
@@ -55,13 +59,17 @@ public class TrackServlet extends HttpServlet {
 	public void init(ServletConfig config) throws ServletException {
 		super.init(config);
 
+		this.siteService = ContextListener.INJECTOR_PROVIDER.injector().getInstance(SiteService.class);
+	}
+	
+	private boolean siteExists (final String site) {
+		return siteService.get(site) != null;
 	}
 
 	@Override
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		response.setStatus(HttpServletResponse.SC_NOT_IMPLEMENTED);
 	}
-	
 
 	@Override
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -70,25 +78,30 @@ public class TrackServlet extends HttpServlet {
 
 		asyncContext.start(() -> {
 			try {
-				
+
 				final String body = CharStreams.toString(request.getReader());
-				
-				
+
 				Map<String, Map<String, Object>> parameters = new HashMap<>();
 				final JSONObject jsonParameters = JSONObject.parseObject(body);
+
+				final String site = jsonParameters.getJSONObject("data").getString(Fields.Site.value());
+				
+				if (!siteExists(site)){
+					return;
+				}
+
 				parameters.put("data", jsonParameters.getJSONObject("data").getInnerMap());
 				parameters.put("meta", jsonParameters.getJSONObject("meta").getInnerMap());
-				
+
 				ContextListener.INJECTOR_PROVIDER.injector().getInstance(AnalyticsDB.class).track(parameters);
-				
+
 			} catch (IOException ex) {
 				LOGGER.error(ex);
 			} finally {
-				
+
 				asyncContext.complete();
 			}
 		});
 	}
-
 
 }
