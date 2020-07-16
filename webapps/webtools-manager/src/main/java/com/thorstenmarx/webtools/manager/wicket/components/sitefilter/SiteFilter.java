@@ -53,7 +53,6 @@ import org.apache.wicket.markup.html.form.DropDownChoice;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.form.IChoiceRenderer;
 import org.apache.wicket.markup.html.panel.Panel;
-import org.apache.wicket.model.AbstractReadOnlyModel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.PropertyModel;
 
@@ -88,13 +87,14 @@ public class SiteFilter extends Panel {
 
 		List<Site> sites = new ArrayList<>(sitesTemp);
 
-		IModel<List<? extends Site>> siteChoices = new AbstractReadOnlyModel<List<? extends Site>>() {
+		IModel<List<? extends Site>> siteChoices = new IModel<List<? extends Site>>() {
 			private static final long serialVersionUID = -2583290457773357445L;
 
 			@Override
 			public List<Site> getObject() {
 				return sites;
 			}
+			
 		};
 
 		final DropDownChoice<Site> siteSelector = new DropDownChoice<>("sites",

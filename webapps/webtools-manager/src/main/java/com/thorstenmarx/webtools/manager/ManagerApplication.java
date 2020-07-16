@@ -60,6 +60,8 @@ public class ManagerApplication extends AuthenticatedWebApplication {
 	@Override
 	protected void init() {
 		super.init();
+		
+		getCspSettings().blocking().disabled();
 
 		injector = ContextListener.INJECTOR_PROVIDER.injector();
 		getMarkupSettings().setStripWicketTags(true);
