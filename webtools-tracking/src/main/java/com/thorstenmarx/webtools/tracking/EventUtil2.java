@@ -48,6 +48,7 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 import javax.servlet.http.HttpServletRequest;
 
 /**
@@ -124,6 +125,7 @@ public class EventUtil2 extends EventUtil {
 
 		Constants.Event eventType = getEventType(parameters);
 
+		event.put(Fields._UUID.value(), UUID.randomUUID().toString());
 		event.put(Fields.UserId.value(), userid);
 		event.put(Fields.RequestId.value(), requestId);
 		event.put(Fields.VisitId.value(), getStringParameter(parameters, Constants.Param.VISIT_ID.value(), ""));
