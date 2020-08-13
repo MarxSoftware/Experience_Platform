@@ -33,6 +33,9 @@ public class Query implements LimitProvider {
 	public enum OCCUR {
 		AND, OR;
 	}
+	public enum TYPE {
+		RAW,DOCUMENT;
+	}
 	
 	private final long start;
 	private final long end;
@@ -40,14 +43,14 @@ public class Query implements LimitProvider {
 	private final Map<String, String> terms;
 	private final Map<String, String[]> multivalueTerms;
 	
-	private final String tableName;
+	private final TYPE type;
 	
 	private Query (Builder builder) {
 		this.start = builder.start;
 		this.end = builder.end;
 		this.terms = builder.terms;
 		this.multivalueTerms = builder.multivalueTerms;
-		this.tableName = builder.tableName;
+		this.type = builder.type;
 	}
 	
 	@Override
@@ -63,8 +66,8 @@ public class Query implements LimitProvider {
 		return end;
 	}
 	
-	public String table () {
-		return tableName;
+	public TYPE Type () {
+		return type;
 	}
 	
 	public Map<String, String> terms () {
@@ -85,13 +88,13 @@ public class Query implements LimitProvider {
 		private Map<String, String> terms = new HashMap<>();
 		private Map<String, String[]> multivalueTerms = new HashMap<>();
 		
-		private String tableName;
+		private TYPE type;
 		
 		private Builder() {}
 		
 		
-		public Builder tableName (final String tableName) {
-			this.tableName = tableName;
+		public Builder type (final TYPE type) {
+			this.type = type;
 			return this;
 		}
 		/**

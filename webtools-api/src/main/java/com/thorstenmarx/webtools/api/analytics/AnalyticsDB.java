@@ -39,7 +39,7 @@ import java.util.concurrent.Future;
  */
 @API(since = "1.0.0", status = API.Status.Stable)
 public interface AnalyticsDB {
-
+	
     /**
      * Run a query.
      *
