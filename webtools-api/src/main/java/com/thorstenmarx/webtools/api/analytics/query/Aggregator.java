@@ -21,15 +21,16 @@ package com.thorstenmarx.webtools.api.analytics.query;
  * <http://www.gnu.org/licenses/gpl-3.0.html>.
  * #L%
  */
+import com.alibaba.fastjson.JSONObject;
 import java.util.List;
 import java.util.concurrent.Callable;
 
 /**
  *
  * @author thmarx
- * @param <T> The returntype of the callable.
+ * @param <R> The returntype of the callable.
  */
-public abstract class Aggregator<T> implements Callable<T> {
+public abstract class Aggregator<R> implements Callable<R> {
 	
 	protected List<ShardDocument> documents;
 
