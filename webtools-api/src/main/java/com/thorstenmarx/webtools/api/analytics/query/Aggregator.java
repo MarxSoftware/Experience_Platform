@@ -21,7 +21,6 @@ package com.thorstenmarx.webtools.api.analytics.query;
  * <http://www.gnu.org/licenses/gpl-3.0.html>.
  * #L%
  */
-import com.alibaba.fastjson.JSONObject;
 import java.util.List;
 import java.util.concurrent.Callable;
 
