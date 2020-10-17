@@ -17,7 +17,8 @@
 		<module>../plugin-example</module>
 		<module>../webtools-incubator</module>
 		<module>../webapps/webtools-manager</module>        
-		<module>../webapps/webtools-tracker</module>        
+		<module>../webapps/webtools-tracker</module>       
+		<module>../webapps/webtools-userprofile</module> 
 		<module>../webapps/experience-platform</module>        
 	</modules>
 	<properties>

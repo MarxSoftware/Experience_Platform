@@ -52,7 +52,6 @@
 		<dependency>
 			<groupId>com.alibaba</groupId>
 			<artifactId>fastjson</artifactId>
-			<version>1.2.70</version>
 			<scope>test</scope>
 		</dependency>
 		<dependency>
@@ -96,7 +95,7 @@
 			<plugin>
 				<groupId>org.eclipse.jetty</groupId>
 				<artifactId>jetty-maven-plugin</artifactId>
-				<version>9.4.27.v20200227</version>
+				<version>9.4.31.v20200723</version>
 				<configuration>
 					<httpConnector>
 						<port>9191</port>
@@ -114,6 +113,11 @@
 						<contextHandler implementation="org.eclipse.jetty.maven.plugin.JettyWebAppContext">
 							<war>${basedir}/../webtools-tracker/target/webtools-tracker-${project.version}.war</war>
 							<contextPath>/tracking</contextPath>
+							<allowNullPathInfo>true</allowNullPathInfo>
+						</contextHandler>
+						<contextHandler implementation="org.eclipse.jetty.maven.plugin.JettyWebAppContext">
+							<war>${basedir}/../webtools-userprofile/target/webtools-userprofile-${project.version}.war</war>
+							<contextPath>/up</contextPath>
 							<allowNullPathInfo>true</allowNullPathInfo>
 						</contextHandler>
 					</contextHandlers>

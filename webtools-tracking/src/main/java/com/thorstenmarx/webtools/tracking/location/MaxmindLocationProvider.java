@@ -1,4 +1,4 @@
-package com.thorstenmarx.webtools.web.utils;
+package com.thorstenmarx.webtools.tracking.location;
 
 /*-
  * #%L

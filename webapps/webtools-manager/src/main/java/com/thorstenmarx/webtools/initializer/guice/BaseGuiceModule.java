@@ -53,7 +53,7 @@ import com.thorstenmarx.webtools.tracking.CrawlerUtil;
 import com.thorstenmarx.webtools.api.location.LocationProvider;
 import com.thorstenmarx.webtools.initializer.MultiModuleManager;
 import com.thorstenmarx.webtools.tracking.location.LocationFilter;
-import com.thorstenmarx.webtools.web.utils.MaxmindLocationProvider;
+import com.thorstenmarx.webtools.tracking.location.MaxmindLocationProvider;
 import java.io.File;
 import java.io.IOException;
 import java.net.URLClassLoader;
