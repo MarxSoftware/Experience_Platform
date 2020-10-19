@@ -1,1 +1,28 @@
+let _UTILS = {
+	getOrientation: () => {
+		let angle = window.orientation ? window.orientation : window.screen.orientation.angle;
+		return Math.abs(window.screen.orientation.angle) - 90 == 0 ? "landscape" : "portrait";
+	},
+	getMobileWidth: () => {
+		return _UTILS.getOrientation() == "landscape" ? screen.availHeight : screen.availWidth;
+	},
+	getMobileHeight: () => {
+		return _UTILS.getOrientation() == "landscape" ? screen.availWidth : screen.availHeight;
+	}
+}
 var EXP_USERPROFILE = {{{userprofile}}};
+
+EXP_USERPROFILE.screen = {};
+EXP_USERPROFILE.screen.width = screen.width;
+EXP_USERPROFILE.screen.height = screen.height;
+
+const _update_mobile = () => {
+	if (EXP_USERPROFILE.device_type === "Mobile Phone") {
+		EXP_USERPROFILE.screen.orientation = _UTILS.getOrientation();
+		EXP_USERPROFILE.screen.width = _UTILS.getMobileWidth();
+		EXP_USERPROFILE.screen.height = _UTILS.getMobileHeight();
+	}
+}
+window.addEventListener("orientationchange", _update_mobile);
+window.addEventListener("resize", _update_mobile);
+_update_mobile();

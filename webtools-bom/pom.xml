@@ -54,8 +54,8 @@
 	</distributionManagement>
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-		<jersey.version>2.31</jersey.version>
-		<wicket.version>9.0.0</wicket.version>
+		<jersey.version>2.32</jersey.version>
+		<wicket.version>9.1.0</wicket.version>
 		<maven.compiler.source>12</maven.compiler.source>
 		<maven.compiler.target>12</maven.compiler.target>
 	</properties>
