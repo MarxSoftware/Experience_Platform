@@ -16,10 +16,10 @@
 		<module>../webtools-tracking</module>
 		<module>../webapps/webtools-tracker</module>       
 		<module>../webapps/webtools-manager</module>   
+		<module>../webapps/experience-platform</module>        
 		<!--module>../plugin-example</module>
 		<module>../webtools-incubator</module>     
-		<module>../webapps/webtools-userprofile</module> 
-		<module>../webapps/experience-platform</module-->        
+		<module>../webapps/webtools-userprofile</module--> 
 	</modules>
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>

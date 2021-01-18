@@ -26,6 +26,7 @@ import com.alibaba.fastjson.JSONArray;
 import com.thorstenmarx.modules.api.ManagerConfiguration;
 import com.thorstenmarx.modules.api.Module;
 import com.thorstenmarx.modules.api.ModuleDescription;
+import com.thorstenmarx.modules.api.ModuleManager;
 import com.thorstenmarx.webtools.ContextListener;
 import com.thorstenmarx.webtools.api.extensions.SecureRestResourceExtension;
 import com.thorstenmarx.webtools.initializer.MultiModuleManager;
@@ -51,28 +52,25 @@ import org.apache.logging.log4j.Logger;
  *
  * @author thmarx
  */
-@Path("module")
-public class SecureModuleResource {
+@Path("manage/module")
+public class ModuleManagmentResource {
 
-	private static final Logger LOGGER = LogManager.getLogger(SecureModuleResource.class);
+	private static final Logger LOGGER = LogManager.getLogger(ModuleManagmentResource.class);
 
-	public SecureModuleResource() {
+	public ModuleManagmentResource() {
 	}
 
-	@Path("{moduleName}")
-	public SecureRestResourceExtension module(
+	@Path("activate/{moduleName}")
+	public Response module(
 			@PathParam("moduleName") final String moduleName) {
 
 		String errorMessage = "extension not found";
 		try {
-			MultiModuleManager modules = ContextListener.INJECTOR_PROVIDER.injector().getInstance(MultiModuleManager.class);
-			Module module = modules.module(moduleName);
-			if (module != null) {
-				List<SecureRestResourceExtension> resourceExtensions = module.extensions(SecureRestResourceExtension.class);
-				if (resourceExtensions.size() > 0) {
-					return resourceExtensions.get(0);
-				}
-			}
+			ModuleManager modules = ContextListener.INJECTOR_PROVIDER.injector().getInstance(ModuleManager.class);
+			
+			modules.activateModule(moduleName);
+			
+			return Response.ok().build();
 		} catch (Exception e) {
 			LOGGER.error(e);
 			errorMessage = "error while executing module";
@@ -91,7 +89,7 @@ public class SecureModuleResource {
 		JSONArray installedModules = new JSONArray();
 		boolean error = false;
 		try {
-			MultiModuleManager modules = ContextListener.INJECTOR_PROVIDER.injector().getInstance(MultiModuleManager.class);
+			ModuleManager modules = ContextListener.INJECTOR_PROVIDER.injector().getInstance(ModuleManager.class);
 			for (ManagerConfiguration.ModuleConfig mc : modules.configuration().getModules().values()) {
 				ModuleDescription modDesc = modules.description(mc.getId());
 				if (modDesc == null) {

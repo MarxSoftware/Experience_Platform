@@ -46,7 +46,7 @@
 		<dependency>
 			<groupId>com.squareup.okhttp3</groupId>
 			<artifactId>okhttp</artifactId>
-			<version>4.7.2</version>
+			<version>4.9.0</version>
 			<scope>test</scope>
 		</dependency>
 		<dependency>
@@ -95,7 +95,7 @@
 			<plugin>
 				<groupId>org.eclipse.jetty</groupId>
 				<artifactId>jetty-maven-plugin</artifactId>
-				<version>9.4.31.v20200723</version>
+				<version>11.0.0</version>
 				<configuration>
 					<httpConnector>
 						<port>9191</port>
@@ -105,19 +105,14 @@
 					</webApp>
 					<scanIntervalSeconds>0</scanIntervalSeconds>
 					<contextHandlers>
-						<contextHandler implementation="org.eclipse.jetty.maven.plugin.JettyWebAppContext">
+						<contextHandler implementation="org.eclipse.jetty.maven.plugin.MavenWebAppContext">
 							<war>${basedir}/../webtools-manager/target/webtools-manager-${project.version}.war</war>
 							<contextPath>/</contextPath>
 							<allowNullPathInfo>true</allowNullPathInfo>
 						</contextHandler>
-						<contextHandler implementation="org.eclipse.jetty.maven.plugin.JettyWebAppContext">
+						<contextHandler implementation="org.eclipse.jetty.maven.plugin.MavenWebAppContext">
 							<war>${basedir}/../webtools-tracker/target/webtools-tracker-${project.version}.war</war>
 							<contextPath>/tracking</contextPath>
-							<allowNullPathInfo>true</allowNullPathInfo>
-						</contextHandler>
-						<contextHandler implementation="org.eclipse.jetty.maven.plugin.JettyWebAppContext">
-							<war>${basedir}/../webtools-userprofile/target/webtools-userprofile-${project.version}.war</war>
-							<contextPath>/up</contextPath>
 							<allowNullPathInfo>true</allowNullPathInfo>
 						</contextHandler>
 					</contextHandlers>
@@ -130,21 +125,21 @@
 				</configuration>
                                 
 				<dependencies>
-					<dependency>
+<!--					<dependency>
 						<groupId>javax.xml.bind</groupId>
 						<artifactId>jaxb-api</artifactId>
 						<version>2.4.0-b180830.0359</version>
-					</dependency>
+					</dependency>-->
 					<!--dependency>
 						<groupId>org.glassfish.jaxb</groupId>
 						<artifactId>jaxb-runtime</artifactId>
 						<version>2.4.0-b180830.0438</version>
 					</dependency-->
-					<dependency>
+<!--					<dependency>
 						<groupId>javax.activation</groupId>
 						<artifactId>activation</artifactId>
 						<version>1.1.1</version>
-					</dependency>
+					</dependency>-->
 		   
 				</dependencies>
 			</plugin>
