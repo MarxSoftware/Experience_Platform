@@ -22,6 +22,7 @@ package com.thorstenmarx.webtools.web.servlets;
  * #L%
  */
 import com.google.common.base.Charsets;
+import com.google.common.base.Strings;
 import com.thorstenmarx.modules.api.Module;
 import com.thorstenmarx.modules.api.ModuleManager;
 import com.thorstenmarx.webtools.ContextListener;
@@ -31,16 +32,15 @@ import java.io.IOException;
 import java.io.OutputStreamWriter;
 import java.util.Arrays;
 import java.util.regex.Pattern;
-import javax.servlet.AsyncContext;
-import javax.servlet.ServletConfig;
-import javax.servlet.ServletException;
-import javax.servlet.annotation.WebServlet;
-import javax.servlet.http.HttpServlet;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
+import jakarta.servlet.AsyncContext;
+import jakarta.servlet.ServletConfig;
+import jakarta.servlet.ServletException;
+import jakarta.servlet.annotation.WebServlet;
+import jakarta.servlet.http.HttpServlet;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.apache.wicket.util.string.Strings;
 
 /**
  *
@@ -116,7 +116,7 @@ public class ExtensionFileServlet extends HttpServlet {
 			return ModuleFileDescription.EMPTY;
 		}
 		final String moduleName = pathParts[0];
-		final String moduleFile = Strings.join("/", Arrays.copyOfRange(pathParts, 1, pathParts.length));
+		final String moduleFile = String.join("/", Arrays.copyOfRange(pathParts, 1, pathParts.length));
 
 		return new ModuleFileDescription(moduleName, moduleFile);
 	}

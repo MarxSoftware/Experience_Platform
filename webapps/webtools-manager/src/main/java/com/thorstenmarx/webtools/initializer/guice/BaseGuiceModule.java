@@ -44,9 +44,7 @@ import com.thorstenmarx.webtools.impl.eventsource.EventSources;
 import com.thorstenmarx.webtools.impl.execution.DefaultExecutor;
 import com.thorstenmarx.webtools.impl.message.LocalMessageStream;
 import com.thorstenmarx.webtools.manager.services.SiteService;
-import com.thorstenmarx.webtools.manager.services.UserService;
 import com.thorstenmarx.webtools.manager.services.impl.DBSiteService;
-import com.thorstenmarx.webtools.manager.services.impl.FileUserService;
 import com.thorstenmarx.webtools.tracking.referrer.ReferrerFilter;
 import com.thorstenmarx.webtools.tracking.useragent.UserAgentFilter;
 import com.thorstenmarx.webtools.tracking.CrawlerUtil;
@@ -154,12 +152,6 @@ public class BaseGuiceModule extends AbstractModule {
 		}
 		LocationProvider locationProvider = new MaxmindLocationProvider(config);
 		return locationProvider;
-	}
-
-	@Provides
-	@Singleton
-	protected UserService userService() {
-		return new FileUserService("webtools_data/conf/");
 	}
 
 	@Provides

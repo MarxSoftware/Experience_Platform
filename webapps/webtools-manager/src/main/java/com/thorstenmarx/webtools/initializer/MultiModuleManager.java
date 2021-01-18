@@ -43,7 +43,6 @@ import com.thorstenmarx.modules.api.ManagerConfiguration;
 import com.thorstenmarx.modules.api.Module;
 import com.thorstenmarx.modules.api.ModuleDescription;
 import com.thorstenmarx.modules.api.ModuleManager;
-import com.thorstenmarx.webtools.api.extensions.ManagerConfigExtension;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -52,7 +51,6 @@ import java.util.List;
 import java.util.Optional;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
-import java.util.function.Predicate;
 
 /**
  *

@@ -36,9 +36,6 @@ import com.thorstenmarx.webtools.api.configuration.Configuration;
 import com.thorstenmarx.webtools.api.execution.Executor;
 import com.thorstenmarx.webtools.impl.execution.DefaultExecutor;
 import com.thorstenmarx.webtools.initializer.guice.LocalGuiceModule;
-import com.thorstenmarx.webtools.manager.model.User;
-import com.thorstenmarx.webtools.manager.services.UserService;
-import com.thorstenmarx.webtools.manager.utils.Helper;
 import com.thorstenmarx.webtools.api.location.LocationProvider;
 import com.thorstenmarx.webtools.initializer.guice.BaseGuiceModule;
 import com.thorstenmarx.webtools.initializer.guice.SystemGuiceModule;
@@ -69,29 +66,6 @@ public class LocalActivation implements Activation {
 		
 		injector.getInstance(Key.get(ModuleManager.class, Core.class));
 
-		UserService users = injector.getInstance(UserService.class);
-		// no users
-		if (users.all().isEmpty()) {
-			User u = new User();
-			u.group("admin");
-			final String password = Helper.randomString();
-			u.username("admin");
-			u.password(password);
-			users.add(u);
-			StringBuilder sb = new StringBuilder();
-			sb.append("===== GENERATED USER =====\r\n");
-			sb.append("===== username: admin =====\r\n");
-			sb.append("===== password: ").append(password).append(" =====\r\n");
-			sb.append("==========================\r\n");
-			LOGGER.error(sb.toString());
-		}
-		Configuration config = injector.getInstance(Configuration.class);
-		Optional<String> apikeyOptional = config.getString(Fields.ApiKey.value());
-		if ( !apikeyOptional.isPresent() ) {
-			final String apikey = Helper.randomString();
-			config.set(Fields.ApiKey.value(), apikey);
-		}
-		
 		// init module manager by getting the instance from guice
 		ContextListener.INJECTOR_PROVIDER.injector().getInstance(ModuleManager.class);
 	}

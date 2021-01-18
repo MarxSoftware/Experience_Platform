@@ -28,9 +28,9 @@ import com.thorstenmarx.webtools.api.configuration.Configuration;
 import com.thorstenmarx.webtools.api.model.Site;
 import com.thorstenmarx.webtools.manager.services.SiteService;
 import com.thorstenmarx.webtools.web.hosting.Hosting;
-import javax.servlet.*;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
+import jakarta.servlet.*;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.Optional;
 

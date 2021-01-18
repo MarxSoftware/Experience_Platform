@@ -1,3 +1,4 @@
+
 /*
  * Copyright (C) 2019 Thorsten Marx
  *
@@ -38,7 +39,6 @@ package com.thorstenmarx.webtools.tracking;
  * #L%
  */
 
-import com.google.common.base.Strings;
 import com.google.common.collect.Multimap;
 import com.thorstenmarx.webtools.api.analytics.Fields;
 import java.time.ZoneOffset;
@@ -49,7 +49,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
-import javax.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletRequest;
 
 /**
  *

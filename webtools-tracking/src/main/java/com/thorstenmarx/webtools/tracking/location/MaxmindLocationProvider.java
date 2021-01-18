@@ -26,12 +26,18 @@ import com.thorstenmarx.webtools.api.location.LocationProvider;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.maxmind.db.CHMCache;
 import com.maxmind.db.Reader;
+import com.maxmind.geoip2.DatabaseReader;
+import com.maxmind.geoip2.exception.GeoIp2Exception;
+import com.maxmind.geoip2.model.CityResponse;
+import com.maxmind.geoip2.model.CountryResponse;
 import com.thorstenmarx.webtools.api.location.Location;
 import com.thorstenmarx.webtools.base.Configuration;
 import java.io.File;
 import java.io.IOException;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
+import java.util.Optional;
+import java.util.logging.Level;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -43,7 +49,7 @@ public class MaxmindLocationProvider implements LocationProvider {
 
 	private static final Logger LOGGER = LogManager.getLogger(MaxmindLocationProvider.class);
 
-	private Reader current;
+	private DatabaseReader current;
 
 	private final Configuration configuration;
 
@@ -53,7 +59,7 @@ public class MaxmindLocationProvider implements LocationProvider {
 		LOGGER.debug("loading maxmind geolite database : " + database.exists());
 		if (database.exists()) {
 			try {
-				current = new Reader(database, new CHMCache());
+				current = new DatabaseReader.Builder(database).withCache(new CHMCache()).build();
 			} catch (IOException ex) {
 				LOGGER.error("error loading maxmind database", ex);
 			}
@@ -75,12 +81,15 @@ public class MaxmindLocationProvider implements LocationProvider {
 		}
 		try {
 			InetAddress inet = InetAddress.getByName(ip);
-			JsonNode node = current.get(inet);
-			if (node != null) {
-				String country = node.get("country").get("names").get("en").asText();
-				String countryIso = node.get("country").get("iso_code").asText();
-				String city = node.get("city").get("names").get("en").asText();
-				String postalcode = node.get("postal").get("code").asText();
+			
+			Optional<CityResponse> tryCountry = current.tryCity(inet);
+			if (tryCountry.isPresent()) {
+				CityResponse countryResponse = tryCountry.get();
+				
+				String country = countryResponse.getCountry().getName();
+				String countryIso = countryResponse.getCountry().getIsoCode();
+				String city = countryResponse.getCity().getName(); //node.get("city").get("names").get("en").asText();
+				String postalcode = countryResponse.getPostal().getCode();//node.get("postal").get("code").asText();
 
 				return new Location(city, country, postalcode).setCountryIso(countryIso);
 			}
@@ -88,6 +97,8 @@ public class MaxmindLocationProvider implements LocationProvider {
 		} catch (UnknownHostException ex) {
 			LOGGER.error("", ex);
 		} catch (IOException ex) {
+			LOGGER.error("", ex);
+		} catch (GeoIp2Exception ex) {
 			LOGGER.error("", ex);
 		}
 		return null;

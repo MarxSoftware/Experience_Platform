@@ -25,7 +25,7 @@ package com.thorstenmarx.webtools.api.extensions;
 import com.alibaba.fastjson.JSONObject;
 import com.thorstenmarx.modules.api.BaseExtension;
 import com.thorstenmarx.webtools.api.ModuleContext;
-import javax.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletRequest;
 
 /**
  * ExtensionPoint to create a rest command processor.
