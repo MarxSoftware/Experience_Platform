@@ -14,7 +14,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package com.thorstenmarx.webtools.integration;
+package de.marx_software.webtools.integration;
 
 /*-
  * #%L
@@ -37,7 +37,7 @@ package com.thorstenmarx.webtools.integration;
  * <http://www.gnu.org/licenses/gpl-3.0.html>.
  * #L%
  */
-import com.thorstenmarx.webtools.integration.audiences.AbstractAudiencesTest;
+import de.marx_software.webtools.integration.audiences.AbstractAudiencesTest;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;

@@ -14,10 +14,10 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package com.thorstenmarx.webtools.integration.audiences;
+package de.marx_software.webtools.integration.audiences;
 
-import com.thorstenmarx.webtools.integration.Audiences;
-import com.thorstenmarx.webtools.integration.Tracking;
+import de.marx_software.webtools.integration.Audiences;
+import de.marx_software.webtools.integration.Tracking;
 import java.util.UUID;
 import okhttp3.MediaType;
 

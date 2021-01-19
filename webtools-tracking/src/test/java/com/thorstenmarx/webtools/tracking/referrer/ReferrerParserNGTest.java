@@ -1,4 +1,4 @@
-package com.thorstenmarx.webtools.tracking.referrer;
+package de.marx_software.webtools.tracking.referrer;
 
 /*-
  * #%L

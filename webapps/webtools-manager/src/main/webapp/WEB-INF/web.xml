@@ -38,7 +38,7 @@ License along with this program.  If not, see
 		<param-value>development</param-value>
 	</context-param>
 	<listener>
-		<listener-class>com.thorstenmarx.webtools.ContextListener</listener-class>
+		<listener-class>de.marx_software.webtools.ContextListener</listener-class>
 	</listener>
 	
 	<!-- START INSECURE REST-->
@@ -47,8 +47,8 @@ License along with this program.  If not, see
 		<servlet-class>org.glassfish.jersey.servlet.ServletContainer</servlet-class>
 		<async-supported>true</async-supported>
 		<init-param>
-			<param-name>javax.ws.rs.Application</param-name>
-			<param-value>com.thorstenmarx.webtools.web.rest.RestApplication</param-value>
+			<param-name>jakarta.ws.rs.Application</param-name>
+			<param-value>de.marx_software.webtools.web.rest.RestApplication</param-value>
 		</init-param>
 		<load-on-startup>1</load-on-startup>
 	</servlet>
@@ -65,20 +65,20 @@ License along with this program.  If not, see
 		<async-supported>true</async-supported>
 		<init-param>
 			<param-name>jakarta.ws.rs.core.Application</param-name>
-			<param-value>com.thorstenmarx.webtools.web.rest.SecureRestApplication</param-value>
+			<param-value>de.marx_software.webtools.web.rest.SecureRestApplication</param-value>
 		</init-param>
 		<load-on-startup>1</load-on-startup>
 	</servlet>
 	
 	<servlet>
 		<servlet-name>TrackServlet</servlet-name>
-		<servlet-class>com.thorstenmarx.webtools.web.servlets.TrackServlet</servlet-class>
+		<servlet-class>de.marx_software.webtools.web.servlets.TrackServlet</servlet-class>
 		<async-supported>true</async-supported>
 	</servlet>
 	
 	<servlet>
 		<servlet-name>ExtensionFileServlet</servlet-name>
-		<servlet-class>com.thorstenmarx.webtools.web.servlets.ExtensionFileServlet</servlet-class>
+		<servlet-class>de.marx_software.webtools.web.servlets.ExtensionFileServlet</servlet-class>
 		<async-supported>true</async-supported>
 	</servlet>
 	<servlet-mapping>
@@ -97,7 +97,7 @@ License along with this program.  If not, see
 	
 	<filter>
 		<filter-name>RequestFilter</filter-name>
-		<filter-class>com.thorstenmarx.webtools.web.filter.HTTPRequestFilter</filter-class>
+		<filter-class>de.marx_software.webtools.web.filter.HTTPRequestFilter</filter-class>
 	</filter>
 	<filter-mapping>
 		<filter-name>RequestFilter</filter-name>
@@ -105,7 +105,7 @@ License along with this program.  If not, see
 	</filter-mapping>
 	<filter>
 		<filter-name>ApiKeyFilter</filter-name>
-		<filter-class>com.thorstenmarx.webtools.web.filter.ApiKeyFilter</filter-class>
+		<filter-class>de.marx_software.webtools.web.filter.ApiKeyFilter</filter-class>
 	</filter>
 	<filter-mapping>
 		<filter-name>ApiKeyFilter</filter-name>
@@ -116,7 +116,7 @@ License along with this program.  If not, see
 	<!-- START: Hosting filters -->
 	<filter>
 		<filter-name>TrackingCounterFilter</filter-name>
-		<filter-class>com.thorstenmarx.webtools.web.hosting.HostingCountingServletFilter</filter-class>
+		<filter-class>de.marx_software.webtools.web.hosting.HostingCountingServletFilter</filter-class>
 		<async-supported>true</async-supported>
 		<init-param>
 			<param-name>counter_name</param-name>
@@ -125,7 +125,7 @@ License along with this program.  If not, see
 	</filter>
 	<filter>
 		<filter-name>APIRequestCounterFilter</filter-name>
-		<filter-class>com.thorstenmarx.webtools.web.hosting.HostingCountingServletFilter</filter-class>
+		<filter-class>de.marx_software.webtools.web.hosting.HostingCountingServletFilter</filter-class>
 		<async-supported>true</async-supported>
 		<init-param>
 			<param-name>counter_name</param-name>

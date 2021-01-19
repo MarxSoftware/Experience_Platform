@@ -32,22 +32,22 @@ License along with this program.  If not, see
 		<param-value>development</param-value>
 	</context-param>
 	<listener>
-		<listener-class>com.thorstenmarx.webtools.ContextListener</listener-class>
+		<listener-class>de.marx_software.webtools.ContextListener</listener-class>
 	</listener>
 
 	<servlet>
 		<servlet-name>TrackingPixel</servlet-name>
-		<servlet-class>com.thorstenmarx.webtools.web.servlets.ImageServlet</servlet-class>
+		<servlet-class>de.marx_software.webtools.web.servlets.ImageServlet</servlet-class>
 		<async-supported>true</async-supported>
 	</servlet>
 	<servlet>
 		<servlet-name>JSConfigurationServlet</servlet-name>
-		<servlet-class>com.thorstenmarx.webtools.web.servlets.JSConfigurationServlet</servlet-class>
+		<servlet-class>de.marx_software.webtools.web.servlets.JSConfigurationServlet</servlet-class>
 		<async-supported>true</async-supported>
 	</servlet>
 	<servlet>
 		<servlet-name>JSTrackingServlet</servlet-name>
-		<servlet-class>com.thorstenmarx.webtools.web.servlets.JSTrackingServlet</servlet-class>
+		<servlet-class>de.marx_software.webtools.web.servlets.JSTrackingServlet</servlet-class>
 		<async-supported>true</async-supported>
 	</servlet>
 	
