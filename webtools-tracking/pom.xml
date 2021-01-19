@@ -3,14 +3,14 @@
 	<modelVersion>4.0.0</modelVersion>
 	
 	<parent>
-		<groupId>com.thorstenmarx.webtools</groupId>
+		<groupId>de.marx_software.webtools</groupId>
 		<artifactId>webtools-parent</artifactId>
 		<version>6.0.0-SNAPSHOT</version>
 		<relativePath>../webtools-parent</relativePath>
 	</parent>
 	
 	
-	<groupId>com.thorstenmarx.webtools</groupId>
+	<groupId>de.marx_software.webtools</groupId>
 	<artifactId>webtools-tracking</artifactId>
 	<version>6.0.0-SNAPSHOT</version>
 	<name>webtools-tracking</name>
@@ -29,7 +29,7 @@
 	<dependencyManagement>
 		<dependencies>
 			<dependency>
-				<groupId>com.thorstenmarx.webtools</groupId>
+				<groupId>de.marx_software.webtools</groupId>
 				<artifactId>webtools-bom</artifactId>
 				<version>6.0.0-SNAPSHOT</version>
 				<scope>import</scope>
@@ -61,11 +61,11 @@
 			<artifactId>guava</artifactId>
 		</dependency>
 		<dependency>
-			<groupId>com.thorstenmarx.webtools</groupId>
+			<groupId>de.marx_software.webtools</groupId>
 			<artifactId>webtools-api</artifactId>
 		</dependency>
 		<dependency>
-			<groupId>com.thorstenmarx.webtools</groupId>
+			<groupId>de.marx_software.webtools</groupId>
 			<artifactId>webtools-base</artifactId>
 		</dependency>
 		<dependency>

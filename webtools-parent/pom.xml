@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
-	<groupId>com.thorstenmarx.webtools</groupId>
+	<groupId>de.marx_software.webtools</groupId>
 	<artifactId>webtools-parent</artifactId>
 	<version>6.0.0-SNAPSHOT</version>
 	<name>webtools-parent</name>
@@ -27,8 +27,8 @@
 		<maven.compiler.target>13</maven.compiler.target>
 	</properties>
 	<organization>
-		<name>WP DigitalExperience</name>
-		<url>https://wp-digitalexperience.com</url>
+		<name>Marx-Software</name>
+		<url>https://marx-software.de</url>
 	</organization>
 	<licenses>
 		<license>
@@ -42,10 +42,10 @@
 			<id>thmarx</id>
 			<name>Thorsten Marx</name>
 			<email>thorsten.marx.1@gmail.com</email>
-			<url>https://thorstenmarx.com</url>
+			<url>https://marx-software.de</url>
 		</developer>
 	</developers>
-	<url>https://wp-digitalexperience.com</url>
+	<url>https://marx-software.de</url>
 	<scm>
 		<connection>scm:git:ssh://git@bitbucket.org/thmarx/webtools2.git</connection>
 		<developerConnection>scm:git:ssh://git@bitbucket.org/thmarx/webtools2.git</developerConnection>
@@ -110,7 +110,7 @@
 				<checksumPolicy>fail</checksumPolicy>
 			</snapshots>
 			<id>wp-digitalexperience-ftp</id>
-			<url>https://maven.wp-digitalexperience.com</url>
+			<url>https://maven.marx-software.de</url>
 			<layout>default</layout>
 		</repository>
 	</repositories>

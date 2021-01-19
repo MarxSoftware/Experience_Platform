@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
-	<groupId>com.thorstenmarx.webtools</groupId>
+	<groupId>de.marx_software.webtools</groupId>
 	<artifactId>webtools-bom</artifactId>
 	<version>6.0.0-SNAPSHOT</version>
 	<packaging>pom</packaging>
@@ -11,8 +11,8 @@
 	<inceptionYear>2016</inceptionYear>
 	
 	<organization>
-		<name>WP DigitalExperience</name>
-		<url>https://wp-digitalexperience.com</url>
+		<name>Marx-Software</name>
+		<url>https://marx-software.de</url>
 	</organization>
 	
 	<licenses>
@@ -27,7 +27,7 @@
 			<id>thmarx</id>
 			<name>Thorsten Marx</name>
 			<email>thorsten.marx.1@gmail.com</email>
-			<url>https://thorstenmarx.com</url>
+			<url>https://marx-software.de</url>
 		</developer>
 	</developers>
 	<url>https://thorstenmarx.com/projects/webtools/</url>
@@ -62,32 +62,32 @@
 	<dependencyManagement>
 		<dependencies>
 			<dependency>
-				<groupId>com.thorstenmarx.webtools</groupId>
+				<groupId>de.marx_software.webtools</groupId>
 				<artifactId>webtools-api</artifactId>
 				<version>6.0.0-SNAPSHOT</version>
 			</dependency>
 			<dependency>
-				<groupId>com.thorstenmarx.webtools</groupId>
+				<groupId>de.marx_software.webtools</groupId>
 				<artifactId>webtools-base</artifactId>
 				<version>6.0.0-SNAPSHOT</version>
 			</dependency>
 			<dependency>
-				<groupId>com.thorstenmarx.webtools</groupId>
+				<groupId>de.marx_software.webtools</groupId>
 				<artifactId>webtools-tracking</artifactId>
 				<version>6.0.0-SNAPSHOT</version>
 			</dependency>
 			<dependency>
-				<groupId>com.thorstenmarx.webtools</groupId>
+				<groupId>de.marx_software.webtools</groupId>
 				<artifactId>webtools-manager</artifactId>
 				<version>6.0.0-SNAPSHOT</version>
 			</dependency>
 			<dependency>
-				<groupId>com.thorstenmarx.webtools</groupId>
+				<groupId>de.marx_software.webtools</groupId>
 				<artifactId>webtools-test</artifactId>
 				<version>6.0.0-SNAPSHOT</version>
 			</dependency>
 			<!--			<dependency>
-				<groupId>com.thorstenmarx.webtools</groupId>
+				<groupId>de.marx_software.webtools</groupId>
 				<artifactId>webtools-cluster</artifactId>
 				<version>3.2.0-SNAPSHOT</version>
 			</dependency>-->
@@ -182,7 +182,7 @@
 			<dependency>
 				<groupId>com.alibaba</groupId>
 				<artifactId>fastjson</artifactId>
-				<version>1.2.75</version>
+				<version>1.2.75_no_jaxrs</version>
 				<scope>compile</scope>
 			</dependency>
 			
